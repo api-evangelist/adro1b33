@@ -1,0 +1,95 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the AOX Platform API
+  version: 1.0.0
+extends: openapi/adro1b33-aox-openapi.yaml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: >-
+  Enhancements derived from openapi/adro1b33-aox-openapi.yaml plus live anonymous probes of
+  api.aoxlabs.com on 2026-09-07. This overlay records what API Evangelist established about the
+  contract; it does not modify ADRO's published document, which stays verbatim in openapi/_original/.
+x-note: >-
+  Nothing here is invented. servers[] is the host the document is actually served from and the host
+  every probe answered on. The security scheme is described as OBSERVED, not as ADRO-declared — the
+  published contract declares no securitySchemes at all, which is the single largest gap in it.
+actions:
+- target: $
+  description: >-
+    Add the servers block the published document omits. drf-spectacular emitted no servers[], so a
+    generated client has no base URL.
+  update:
+    servers:
+    - url: https://api.aoxlabs.com
+      description: >-
+        AOX production API. Observed: the OpenAPI document itself is served from this host at /schema/,
+        and every operation probed answered here.
+- target: $
+  description: >-
+    Record the externalDocs the document omits — the Swagger UI ADRO serves for this exact schema.
+  update:
+    externalDocs:
+      description: AOX Swagger UI (served by the provider)
+      url: https://api.aoxlabs.com/swagger/
+- target: $.info
+  description: Attribute the document and name the operator, which info carries neither of.
+  update:
+    x-provider: ADRO, Inc.
+    x-provider-url: https://adro.com
+    x-product: AOX — Aerodynamic Optimization eXperience
+    x-product-url: https://aoxlabs.com
+    contact:
+      name: ADRO support
+      email: support@adro.com
+      url: https://aoxlabs.com/contact
+    x-contact-source: >-
+      support@adro.com is published verbatim in the provider's own /board/ announcement feed
+      (https://api.aoxlabs.com/board/, entry id 2) and on https://aoxlabs.com/contact.
+- target: $.components
+  description: >-
+    Describe the authentication that the contract omits entirely. Marked as observed, not declared —
+    see authentication/adro1b33-authentication.yml for the evidence and the confidence level.
+  update:
+    securitySchemes:
+      aoxSession:
+        type: apiKey
+        in: cookie
+        name: sessionid
+        description: >-
+          OBSERVED, NOT PROVIDER-DECLARED. The published document declares no securitySchemes. An
+          anonymous request to any protected operation returns HTTP 401 with the Django REST Framework
+          body {"detail":"자격 인증 데이터가 제공되지 않았습니다."}. A session is established at POST
+          /accounts/login/ (email + password) or POST /accounts/social-login/, renewed at POST
+          /accounts/token/refresh/, and ended at POST /accounts/logout/. LoginResponse returns no token
+          in the body, which is consistent with an httpOnly cookie session rather than a bearer token.
+          The cookie name is the Django default and has NOT been confirmed on the wire. Do not treat
+          this scheme as authoritative — treat it as a documented gap in ADRO's contract.
+- target: $.info
+  description: Record the runtime facts an integrator needs that the contract does not state.
+  update:
+    x-conventions:
+      trailing_slash_required: true
+      field_case: camelCase
+      query_param_case: snake_case
+      pagination: limit/offset with count/next/previous/results (not uniform — cursor and page_size also appear)
+      idempotency: none — no Idempotency-Key on any operation
+      rate_limit_headers: none observed
+      error_format: drf-detail (NOT RFC 9457)
+      error_language: ko (no Accept-Language handling observed)
+      versioning: none in path, header or media type
+      events: none — no webhooks, callbacks or AsyncAPI; job progress is polled
+      artifacts: conventions/adro1b33-conventions.yml
+- target: $.info
+  description: Record the two public operations that were failing at capture time.
+  update:
+    x-observed-defects:
+    - operationId: plans_list
+      path: /plans/
+      declared: public (security [{}])
+      observed_status: 500
+      observed: '2026-09-07'
+    - operationId: credits_bundles_list
+      path: /credits/bundles/
+      declared: public (security [{}])
+      observed_status: 500
+      observed: '2026-09-07'

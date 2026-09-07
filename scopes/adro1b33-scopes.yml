@@ -1,0 +1,30 @@
+generated: '2026-09-07'
+method: probed
+source: https://adro.com/.well-known/openid-configuration
+applies_to: ADRO US Store Agent Commerce (UCP / MCP)
+authorization_server: https://shopify.com/authentication/67310649500
+authorization_endpoint: https://shopify.com/authentication/67310649500/oauth/authorize
+token_endpoint: https://shopify.com/authentication/67310649500/oauth/token
+jwks_uri: https://shopify.com/authentication/67310649500/.well-known/jwks.json
+grant_types:
+- authorization_code
+- refresh_token
+- urn:ietf:params:oauth:grant-type:jwt-bearer
+pkce:
+- S256
+scope_count: 4
+scopes:
+- name: openid
+  description: Standard OpenID Connect scope; requests an id_token identifying the customer.
+- name: email
+  description: Releases the customer's email address and email_verified claim.
+- name: customer-account-api:full
+  description: Full access to the Shopify Customer Account API for this shop on the customer's behalf.
+- name: customer-account-mcp-api:full
+  description: >-
+    Full access to the Customer Account MCP API — the authenticated agent surface that sits alongside
+    the anonymous UCP commerce MCP endpoint at /api/ucp/mcp.
+note: >-
+  The AOX Platform API at api.aoxlabs.com declares no oauth2 securityScheme and publishes no scope
+  reference, so it contributes no scopes to this file. These four are the storefront identity scopes
+  ADRO's own domain advertises; the authorization server is Shopify's, scoped to ADRO's shop id.

@@ -1,23 +1,196 @@
 aid: adro1b33
-name: Adro1b33
-description: 'Adro1b33 is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+name: ADRO
+description: >-
+  ADRO, Inc. (에이드로) is a South Korean mobility aerotech company in Yongin-si, Gyeonggi-do that designs and
+  manufactures aerospace-grade carbon-fiber aerodynamic components for global automotive brands, and that has
+  extended into software with AOX (Aerodynamic Optimization eXperience) — a web-based, GPU- and HPC-backed
+  aerodynamic design and optimization platform operated at aoxlabs.com that takes a CAD or STL geometry through
+  meshing, CFD simulation, shape optimization and post-processing without requiring CFD expertise. The AOX platform
+  is backed by a public Django REST Framework contract at api.aoxlabs.com serving a 231-operation OpenAPI 3.0.3
+  document covering projects, jobs, LES runs, sketch sessions, patches, artifacts, assets, teams, credits, plans,
+  subscriptions and payments. The company's US direct-to-consumer parts storefront at adro.com is a Shopify store
+  that serves an agent-facing llms.txt and a live Universal Commerce Protocol (UCP) MCP endpoint.
 url: https://raw.githubusercontent.com/api-evangelist/adro1b33/refs/heads/main/apis.yml
+image: https://aoxlabs.com/logos/AOX_Main_dark.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-09-07'
 modified: '2026-09-07'
+position: Producing
 tags:
-- Company
-apis: []
+- Aerodynamics
+- Computational Fluid Dynamics
+- Simulation
+- Automotive
+- Engineering
+- Optimization
+- Manufacturing
+- Artificial Intelligence
+- High Performance Computing
+- Ecommerce
+- MCP
+- South Korea
+tags_raw:
+- aerodynamics
+- computational-fluid-dynamics
+- simulation
+- automotive
+- engineering
+- optimization
+- manufacturing
+- artificial-intelligence
+- high-performance-computing
+- ecommerce
+- mcp
+- south-korea
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: AOX Platform API
+  description: >-
+    The REST API behind AOX, ADRO's aerodynamic optimization platform. A Django REST Framework backend serving a
+    public, machine-readable OpenAPI 3.0.3 document (drf-spectacular) with 231 operations across 207 paths:
+    accounts and team management, projects, jobs, LES runs, sketch sessions, geometry patches, artifacts, an asset
+    marketplace, STL conversion and repair, credits and credit bundles, plans, subscriptions and payments. Nineteen
+    operations are explicitly unauthenticated (login, signup, social login, token refresh, plans, credit bundles,
+    board announcements, health, tenant existence, email verification); the remainder require an authenticated
+    session.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  image: https://aoxlabs.com/logos/AOX_Main_dark.png
+  tags:
+  - Aerodynamics
+  - Computational Fluid Dynamics
+  - Simulation
+  - Optimization
+  - Engineering
+  - High Performance Computing
+  tags_raw:
+  - aerodynamics
+  - computational-fluid-dynamics
+  - simulation
+  - optimization
+  - engineering
+  - high-performance-computing
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-aox-openapi.yaml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+  - type: Overlay
+    url: overlays/adro1b33-aox-overlay.yaml
+  - type: AgentSkill
+    url: skills/_index.yml
+- name: ADRO US Store Agent Commerce (UCP / MCP)
+  description: >-
+    ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that publishes an agent-facing
+    surface on ADRO's own domain — an llms.txt of agent instructions, a UCP merchant profile at /.well-known/ucp, and
+    a live Universal Commerce Protocol MCP endpoint at POST /api/ucp/mcp whose anonymous tools/list returns thirteen
+    tools with full JSON Schema inputs for catalog search and lookup, product retrieval, cart, checkout and order.
+    The runtime is Shopify's platform-provided UCP implementation rather than ADRO-authored code; the endpoint,
+    merchant profile and catalog are ADRO's.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://adro.com
+  image: https://adro.com/cdn/shop/files/adro_logo_klaviyo.png?v=1785437102
+  tags:
+  - Ecommerce
+  - MCP
+  - agent-native
+  - Automotive
+  tags_raw:
+  - ecommerce
+  - mcp
+  - agent-native
+  - automotive
+  properties:
+  - type: MCPServer
+    url: mcp/adro1b33-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/adro1b33-tool-crosswalk.yml
+  - type: LLMsTxt
+    url: llms/adro1b33-llms.txt
+  - type: WellKnown
+    url: well-known/adro1b33-well-known.yml
 common:
 - type: Website
-  url: https://equityzen.com/company/adro1b33
+  url: https://adro.com/
+- type: Website
+  url: https://aoxlabs.com/
+- type: Documentation
+  url: https://aoxlabs.com/product
+- type: APIReference
+  url: https://api.aoxlabs.com/swagger/
+- type: Pricing
+  url: https://aoxlabs.com/pricing
+- type: SignUp
+  url: https://aoxlabs.com/login
+- type: Login
+  url: https://aoxlabs.com/login
+- type: Support
+  url: https://aoxlabs.com/contact
+- type: TermsOfService
+  url: https://aoxlabs.com/terms
+- type: PrivacyPolicy
+  url: https://aoxlabs.com/privacy
+- type: Blog
+  url: https://adro.com/blogs/news
+- type: ChangeLog
+  url: https://aoxlabs.com/board
+- type: OpenAPI
+  url: openapi/adro1b33-aox-openapi.yaml
+- type: MCPServer
+  url: mcp/adro1b33-mcp.yml
+- type: LLMsTxt
+  url: llms/adro1b33-llms.txt
+- type: WellKnown
+  url: well-known/adro1b33-well-known.yml
+- type: Authentication
+  url: authentication/adro1b33-authentication.yml
+- type: Conventions
+  url: conventions/adro1b33-conventions.yml
+- type: ErrorCatalog
+  url: errors/adro1b33-problem-types.yml
+- type: DataModel
+  url: data-model/adro1b33-data-model.yml
+- type: Conformance
+  url: conformance/adro1b33-conformance.yml
+- type: Compliance
+  url: conformance/adro1b33-conformance.yml
+- type: TrustCenter
+  url: security/adro1b33-trust-center.yml
+- type: Lifecycle
+  url: lifecycle/adro1b33-lifecycle.yml
+- type: ChangeLog
+  url: changelog/adro1b33-changelog.yml
+- type: Plans
+  url: plans/adro1b33-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/adro1b33-rate-limits.yml
+- type: Packages
+  url: packages/adro1b33-packages.yml
+- type: Overlay
+  url: overlays/adro1b33-aox-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/adro1b33-domain-security.yml
+- type: OAuthScopes
+  url: scopes/adro1b33-scopes.yml
+
+x-enrichment:
+  date: '2026-09-07'
+  status: enriched
+  artifacts_added: 29
+  pass: local-v3

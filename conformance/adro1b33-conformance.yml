@@ -1,0 +1,123 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/adro1b33-aox-openapi.yaml, well-known/adro1b33-openid-configuration.json,
+  well-known/adro1b33-ucp.json, mcp/adro1b33-ucp-mcp-tools.json, and the certification statements
+  published on https://aoxlabs.com.
+conformance:
+- id: openapi-3.0.3
+  conforms: true
+  evidence: >-
+    https://api.aoxlabs.com/schema/ returns a parsing OpenAPI 3.0.3 document, 207 paths / 231
+    operations / 185 component schemas, served as application/vnd.oai.openapi (drf-spectacular).
+- id: oauth2
+  conforms: true
+  scope: ADRO US Store only
+  evidence: >-
+    https://adro.com/.well-known/oauth-authorization-server (HTTP 200) — authorization_code and
+    refresh_token grants, client_secret_basic/client_secret_post, PKCE S256.
+- id: oidc
+  conforms: true
+  scope: ADRO US Store only
+  evidence: >-
+    https://adro.com/.well-known/openid-configuration (HTTP 200) — issuer, jwks_uri, RS256 id tokens,
+    openid/email scopes, end_session_endpoint.
+- id: rfc9728-oauth-protected-resource
+  conforms: true
+  scope: ADRO US Store only
+  evidence: https://adro.com/.well-known/oauth-protected-resource (HTTP 200) naming the shop-scoped authorization server.
+- id: json-rpc-2.0
+  conforms: true
+  evidence: >-
+    POST https://adro.com/api/ucp/mcp returned a well-formed JSON-RPC 2.0 response to
+    {"jsonrpc":"2.0","id":1,"method":"tools/list"}.
+- id: mcp
+  conforms: true
+  evidence: >-
+    tools/list returned 13 tools, each with a JSON Schema 2020-12 inputSchema. Saved verbatim to
+    mcp/adro1b33-ucp-mcp-tools.json.
+- id: json-schema-2020-12
+  conforms: true
+  evidence: 'Every MCP tool inputSchema declares $schema https://json-schema.org/draft/2020-12/schema.'
+- id: llmstxt
+  conforms: true
+  evidence: https://adro.com/llms.txt (HTTP 200, text/markdown, 73,323 bytes).
+- id: pagination
+  conforms: true
+  evidence: >-
+    DRF limit/offset envelope (count/next/previous/results) confirmed live on
+    https://api.aoxlabs.com/board/ and declared in the Paginated*List component schemas. Not uniform —
+    cursor and page_size also appear. See conventions/adro1b33-conventions.yml.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No operation returns application/problem+json and no error body carries type/title/status. The API
+    uses the stock Django REST Framework envelopes. See errors/adro1b33-problem-types.yml.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header on any of the 231 operations. Server-side credit-ledger idempotency keys
+    exist but are read-only. See conventions/adro1b33-conventions.yml.
+- id: rfc8594-deprecation
+  conforms: false
+  evidence: No Sunset or Deprecation header and no deprecated operation anywhere in the contract.
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document, no webhooks, no callbacks. Job progress is polled.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returned 404 on adro.com, aoxlabs.com and api.aoxlabs.com.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json returned 404 (adro.com, aoxlabs.com,
+    api.aoxlabs.com) or a redirect (www.adro.com, kr.adro.com). No card is published.
+domain_standards:
+- id: ucp
+  name: Universal Commerce Protocol
+  version: '2026-08-25'
+  conforms: true
+  market: agentic commerce
+  evidence: >-
+    https://adro.com/.well-known/ucp declares ucp.version 2026-08-25, supported_versions 2026-04-08 and
+    2026-01-23, a dev.ucp.shopping service over MCP transport, and eight capability classes —
+    dev.ucp.shopping.checkout, .fulfillment, .discount, .cart, .order, .catalog.search, .catalog.lookup
+    and dev.shopify.catalog — each pinned to a ucp.dev spec and schema URL. The payment_handlers block
+    declares com.google.pay for merchant "ADRO US" at merchant_origin adro.com. This is a genuine
+    domain-standard signature in the contract itself, not a marketing claim, and it means an agent that
+    already speaks UCP can transact with ADRO's storefront with no bespoke connector.
+  caveat: >-
+    Conformance is delivered by Shopify's platform, which implements UCP for every store it hosts. It
+    is real and callable on ADRO's domain; it is not ADRO-authored protocol work.
+- id: cfd-domain
+  name: Computational fluid dynamics interchange
+  conforms: unknown
+  market: engineering simulation
+  evidence: >-
+    Checked deliberately and found nothing to record. The AOX contract moves geometry as STL
+    (/stl/convert/, /stl/repair/, /projects/{project_id}/register-stl/, /sample-stls/) and STEP
+    (/job/{id}/export-step/), and ADRO's site names HELYX and CF-MESH+ as the meshing workflows, but
+    the contract declares no CGNS, no OpenVDB, no STEP AP242 profile identifier, no ISO 10303 reference
+    and no standards-body conformance class. This is reward-only: no penalty is implied, and no
+    conformance is asserted where the market has no declared standard the contract could carry.
+certifications:
+- name: ISO/IEC 27001:2022
+  status: certified
+  scope: Adro Digital Service Development and Operation
+  valid_from: '2026-06-24'
+  valid_to: '2029-06-23'
+  evidence: https://aoxlabs.com/ (certification section, HTTP 200)
+  artifact: https://static.aoxlabs.com/_static/landing/images/certifications/iso-iec-27001-adro.png
+- name: TISAX
+  status: assessment completed
+  scope: S8PP81
+  objectives:
+  - High Availability
+  - Confidential
+  valid_to: '2029-05-26'
+  evidence: https://aoxlabs.com/ (certification section, HTTP 200)
+  artifact: https://aoxlabs.com/documents/certifications/tisax-assessment-s8pp81.pdf
+  note: >-
+    TISAX is the automotive-industry information-security assessment scheme run by ENX — the relevant
+    trust credential for a supplier selling into automotive OEM workflows. Detailed results are
+    available only to authorized TISAX participants.

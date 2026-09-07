@@ -1,0 +1,69 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  Registry metadata endpoints queried directly — registry.npmjs.org (including the npm search API),
+  pypi.org/pypi/<pkg>/json, and the GitHub search API for repositories and organizations — plus the
+  aoxlabs.com site and the AOX OpenAPI document. No SDK, CLI or SourceCode link exists in apis.yml to
+  derive candidates from.
+package_count: 0
+official_package_count: 0
+packages: []
+finding: >-
+  ADRO publishes NO first-party client libraries in any registry. There is no npm, PyPI, Maven Central,
+  NuGet, pkg.go.dev, RubyGems, Packagist or crates.io package for AOX or ADRO, no public GitHub
+  organization (the GitHub search API returns zero users and zero repositories for adro/aoxlabs), and
+  no SDK section, download link or code sample on aoxlabs.com. The 231-operation AOX contract is
+  reachable only by hand-rolling a client from https://api.aoxlabs.com/schema/.
+searched:
+- registry: npm
+  queries:
+  - aox
+  - aoxlabs
+  - aox-sdk
+  - adro
+  - adro-sdk
+  - adro-inc
+  - '@aoxlabs/sdk'
+  - 'search text=aoxlabs'
+  result: no first-party package
+- registry: pypi
+  queries:
+  - aox
+  - aoxlabs
+  - adro
+  result: no first-party package
+- registry: github
+  queries:
+  - 'users: adro aoxlabs'
+  - 'repositories: aoxlabs OR "adro inc"'
+  result: no organization, no repositories
+name_collisions:
+- registry: npm
+  name: aox
+  version: 0.0.1
+  published: '2019-02-24'
+  published_source: unverified — registry time block not re-read for this entry
+  official: false
+  reason: >-
+    Description "A O X", repository github.com/PengJiyuan/aox. An unrelated personal package that
+    happens to share the name.
+- registry: npm
+  name: aox-sdk
+  version: 13.21.0
+  published: '2025-05-30'
+  official: false
+  deprecated: true
+  reason: >-
+    NOT ADRO's. Author aox@aox.io / linkedin.com/in/aox, maintainer tuyndv (admin@tuyn.info), license
+    "LICENSED", no repository or homepage, published across three versions in 34 hours in May 2025 and
+    since marked deprecated. Recorded because a developer searching npm for "AOX SDK" will find this
+    first and it is not the AOX aerodynamic platform.
+- registry: pypi
+  name: aox
+  version: 1.1.1
+  official: false
+  reason: '"AdventOfCode Submissions Framework", github.com/costas-basdekis/aox. Unrelated.'
+cdn_distribution: none
+note: >-
+  No SDKs pointer is emitted in apis.yml. sdk_count reads the SDKs type and there is no first-party SDK
+  to point at; emitting one would credit ADRO with client libraries it does not ship.

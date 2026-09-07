@@ -1,0 +1,223 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/adro1b33-aox-openapi.yaml plus live anonymous probes of api.aoxlabs.com, and the published
+  policy pages https://aoxlabs.com/refund and https://aoxlabs.com/terms. ADRO publishes no developer
+  documentation for the AOX Platform API, so every convention below is read out of the contract or
+  observed on the wire — there is no prose reference to search.
+applies_to: AOX Platform API (https://api.aoxlabs.com)
+auth:
+  style: session
+  detail: See authentication/adro1b33-authentication.yml. No securityScheme is declared in the spec.
+naming:
+  path_style: trailing-slash
+  detail: >-
+    Every one of the 207 paths ends in a slash (Django APPEND_SLASH convention). A request without the
+    trailing slash will not match. Path segments are lowercase kebab-case.
+  field_case: camelCase
+  field_case_note: >-
+    Response and request bodies are camelCase (teamId, createdAt, purgeAfter, amountMinor) even though
+    query parameters and path segments are snake_case (project_uid, job_uid, page_size). The two
+    conventions coexist in the same request.
+  identifiers:
+    dual: true
+    detail: >-
+      Most resources carry BOTH a numeric `id` and an opaque `uid`, and the API is inconsistent about
+      which one addresses a resource: /projects/{id}/ and /job/{id}/ take the numeric id, while
+      /les/runs/{uid}/, /sketch/sessions/{job_uid}/, /assets/{asset_uid}/ and
+      /teams/{team_uid}/retained-results/ take the uid. Lookup-by-uid escape hatches exist at
+      /projects/by-uid/{uid}/ and /job/by-uid/{uid}/.
+pagination:
+  style: limit-offset
+  params:
+  - limit
+  - offset
+  - cursor
+  - page_size
+  params_note: >-
+    Not uniform. limit/offset is the dominant style (the Paginated*List schemas carry the DRF
+    LimitOffsetPagination example URLs), but `cursor` appears on two operations and `page_size` on two
+    more. A client cannot assume one paging contract across the surface.
+  response_fields:
+    count: total matching records
+    next: absolute URL of the next page, null on the last page
+    previous: absolute URL of the previous page, null on the first page
+    results: the array of records
+  envelope_schemas:
+  - PaginatedProjectListList
+  - PaginatedJobListList
+  - PaginatedArtifactListList
+  - PaginatedFileUploadTrackerList
+  evidence: 'GET https://api.aoxlabs.com/board/ returned {"count":2,"next":null,"previous":null,"results":[...]}'
+filtering:
+  documented: false
+  observed_params:
+  - include_inactive
+  - currency
+  - mode
+  - kind
+  - events_limit
+versioning:
+  scheme: none-in-path
+  detail: >-
+    The API is unversioned on the wire — no /v1/ segment, no version header, no media-type versioning.
+    The only version string anywhere is info.version 1.0.0 in the generated document, which is the
+    drf-spectacular default rather than a release identifier. See lifecycle/adro1b33-lifecycle.yml.
+request_id_tracing:
+  supported: false
+  detail: >-
+    No X-Request-Id, correlation-id or trace header was returned on any probed response. Long-running
+    work is instead correlated by job/run uid: POST /job/unified/ returns a job, and GET
+    /job/{id}/monitor/, /job/{id}/execution-logs/ and /job/{id}/history/ carry it forward.
+    /sketch/sessions/{job_uid}/events/ is the closest thing to an event stream.
+async_model:
+  style: poll
+  detail: >-
+    The platform is asynchronous by nature — CFD jobs run for minutes to hours. Work is submitted
+    (POST /job/unified/, POST /les/runs/, POST /stl/convert-async/) and polled. The spec's own
+    description for the job endpoints instructs the front end to poll GET /job/{id}/monitor/ every
+    5–10 seconds. 202 Accepted is returned by 5 operations.
+  webhooks: false
+  callbacks_in_spec: false
+  note: >-
+    There are no webhooks, no callbacks and no AsyncAPI document. In-app notification collections exist
+    (GET /job-notifications/, POST /asset-notifications/{notification_id}/read/) but they are pull, not
+    push — an integrator has no way to be told a job finished.
+rate_limit_signaling:
+  headers: []
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was observed on any response, and no 429 is
+    declared anywhere in the contract. See rate-limits/adro1b33-rate-limits.yml.
+error_envelope:
+  format: drf-detail
+  reference: errors/adro1b33-problem-types.yml
+idempotency:
+  coverage: none
+  mechanism: none
+  client_supplied_key: false
+  detail: >-
+    NO client-supplied idempotency mechanism exists. There is no Idempotency-Key header parameter on
+    any of the 231 operations, and no request body carries an idempotency or client-reference field.
+    Retrying POST /job/unified/, POST /projects/, POST /credits/bundles/{bundle_id}/purchase/ or
+    POST /plans/{code}/subscribe/ after a timeout will create a second resource or a second charge.
+  server_side_ledger:
+    present: true
+    detail: >-
+      The credit ledger DOES record idempotency keys — CreditOperation.idempotencyKey (required,
+      maxLength 128) and CreditTransaction.operationIdempotencyKey (readOnly) — surfaced through GET
+      /credits/operations/ and GET /credits/transactions/. These are server-generated and read-only:
+      they let ADRO deduplicate its own internal credit grants and consumption, and they let a client
+      AUDIT what happened, but a client cannot supply one to make its own write safe to retry. This is
+      internal replay protection, not an idempotency contract, so coverage is `none`.
+dry_run_mode:
+  available: partial
+  detail: >-
+    Real preview/estimate operations exist and they are the closest thing to a rehearsal: GET
+    /credits/estimate/ prices a job before it is submitted, GET /plans/{code}/upgrade-quote/ and GET
+    /subscriptions/storage-addon/quote/ price a plan change, GET /projects/{id}/mesh-predict/ predicts
+    meshing, and GET /projects/{id}/deletion-preview/, /job/{id}/deletion-preview/ and
+    /les/runs/{uid}/deletion-preview/ show the blast radius of a delete before it is issued. There is
+    no generic dry-run flag on write operations.
+reversibility:
+  grade: verified
+  summary: >-
+    Destructive operations on this API are two-phase by design: a soft delete that schedules a purge,
+    a preview that shows what will be lost, an explicit restore, and a separate purge-now for the user
+    who wants it gone immediately. The window is machine-readable per resource rather than stated as a
+    fixed number of days, and it is exposed on the resource itself.
+  window_mechanism:
+    fields:
+    - Project.deletedAt
+    - Project.purgeAfter
+    - Project.canRestore
+    - Project.deletion
+    - DeletionExecutionStatus.scheduledFor
+    detail: >-
+      `purgeAfter` is the timestamp after which a soft-deleted resource is permanently destroyed, and
+      `canRestore` states in the response whether restore is still available. GET
+      /deletion-executions/{execution_uid}/ reports the progress of an executed purge. An agent can
+      therefore read its own remaining window from the resource before deciding to act. What ADRO does
+      NOT publish is the retention period itself — no docs page states how long purgeAfter is set to,
+      so the window is discoverable per resource but not predictable in advance.
+    evidence: openapi/adro1b33-aox-openapi.yaml components.schemas.Project, .ProjectList, .DeletionExecutionStatus
+  write_surfaces:
+  - surface: Project deletion
+    forward: projects_destroy (DELETE /projects/{id}/)
+    reversal: projects_restore_create (POST /projects/{id}/restore/)
+    preview: projects_deletion_preview_retrieve (GET /projects/{id}/deletion-preview/)
+    irreversible_escape: projects_purge_now_create (POST /projects/{id}/purge-now/)
+    window: 'Until Project.purgeAfter; Project.canRestore reports availability.'
+  - surface: Job deletion
+    forward: job_delete_create (POST /job/{id}/delete/ — soft delete; cancels first if QUEUED/RUNNING)
+    reversal: job_restore_create (POST /job/{id}/restore/)
+    preview: job_deletion_preview_retrieve (GET /job/{id}/deletion-preview/)
+    irreversible_escape: job_purge_now_create (POST /job/{id}/purge-now/)
+    window: 'Until the scheduled purge date returned by deletion-preview.'
+    spec_note: >-
+      The contract states the soft delete filters the job out of API responses (is_deleted=True) and
+      that it can be reversed.
+  - surface: LES run deletion
+    forward: les_runs_delete_create (POST /les/runs/{uid}/delete/)
+    reversal: les_runs_restore_create (POST /les/runs/{uid}/restore/)
+    preview: les_runs_deletion_preview_retrieve (GET /les/runs/{uid}/deletion-preview/)
+    irreversible_escape: les_runs_purge_now_create (POST /les/runs/{uid}/purge-now/)
+  - surface: Job execution
+    forward: job_unified_create (POST /job/unified/)
+    reversal: job_cancel_create (POST /job/{id}/cancel/)
+    window: >-
+      Until the job completes. https://aoxlabs.com/refund enumerates the cancellation points — before
+      execution starts, during Meshing or Lattice Setup, during Simulating, during Optimizing, during
+      PostProcessing, after successful completion — but the credit outcome for each point is rendered
+      client-side and is not present in the served HTML, so the refund consequence per point is NOT
+      recorded here.
+  - surface: Geometry patch merge
+    forward: patches_merge_create (POST /patches/merge/)
+    reversal: patches_unmerge_create (POST /patches/{id}/unmerge/)
+    window: not stated
+  - surface: Subscription
+    forward: plans_subscribe_create (POST /plans/{code}/subscribe/)
+    reversal: subscriptions_cancel_create (POST /subscriptions/cancel/), undone in turn by subscriptions_resume_create (POST /subscriptions/resume/)
+    window: >-
+      Cancellation is a RESERVATION — it takes effect at the end of the current billing cycle and the
+      plan stays usable until then; resume flips CANCELLED back to ACTIVE before that boundary. Stated
+      at https://aoxlabs.com/refund section 2.
+  - surface: Plan downgrade
+    forward: plans_downgrade_create (POST /plans/{code}/downgrade/)
+    reversal: none documented
+    window: >-
+      Takes effect on the next billing date; the higher plan remains available until the current cycle
+      ends and no cash refund is issued for the current-cycle price difference
+      (https://aoxlabs.com/refund section 3).
+  - surface: Payment
+    forward: payments_prepare_create (POST /payments/prepare/) + payments_verify_create
+    reversal: payments_checkout_cancel_create (POST /payments/{payment_id}/checkout-cancel/)
+    window: >-
+      checkout-cancel only marks an abandoned/failed checkout (READY or PAY_PENDING -> FAILED
+      CHECKOUT_CANCELED) and the contract explicitly says it is NOT a refund. Refunds are a
+      back-office process — the Payment schema exposes refundAvailableAmountMinor,
+      cancelledAmountMinor and cancellations[], but no refund operation is published. Per
+      https://aoxlabs.com/refund section 8, an approved refund is initiated within 3 business days of
+      approval, and current-cycle subscription fees are generally non-refundable.
+  - surface: Asset listing
+    forward: assets_projects_create / assets_approval_create
+    reversal: assets_stop_sale_create (POST /assets/{asset_uid}/stop-sale/)
+  - surface: Credit ledger
+    reversal_kinds:
+    - REFUND_REVERSAL
+    - COMPENSATION
+    detail: >-
+      CreditOperation.kind enumerates GRANT, CONSUME, REFUND_REVERSAL, EXPIRE and COMPENSATION, so
+      credit movements are reversible as ledger entries. There is no client-callable operation to
+      trigger a reversal.
+  post_subscription_data_access:
+    detail: >-
+      GET /teams/{team_uid}/retained-results/ and POST
+      /teams/{team_uid}/retained-results/{artifact_uid}/download-url/ let a team whose subscription has
+      ended retrieve approved result artifacts — an explicit exit path for a customer's own data. The
+      retention period for those artifacts is not published.
+cross_links:
+  errors: errors/adro1b33-problem-types.yml
+  lifecycle: lifecycle/adro1b33-lifecycle.yml
+  authentication: authentication/adro1b33-authentication.yml
+  rate_limits: rate-limits/adro1b33-rate-limits.yml
+  data_model: data-model/adro1b33-data-model.yml

@@ -1,0 +1,66 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/adro1b33-aox-openapi.yaml, the anonymous /board/ announcement feed at api.aoxlabs.com, and
+  the published policy pages at https://aoxlabs.com/terms and https://aoxlabs.com/refund.
+versioning:
+  scheme: none
+  in_path: false
+  in_header: false
+  in_media_type: false
+  spec_version: '1.0.0'
+  spec_version_note: >-
+    info.version is the drf-spectacular default, not a released API version. Nothing in the contract or
+    on the site identifies a version a consumer could pin to.
+  policy_published: false
+deprecation:
+  policy_published: false
+  deprecated_operations: 0
+  deprecated_operation_note: >-
+    Not one of the 231 operations carries `deprecated: true`.
+  sunset_header: false
+  deprecation_header: false
+  rfc8594_compliant: false
+status_page:
+  published: false
+  detail: >-
+    No status.aoxlabs.com, no status.adro.com, and no status link in the site footer or the API
+    contract. GET https://api.aoxlabs.com/health/ returns {"status":"ok"} and is the only availability
+    signal ADRO exposes — a liveness probe, not a status page.
+  health_endpoint: https://api.aoxlabs.com/health/
+sla:
+  published: false
+  detail: >-
+    https://aoxlabs.com/refund states the opposite of an availability guarantee: "AOX is a cloud
+    computing and CFD execution environment, not a guaranteed-result product." Section 6 (system
+    failure compensation) is rendered client-side and was not present in the served HTML.
+data_retention:
+  soft_delete: true
+  restore_supported: true
+  window_field: Project.purgeAfter
+  window_published: false
+  detail: >-
+    Soft-deleted projects, jobs and LES runs are restorable until a per-resource purgeAfter timestamp
+    that the API returns but the site never quantifies. See the reversibility block in
+    conventions/adro1b33-conventions.yml.
+  post_cancellation_export: >-
+    GET /teams/{team_uid}/retained-results/ lets a team whose subscription has expired download
+    approved result artifacts.
+announcements:
+  channel: https://aoxlabs.com/board
+  api: https://api.aoxlabs.com/board/
+  public: true
+  entry_count: 2
+  detail: >-
+    A two-entry system notice board, not a product changelog. See changelog/adro1b33-changelog.yml.
+maturity:
+  stage: beta
+  evidence: >-
+    ADRO's own CES 2026 press release describes AOX as in closed beta with a broader beta program
+    scheduled for H1 2026 (https://www.prnewswire.com/news-releases/ai-driven-aerodynamic-platform-aox-showcased-at-ces-2026-advancing-toward-public-beta-in-h1-2026-302661729.html).
+  api_maturity_note: >-
+    Consistent with the contract: no version, no deprecation policy, no status page, no declared
+    securitySchemes, and two public operations returning 500 at probe time.
+pointers_note: >-
+  No StatusPage or Deprecation pointer is emitted in apis.yml. Neither surface exists, and emitting a
+  pointer would assert a page ADRO does not serve.

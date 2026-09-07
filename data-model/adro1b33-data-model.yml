@@ -1,0 +1,200 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/adro1b33-aox-openapi.yaml — components.schemas $ref links and id-reference fields across 185
+  schemas. No published object reference exists on aoxlabs.com to search, so id-prefix conventions and
+  entity descriptions could not be enriched from documentation.
+root_entity: Team
+root_note: >-
+  Team is the tenancy root. Every billable and every storable thing hangs off it: projects, jobs,
+  credit wallets, subscriptions, payments and storage add-ons all carry teamId, and POST
+  /accounts/team-switch/ changes which team a session acts as. A user without a team has no working
+  surface.
+identifier_conventions:
+  dual_key: true
+  detail: >-
+    Core resources carry both a numeric `id` and an opaque `uid`. No id prefixes are used (no
+    Stripe-style `proj_`), so an identifier is not self-describing — a bare uid does not tell a client
+    which collection it belongs to.
+entities:
+- name: Team
+  schema: AccountTeam
+  key_fields: [tenantId]
+  operations: [accounts_teams_retrieve, accounts_team_switch_create, teams_retrieve, teams_create, teams_partial_update, teams_destroy]
+- name: TeamMember
+  operations: [teams_members_retrieve, teams_members_create, teams_members_partial_update, teams_members_destroy]
+- name: TeamInvitation
+  operations: [teams_invitations_retrieve, teams_invitations_create, teams_invitations_destroy]
+- name: Project
+  schema: Project
+  key_fields: [id, uid, teamId, slug, mode]
+  lifecycle_fields: [createdAt, updatedAt, lastActivityAt, archivedAt, isDeleted, deletedAt, purgeAfter, canRestore]
+  operations: [projects_list, projects_create, projects_retrieve, projects_update, projects_destroy, projects_by_uid_retrieve, projects_restore_create, projects_purge_now_create, projects_activate_create]
+- name: Job
+  schema: Job
+  key_fields: [id, uid, project, executionBackend, status, stage, solverEngine, workloadType, operationMode]
+  operations: [job_unified_create, job_retrieve, job_by_uid_retrieve, job_cancel_create, job_delete_create, job_restore_create, job_restart_create, job_monitor_retrieve]
+- name: JobExecution
+  schema: JobExecution
+- name: JobStatusEvent
+  schema: JobStatusEvent
+- name: Patch
+  schema: Patch
+  key_fields: [id, uid, patchType, category, artifactId, sourcePatchId, mergedIntoPatchId]
+  note: A geometry deformation region (FFD degree, plane limits, normal displacement, proxy mesh/atlas keys).
+- name: Artifact
+  schema: Artifact
+  key_fields: [id, uid, artifactRole, storageProvider, s3Bucket, s3Key, checksumSha256]
+- name: SourceFile
+  schema: SourceFile
+- name: LesRun
+  key_fields: [uid]
+  note: Large-eddy simulation runs; addressed by uid only, with their own upload/autoconfig pipeline.
+- name: SketchSession
+  key_fields: [job_uid]
+  note: Interactive design sessions with heartbeat, stream ticket, conditions and an events feed.
+- name: Asset
+  key_fields: [asset_uid]
+  note: A marketplace object — acquirable, saveable, approvable, publishable from a job, with a stop-sale.
+- name: CreditWallet
+  schema: CreditWallet
+  key_fields: [id, teamId, balance, billingMode]
+- name: CreditBucket
+  schema: CreditBucket
+- name: CreditOperation
+  schema: CreditOperation
+  key_fields: [id, kind, totalDelta, walletBalanceAfter, idempotencyKey]
+- name: CreditTransaction
+  schema: CreditTransaction
+  key_fields: [id, operation, bucket, sequence, delta, bucketRemainingAfter]
+- name: CreditBundle
+  schema: CreditBundle
+- name: Plan
+  schema: Plan
+  key_fields: [id, code, itemCode, price, monthlyCredits, storageQuotaBytes, allowedSolvers]
+- name: Subscription
+  schema: Subscription
+  key_fields: [id, teamId, plan, planCode, status, currentCycleStartedAt, currentCycleEndsAt, cancelAtPeriodEnd]
+- name: Payment
+  schema: Payment
+  key_fields: [paymentId, teamId, requestedByUserId, provider, status, amountMinor, currency, pgTxId]
+- name: PaymentCancellation
+  schema: PaymentCancellation
+- name: BillingKey
+  schema: BillingKey
+- name: FileUploadTracker
+  schema: FileUploadTracker
+- name: DeletionExecution
+  schema: DeletionExecutionStatus
+  key_fields: [executionId, resourceType, resourceUid, status, phase, scheduledFor]
+relationships:
+- from: Team
+  to: Project
+  type: has_many
+  via: Project.teamId
+- from: Team
+  to: CreditWallet
+  type: has_one
+  via: CreditWallet.teamId
+- from: Team
+  to: Subscription
+  type: has_one
+  via: Subscription.teamId
+- from: Team
+  to: Payment
+  type: has_many
+  via: Payment.teamId
+- from: Project
+  to: Artifact
+  type: has_many
+  via: Project.artifacts ($ref Artifact)
+- from: Project
+  to: Patch
+  type: has_many
+  via: Project.patches ($ref Patch)
+- from: Project
+  to: SourceFile
+  type: has_many
+  via: Project.sourceFiles ($ref SourceFile)
+- from: Project
+  to: WorkbenchState
+  type: has_one
+  via: Project.workbenchState ($ref WorkbenchState)
+- from: Project
+  to: Job
+  type: has_many
+  via: 'GET /projects/{id}/jobs/ ; JobList.projectId'
+- from: Job
+  to: Project
+  type: belongs_to
+  via: Job.project ($ref SimpleProject)
+- from: Job
+  to: JobRunConfigEnvelope
+  type: has_one
+  via: Job.runConfig
+- from: Job
+  to: JobExecution
+  type: has_many
+  via: Job.executions
+- from: Job
+  to: JobStatusEvent
+  type: has_many
+  via: Job.events
+- from: Job
+  to: Patch
+  type: has_many
+  via: Job.inputSnapshotPatches ($ref Patch)
+  note: The job snapshots the patches it ran against, so a job's inputs survive later edits to the project.
+- from: Job
+  to: Job
+  type: belongs_to
+  via: Job.restartFromJob / Job.restartFromJobUid
+  note: Self-reference — a restarted job points back at the job it resumed from, plus restartStage.
+- from: Patch
+  to: Artifact
+  type: belongs_to
+  via: Patch.artifactId
+- from: Patch
+  to: Patch
+  type: belongs_to
+  via: Patch.sourcePatchId / Patch.mergedIntoPatchId
+  note: Self-reference — the merge/unmerge graph (POST /patches/merge/, POST /patches/{id}/unmerge/).
+- from: Patch
+  to: MergedSourcePatch
+  type: has_many
+  via: Patch.mergedSourcePatches
+- from: Subscription
+  to: Plan
+  type: belongs_to
+  via: Subscription.plan / Subscription.planCode
+- from: Subscription
+  to: BillingKey
+  type: belongs_to
+  via: Subscription.billingKey
+- from: Subscription
+  to: NextBilling
+  type: has_one
+  via: Subscription.nextBilling
+- from: Payment
+  to: PaymentCancellation
+  type: has_many
+  via: Payment.cancellations
+- from: CreditOperation
+  to: CreditTransaction
+  type: has_many
+  via: CreditTransaction.operation
+  note: A ledger operation fans out into per-bucket transactions, each with a sequence number.
+- from: CreditWallet
+  to: CreditBucket
+  type: has_many
+  via: CreditWallet.bucketsBySource
+- from: Job
+  to: CreditOperation
+  type: has_many
+  via: 'GET /credits/usage/jobs/{job_uid}/'
+- from: Asset
+  to: Job
+  type: belongs_to
+  via: 'POST /jobs/{job_uid}/asset-submissions/ ; GET /jobs/{job_uid}/asset-publish-candidate/'
+  note: A marketplace asset originates from a completed job.
+render: null

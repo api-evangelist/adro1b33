@@ -1,0 +1,128 @@
+generated: '2026-09-07'
+method: searched
+source: https://aoxlabs.com/pricing
+applies_to: AOX (https://aoxlabs.com)
+currency: unknown
+billing_period: monthly
+plan_count: 5
+price_transparency:
+  prices_published: false
+  detail: >-
+    The pricing page renders a full plan comparison — credits, storage, compute type, memory, solver
+    access, processing time and a per-plan "discount rate" — but every monetary Price cell is empty in
+    the server-rendered HTML and is filled client-side after currency selection. The machine-readable
+    catalog behind it, GET https://api.aoxlabs.com/plans/, was returning HTTP 500 at probe time even
+    though the contract marks it public, and GET /credits/bundles/ returned 500 as well. So the tier
+    structure is public and the numbers are not: a buyer or an agent cannot read a price from either
+    the page or the API. Recorded as a finding, not guessed.
+  evidence:
+  - url: https://aoxlabs.com/pricing
+    status: 200
+  - url: https://api.aoxlabs.com/plans/
+    status: 500
+  - url: https://api.aoxlabs.com/credits/bundles/
+    status: 500
+plans:
+- name: Beginner
+  price: null
+  currency: null
+  billing_period: monthly
+  included_quota:
+    credits_per_cycle: 250
+    storage_gb: 10
+  limits:
+    compute_type: Cloud
+    memory: 320 GB
+    solvers:
+    - X-Fast
+    max_mesh_cells: 1M
+    processing_time: 5~10 min
+  overage: Additional credit bundles; up to 500 GB additional storage.
+- name: Engineer
+  price: null
+  currency: null
+  billing_period: monthly
+  included_quota:
+    credits_per_cycle: 900
+    storage_gb: 30
+  limits:
+    compute_type: HPC distributed multi-node
+    memory: multi-node
+    solvers:
+    - X-Fidelity
+    - X-Fast
+    max_mesh_cells: 10M+
+    processing_time: 30~180 min
+  overage: Additional credit bundles; up to 500 GB additional storage.
+- name: Turbo
+  price: null
+  currency: null
+  billing_period: monthly
+  included_quota:
+    credits_per_cycle: 500
+    storage_gb: 10
+  limits:
+    compute_type: GPU
+    memory: 48 GB VRAM
+    solvers:
+    - X-Frontier
+    max_lattice_points: 200M
+    processing_time: <1~15 min
+  overage: Additional credit bundles; up to 500 GB additional storage.
+- name: Professional
+  popular: true
+  price: null
+  currency: null
+  billing_period: monthly
+  included_quota:
+    credits_per_cycle: 3000
+    storage_gb: 100
+  limits:
+    compute_type: HPC + GPU (full access)
+    solvers:
+    - X-Fidelity
+    - X-Fast
+    - X-Frontier
+    processing_time: solver dependent
+  overage: Additional credit bundles; up to 500 GB additional storage.
+- name: OEM / Enterprise
+  price: null
+  currency: null
+  billing_period: custom
+  contact_only: true
+  included_quota:
+    credits_per_cycle: custom
+  limits:
+    compute_type: Custom compute
+    solvers: all
+add_ons:
+- name: Credit bundles
+  detail: >-
+    Bundles add credits to the current subscription but do NOT change which solvers the plan may use.
+    Catalog at GET /credits/bundles/ and purchase at POST /credits/bundles/{bundle_id}/purchase/.
+- name: Additional storage
+  detail: >-
+    Up to 500 GB beyond the plan allowance, on any plan. Retained for as long as the plan stays active.
+    Quoted at GET /subscriptions/storage-addon/quote/ and bought at POST
+    /subscriptions/storage-addon/purchase/.
+metering:
+  unit: credit
+  detail: >-
+    Consumption is metered in credits against a per-team wallet (GET /credits/wallet/, GET
+    /credits/buckets/). GET /credits/estimate/ prices a job before submission and GET
+    /credits/usage/jobs/ reports what each job actually cost.
+plan_change_rules:
+  upgrade: POST /plans/{code}/upgrade/ with a prior quote at GET /plans/{code}/upgrade-quote/
+  downgrade: >-
+    POST /plans/{code}/downgrade/ — reserved, applied at the end of the current cycle; no refund of the
+    current-cycle price difference (https://aoxlabs.com/refund section 3).
+  cancellation: >-
+    POST /subscriptions/cancel/ — reserved, effective at cycle end; reversible with POST
+    /subscriptions/resume/. Current-cycle fees are generally non-refundable
+    (https://aoxlabs.com/refund section 2).
+payment_providers:
+- PayLetter
+- PayPal
+payment_providers_note: >-
+  PayLetter is named directly in the contract (POST /billing-keys/payletter/register-and-charge/);
+  PayPal and card issuers are named in https://aoxlabs.com/refund section 8.

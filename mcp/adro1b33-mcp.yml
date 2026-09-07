@@ -1,0 +1,99 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  https://adro.com/llms.txt named the endpoint; https://adro.com/.well-known/ucp returned the merchant
+  profile (HTTP 200); an anonymous POST of {"jsonrpc":"2.0","id":1,"method":"tools/list"} to
+  https://adro.com/api/ucp/mcp returned HTTP 200 with 13 tools and full JSON Schema inputs, saved
+  verbatim to mcp/adro1b33-ucp-mcp-tools.json.
+name: ADRO US Store — UCP Commerce MCP
+status: live
+deployment:
+  mode: remote
+  endpoint: https://adro.com/api/ucp/mcp
+  auth: none
+  verified: probed
+  note: >-
+    The endpoint answers tools/list anonymously over plain JSON-RPC (Content-Type application/json).
+    A GET returns 404 — it is POST-only. No stdio package is published, so there is nothing to install.
+provenance:
+  authored_by: platform
+  platform: Shopify
+  note: >-
+    This is Shopify's platform-provided Universal Commerce Protocol implementation, served on ADRO's own
+    domain for ADRO's own catalog and checkout. The endpoint, the merchant profile, the payment handlers
+    (Google Pay merchant "ADRO US", merchant_origin adro.com) and the product data are ADRO's; the server
+    code and the tool contract are Shopify's. It is a real, reachable agent surface for this company, and
+    it is not evidence of ADRO-authored MCP work.
+protocol:
+  ucp_version: '2026-08-25'
+  supported_versions:
+  - '2026-04-08'
+  - '2026-01-23'
+  transport: mcp
+  spec: https://ucp.dev/2026-08-25/specification/overview/
+  schema: https://ucp.dev/2026-08-25/services/shopping/mcp.openrpc.json
+  canonical_endpoint: https://adro-us.myshopify.com/api/ucp/mcp
+capabilities:
+- dev.ucp.shopping.checkout
+- dev.ucp.shopping.fulfillment
+- dev.ucp.shopping.discount
+- dev.ucp.shopping.cart
+- dev.ucp.shopping.order
+- dev.ucp.shopping.catalog.search
+- dev.ucp.shopping.catalog.lookup
+- dev.shopify.catalog
+tool_count: 13
+tools:
+- name: search_catalog
+  category: catalog
+  description: Search for products from the online store, hosted on Shopify.
+- name: lookup_catalog
+  category: catalog
+  description: Look up multiple products or variants by identifier.
+- name: get_product
+  category: catalog
+  description: Retrieve complete product detail by identifier. Returns a singular product.
+- name: get_cart
+  category: cart
+  description: Get the cart contents.
+- name: create_cart
+  category: cart
+  description: Creates a new cart.
+- name: update_cart
+  category: cart
+  description: Perform updates to a cart.
+- name: cancel_cart
+  category: cart
+  description: Cancels a cart.
+- name: get_checkout
+  category: checkout
+  description: Returns details about the checkout, including line items, totals, discounts and taxes.
+- name: create_checkout
+  category: checkout
+  description: Creates a checkout.
+- name: update_checkout
+  category: checkout
+  description: Updates a checkout.
+- name: complete_checkout
+  category: checkout
+  description: Completes a checkout and returns the checkout result. Requires buyer approval of payment.
+- name: cancel_checkout
+  category: checkout
+  description: Cancels a checkout.
+- name: get_order
+  category: order
+  description: Get the details of an order.
+agent_rules:
+  human_approval_required: true
+  note: >-
+    adro.com/llms.txt states agents must not complete payment without explicit, contemporaneous buyer
+    consent, and recommends routing purchases through the Shop skill (https://shop.app/SKILL.md) when
+    that consent cannot be obtained at the moment of payment.
+  rate_limited: true
+  rate_limit_note: The MCP endpoint is rate-limited per IP; llms.txt instructs agents to back off on 429.
+raw_manifest: mcp/adro1b33-ucp-mcp-tools.json
+aox_platform_note: >-
+  ADRO's other API — the AOX aerodynamic optimization platform at api.aoxlabs.com — publishes no MCP
+  server. No candidate tool list was derived for it: deriving one would assert an agent surface that
+  does not exist. Its 231 REST operations are recorded in openapi/adro1b33-aox-openapi.yaml and are
+  listed as rest_only[] in mcp/adro1b33-tool-crosswalk.yml.

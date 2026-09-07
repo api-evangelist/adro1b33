@@ -1,0 +1,150 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  Direct HTTPS probes of the named /.well-known/ path list on every host this record knows —
+  the registrable domains adro.com and aoxlabs.com plus www, the Korean storefront kr.adro.com,
+  the API host api.aoxlabs.com, and the static asset host static.aoxlabs.com.
+notes: >-
+  adro.com, www.adro.com and kr.adro.com are Shopify-hosted storefronts, so the OpenID Connect /
+  OAuth discovery documents they serve are Shopify Customer Accounts documents issued per shop —
+  the issuer is scoped to ADRO's own shop id (67310649500 for adro.com, 91954348312 for kr.adro.com)
+  and the protected resource is https://adro.com, but the runtime is Shopify's, not ADRO-authored.
+  aoxlabs.com answers /.well-known/openid-configuration with a 307 redirect to the marketing site
+  root, not a document. api.aoxlabs.com serves no /.well-known documents at all; its machine-readable
+  contract lives at /schema/ instead. static.aoxlabs.com is a locked-down CloudFront origin (403 on
+  everything). No security.txt, api-catalog, ai-plugin.json, aauth-resource.json or agent card was
+  found on any host.
+hosts:
+- host: adro.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: adro1b33-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: adro1b33-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: adro1b33-oauth-protected-resource.json
+  - path: /.well-known/ucp
+    status: 200
+    file: adro1b33-ucp.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/adro1b33-llms.txt
+  - path: /robots.txt
+    status: 200
+- host: www.adro.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+- host: kr.adro.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+  - path: /.well-known/security.txt
+    status: 302
+  - path: /.well-known/api-catalog
+    status: 302
+  - path: /.well-known/agent-card.json
+    status: 302
+  - path: /.well-known/agent.json
+    status: 302
+  - path: /llms.txt
+    status: 401
+- host: aoxlabs.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 307
+  - path: /.well-known/oauth-authorization-server
+    status: 307
+  - path: /.well-known/oauth-protected-resource
+    status: 307
+  - path: /.well-known/api-catalog
+    status: 307
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /robots.txt
+    status: 200
+- host: api.aoxlabs.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /robots.txt
+    status: 404
+- host: static.aoxlabs.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+  - path: /llms.txt
+    status: 403
+- host: shopify.com
+  note: >-
+    Named in adro.com's oauth-protected-resource authorization_servers[] as the shop-scoped issuer
+    https://shopify.com/authentication/67310649500. Probed only for that issuer's own JWKS; the rest
+    of shopify.com is Shopify's surface, not ADRO's, and was deliberately not probed.
+  documents:
+  - path: /authentication/67310649500/.well-known/jwks.json
+    status: 200

@@ -1,0 +1,24 @@
+generated: '2026-09-07'
+method: generated
+source: >-
+  openapi/adro1b33-aox-openapi.yaml and mcp/adro1b33-ucp-mcp-tools.json. Every operationId and tool
+  name referenced in these skills was verified present in the respective contract before it was
+  written. ADRO publishes no skills, no AGENTS.md and no getting-started guide, so the step ORDER is
+  derived from the contracts' own structure and is marked generated, not searched.
+skill_count: 3
+skills:
+- name: run-aerodynamic-optimization
+  file: adro1b33-run-aerodynamic-optimization.md
+  api: AOX Platform API
+  operations: 18
+  summary: Geometry upload through optimization job to result retrieval, with a credit estimate before submission.
+- name: manage-project-lifecycle
+  file: adro1b33-manage-project-lifecycle.md
+  api: AOX Platform API
+  operations: 17
+  summary: Preview, soft-delete, restore and purge projects, jobs and LES runs against the per-resource restore window.
+- name: shop-adro-parts
+  file: adro1b33-shop-adro-parts.md
+  api: ADRO US Store Agent Commerce (UCP / MCP)
+  operations: 13
+  summary: Catalog search through cart and checkout on the live UCP MCP endpoint, honoring the buyer-approval rule.

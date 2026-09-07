@@ -1,0 +1,30 @@
+generated: '2026-09-07'
+method: probed
+source: https://api.aoxlabs.com/board/ (HTTP 200, anonymous) — rendered for humans at https://aoxlabs.com/board
+scheme: none
+current_version: null
+current_version_note: >-
+  The API is unversioned and the notice board carries no version numbers or release identifiers.
+kind: notice-board
+kind_note: >-
+  This is a system announcement feed, not a product changelog. It carries no "added / changed /
+  fixed / breaking" structure, no dates tied to releases, and no operation-level detail. ADRO
+  publishes nothing that tells an integrator what changed in the AOX API or when. Recorded here
+  because it is the only dated, machine-readable change surface the company serves.
+entry_count: 2
+entries:
+- date: '2026-08-07'
+  published_at: '2026-08-07T10:04:32.907558Z'
+  id: 3
+  category: system
+  priority: normal
+  title: We will be rolling out new features next week.
+  breaking: false
+  additions: unspecified
+- date: '2026-08-07'
+  id: 2
+  category: system
+  priority: normal
+  title: For service-related assistance or inquiries, please contact us at support@adro.com
+  breaking: false
+  additions: none

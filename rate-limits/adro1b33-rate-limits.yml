@@ -1,0 +1,50 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  Live anonymous responses from https://api.aoxlabs.com (headers inspected on /board/, /health/ and
+  /accounts/login/) and https://adro.com/llms.txt for the storefront MCP endpoint.
+limit_count: 0
+apis:
+- api: AOX Platform API
+  host: https://api.aoxlabs.com
+  documented: false
+  limit_count: 0
+  response_headers: []
+  exhaustion_status: undeclared
+  detail: >-
+    No published rate limits and no runtime signal. Not one of the 231 operations declares a 429
+    response, and no X-RateLimit-*, RateLimit-* or Retry-After header appeared on any probed response.
+    The full set of headers returned on a 200 is: date, content-type, content-length, server
+    (gunicorn), vary, allow, x-frame-options, strict-transport-security, x-content-type-options,
+    referrer-policy, cross-origin-opener-policy. An agent has no way to pace itself against this API
+    except by backing off blindly.
+  evidence:
+  - url: https://api.aoxlabs.com/board/
+    status: 200
+    note: No rate-limit headers present.
+  - url: https://api.aoxlabs.com/health/
+    status: 200
+    note: No rate-limit headers present.
+  quota_note: >-
+    Consumption IS metered, just not by request rate — credits per billing cycle, storage bytes, and a
+    per-project download quota (GET /projects/{project_uid}/download-quota/). See
+    plans/adro1b33-plans-pricing.yml.
+- api: ADRO US Store Agent Commerce (UCP / MCP)
+  host: https://adro.com
+  documented: true
+  quantified: false
+  limit_count: 0
+  scope: per-ip
+  exhaustion_status: 429
+  response_headers: []
+  detail: >-
+    https://adro.com/llms.txt states "The MCP endpoint is rate-limited per IP. Back off on 429
+    responses." It names the scope and the exhaustion status but no number and no window, and no
+    rate-limit header was returned on the probed tools/list call. This is Shopify's platform limit
+    rather than an ADRO-set one.
+  evidence:
+  - url: https://adro.com/llms.txt
+    status: 200
+  - url: https://adro.com/api/ucp/mcp
+    status: 200
+    note: POST tools/list; no rate-limit headers in the response.

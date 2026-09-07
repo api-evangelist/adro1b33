@@ -1,0 +1,100 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/adro1b33-aox-openapi.yaml (declared responses) plus live anonymous probes of
+  api.aoxlabs.com for the envelopes the contract omits. No published error reference exists on
+  aoxlabs.com to search.
+format: drf-detail
+format_note: >-
+  NOT RFC 9457. No operation returns application/problem+json, and neither `type` nor `title` nor
+  `status` appears in any error body. The API uses the two stock Django REST Framework envelopes.
+contract_gap: >-
+  The spec declares error responses on exactly ONE of 231 operations — POST
+  /projects/{project_id}/register-stl/ declares 400 and 404, both with an untyped
+  `{type: object, additionalProperties: {}}` schema and an empty description. Every other operation
+  documents only its success codes (191x 200, 26x 201, 11x 204, 5x 202). A consumer reading the
+  contract has no way to know what a failure looks like, which is why the envelopes below were
+  established by probing rather than derived.
+envelopes:
+- id: detail
+  shape: '{"detail": "<message>"}'
+  schema: '#/components/schemas/DetailResponse'
+  used_for:
+  - 401 authentication failure
+  - 403 permission denied
+  - 404 not found
+  - 405 method not allowed
+  - 429 throttled
+  note: >-
+    The stock DRF APIException envelope. DetailResponse IS defined in components.schemas but is wired
+    to success responses (e.g. logout, cancel), never to an error status.
+- id: field_errors
+  shape: '{"<field>": ["<message>", ...], ...}'
+  used_for:
+  - 400 request-body validation failure
+  note: The stock DRF ValidationError envelope, keyed by serializer field name.
+- id: django_html
+  shape: 'text/html — <title>Server Error (500)</title>'
+  used_for:
+  - 500 unhandled server error
+  note: >-
+    An API client parsing JSON will fail on this body. Observed live on GET /plans/ and
+    GET /credits/bundles/, two operations the contract marks as public.
+localization:
+  language: ko
+  note: >-
+    Error messages are returned in Korean regardless of Accept-Language. No Accept-Language handling
+    or English fallback was observed. This is a real integration hazard for a platform whose stated
+    market is global automotive OEMs — an agent or an English-locale client cannot match on message
+    text.
+problem_types:
+- id: not-authenticated
+  status: 401
+  envelope: detail
+  title: Authentication credentials were not provided
+  body_observed: '{"detail":"자격 인증 데이터가 제공되지 않았습니다."}'
+  evidence: https://api.aoxlabs.com/ (probed 2026-09-07)
+  remediation: Establish a session via POST /accounts/login/ or refresh it via POST /accounts/token/refresh/.
+- id: validation-error
+  status: 400
+  envelope: field_errors
+  title: Request body failed serializer validation
+  body_observed: '{"email":["이 필드는 필수 항목입니다."],"password":["이 필드는 필수 항목입니다."]}'
+  evidence: 'POST https://api.aoxlabs.com/accounts/login/ with {} (probed 2026-09-07)'
+  remediation: Correct the named fields; each key is a request-body field and each value a list of messages.
+- id: method-not-allowed
+  status: 405
+  envelope: detail
+  title: Method not allowed
+  body_observed: '{"detail":"메서드 \"DELETE\"는 허용되지 않습니다."}'
+  evidence: 'DELETE https://api.aoxlabs.com/health/ (probed 2026-09-07)'
+  remediation: Read the `Allow` response header, which the API does return correctly.
+- id: server-error
+  status: 500
+  envelope: django_html
+  title: Unhandled server error
+  body_observed: '<!doctype html><html lang="en"><head><title>Server Error (500)</title></head>...'
+  evidence: 'GET https://api.aoxlabs.com/plans/ (probed 2026-09-07)'
+  remediation: >-
+    None available to the caller. Note that two operations the spec marks public (plans_list,
+    credits_bundles_list) were returning 500 at probe time, so the published plan catalog is not
+    currently machine-readable.
+- id: register-stl-bad-request
+  status: 400
+  envelope: unspecified
+  title: Declared but untyped
+  evidence: 'openapi: POST /projects/{project_id}/register-stl/ responses.400'
+  derived_from_spec: true
+- id: register-stl-not-found
+  status: 404
+  envelope: unspecified
+  title: Declared but untyped
+  evidence: 'openapi: POST /projects/{project_id}/register-stl/ responses.404'
+  derived_from_spec: true
+domain_failure_fields:
+  note: >-
+    Failure detail for long-running work is carried in the resource, not the HTTP error. The Job schema
+    exposes `errorSummary` and `errorDetail` alongside `status`/`stage`, and the Payment schema exposes
+    `failureCode` and `failureMessage`. An agent polling GET /job/{id}/ or GET /job/{id}/monitor/ reads
+    failure there; a 200 does not mean the job succeeded.
+error_code_registry_published: false

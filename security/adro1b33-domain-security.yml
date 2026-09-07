@@ -1,0 +1,39 @@
+generated: '2026-09-07'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: adro.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov  5 20:12:35 2026 GMT
+  hsts: true
+  hsts_max_age: 7889238
+- host: aoxlabs.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb  2 23:59:59 2027 GMT
+  hsts: false
+- host: api.aoxlabs.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Feb  2 23:59:59 2027 GMT
+  hsts: null
+  hsts_correction: >-
+    The automated probe recorded null, but api.aoxlabs.com DOES return
+    `strict-transport-security: max-age=31536000; includeSubDomains; preload` on live responses
+    (observed 2026-09-07 on GET /board/, GET /health/ and POST /accounts/login/). The host also
+    returns x-frame-options DENY, x-content-type-options nosniff, referrer-policy same-origin and
+    cross-origin-opener-policy same-origin — the Django security-middleware defaults, correctly on.
+domains:
+- domain: adro.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none
+- domain: aoxlabs.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none
