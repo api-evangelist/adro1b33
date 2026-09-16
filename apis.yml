@@ -1,22 +1,22 @@
 aid: adro1b33
 name: ADRO
-description: >-
-  ADRO, Inc. (에이드로) is a South Korean mobility aerotech company in Yongin-si, Gyeonggi-do that designs and
-  manufactures aerospace-grade carbon-fiber aerodynamic components for global automotive brands, and that has
-  extended into software with AOX (Aerodynamic Optimization eXperience) — a web-based, GPU- and HPC-backed
-  aerodynamic design and optimization platform operated at aoxlabs.com that takes a CAD or STL geometry through
-  meshing, CFD simulation, shape optimization and post-processing without requiring CFD expertise. The AOX platform
-  is backed by a public Django REST Framework contract at api.aoxlabs.com serving a 231-operation OpenAPI 3.0.3
-  document covering projects, jobs, LES runs, sketch sessions, patches, artifacts, assets, teams, credits, plans,
-  subscriptions and payments. The company's US direct-to-consumer parts storefront at adro.com is a Shopify store
-  that serves an agent-facing llms.txt and a live Universal Commerce Protocol (UCP) MCP endpoint.
+description: ADRO, Inc. (에이드로) is a South Korean mobility aerotech company in Yongin-si, Gyeonggi-do that
+  designs and manufactures aerospace-grade carbon-fiber aerodynamic components for global automotive brands,
+  and that has extended into software with AOX (Aerodynamic Optimization eXperience) — a web-based, GPU-
+  and HPC-backed aerodynamic design and optimization platform operated at aoxlabs.com that takes a CAD
+  or STL geometry through meshing, CFD simulation, shape optimization and post-processing without requiring
+  CFD expertise. The AOX platform is backed by a public Django REST Framework contract at api.aoxlabs.com
+  serving a 231-operation OpenAPI 3.0.3 document covering projects, jobs, LES runs, sketch sessions, patches,
+  artifacts, assets, teams, credits, plans, subscriptions and payments. The company's US direct-to-consumer
+  parts storefront at adro.com is a Shopify store that serves an agent-facing llms.txt and a live Universal
+  Commerce Protocol (UCP) MCP endpoint.
 url: https://raw.githubusercontent.com/api-evangelist/adro1b33/refs/heads/main/apis.yml
 image: https://aoxlabs.com/logos/AOX_Main_dark.png
 x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-09-07'
-modified: '2026-09-07'
+modified: '2026-09-16'
 position: Producing
 tags:
 - Aerodynamics
@@ -28,7 +28,7 @@ tags:
 - Manufacturing
 - Artificial Intelligence
 - High Performance Computing
-- Ecommerce
+- E-Commerce
 - MCP
 - South Korea
 tags_raw:
@@ -50,62 +50,19 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- name: AOX Platform API
-  description: >-
-    The REST API behind AOX, ADRO's aerodynamic optimization platform. A Django REST Framework backend serving a
-    public, machine-readable OpenAPI 3.0.3 document (drf-spectacular) with 231 operations across 207 paths:
-    accounts and team management, projects, jobs, LES runs, sketch sessions, geometry patches, artifacts, an asset
-    marketplace, STL conversion and repair, credits and credit bundles, plans, subscriptions and payments. Nineteen
-    operations are explicitly unauthenticated (login, signup, social login, token refresh, plans, credit bundles,
-    board announcements, health, tenant existence, email verification); the remainder require an authenticated
-    session.
-  humanURL: https://api.aoxlabs.com/swagger/
-  baseURL: https://api.aoxlabs.com
-  image: https://aoxlabs.com/logos/AOX_Main_dark.png
-  tags:
-  - Aerodynamics
-  - Computational Fluid Dynamics
-  - Simulation
-  - Optimization
-  - Engineering
-  - High Performance Computing
-  tags_raw:
-  - aerodynamics
-  - computational-fluid-dynamics
-  - simulation
-  - optimization
-  - engineering
-  - high-performance-computing
-  properties:
-  - type: OpenAPI
-    url: openapi/adro1b33-aox-openapi.yaml
-  - type: APIReference
-    url: https://api.aoxlabs.com/swagger/
-  - type: Authentication
-    url: authentication/adro1b33-authentication.yml
-  - type: Conventions
-    url: conventions/adro1b33-conventions.yml
-  - type: ErrorCatalog
-    url: errors/adro1b33-problem-types.yml
-  - type: DataModel
-    url: data-model/adro1b33-data-model.yml
-  - type: Overlay
-    url: overlays/adro1b33-aox-overlay.yaml
-  - type: AgentSkill
-    url: skills/_index.yml
 - name: ADRO US Store Agent Commerce (UCP / MCP)
-  description: >-
-    ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that publishes an agent-facing
-    surface on ADRO's own domain — an llms.txt of agent instructions, a UCP merchant profile at /.well-known/ucp, and
-    a live Universal Commerce Protocol MCP endpoint at POST /api/ucp/mcp whose anonymous tools/list returns thirteen
-    tools with full JSON Schema inputs for catalog search and lookup, product retrieval, cart, checkout and order.
-    The runtime is Shopify's platform-provided UCP implementation rather than ADRO-authored code; the endpoint,
-    merchant profile and catalog are ADRO's.
+  description: ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that
+    publishes an agent-facing surface on ADRO's own domain — an llms.txt of agent instructions, a UCP
+    merchant profile at /.well-known/ucp, and a live Universal Commerce Protocol MCP endpoint at POST
+    /api/ucp/mcp whose anonymous tools/list returns thirteen tools with full JSON Schema inputs for catalog
+    search and lookup, product retrieval, cart, checkout and order. The runtime is Shopify's platform-provided
+    UCP implementation rather than ADRO-authored code; the endpoint, merchant profile and catalog are
+    ADRO's.
   humanURL: https://adro.com/llms.txt
   baseURL: https://adro.com
   image: https://adro.com/cdn/shop/files/adro_logo_klaviyo.png?v=1785437102
   tags:
-  - Ecommerce
+  - E-Commerce
   - MCP
   - agent-native
   - Automotive
@@ -123,6 +80,626 @@ apis:
     url: llms/adro1b33-llms.txt
   - type: WellKnown
     url: well-known/adro1b33-well-known.yml
+- aid: adro1b33:adro1b33-accounts-api
+  name: ADRO Accounts API
+  description: The accounts API from ADRO — 18 operation(s) for accounts.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-accounts-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-ai-api
+  name: ADRO AI API
+  description: The Ai API from ADRO — 4 operation(s) for ai.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - Ai
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-ai-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-announcements-api
+  name: ADRO Announcements API
+  description: The announcements API from ADRO — 1 operation(s) for announcements.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - announcements
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-announcements-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-artifacts-api
+  name: ADRO Artifacts API
+  description: The artifacts API from ADRO — 5 operation(s) for artifacts.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - artifacts
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-artifacts-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-asset-notifications-api
+  name: ADRO Asset Notifications API
+  description: The asset-notifications API from ADRO — 1 operation(s) for asset-notifications.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - asset-notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-asset-notifications-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-assets-api
+  name: ADRO Assets API
+  description: The assets API from ADRO — 10 operation(s) for assets.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - assets
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-assets-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-board-api
+  name: ADRO Board API
+  description: The board API from ADRO — 2 operation(s) for board.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - board
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-board-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-book-demo-api
+  name: ADRO Book Demo API
+  description: The book_demo API from ADRO — 1 operation(s) for book_demo.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - book_demo
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-book-demo-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-credits-api
+  name: ADRO Credits API
+  description: The credits API from ADRO — 11 operation(s) for credits.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - credits
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-credits-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-deletion-executions-api
+  name: ADRO Deletion Executions API
+  description: The deletion-executions API from ADRO — 1 operation(s) for deletion-executions.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - deletion-executions
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-deletion-executions-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-error-feedback-api
+  name: ADRO Error Feedback API
+  description: The error-feedback API from ADRO — 1 operation(s) for error-feedback.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - error-feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-error-feedback-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-feature-feedback-api
+  name: ADRO Feature Feedback API
+  description: The feature-feedback API from ADRO — 2 operation(s) for feature-feedback.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - feature-feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-feature-feedback-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-health-api
+  name: ADRO Health API
+  description: The health API from ADRO — 1 operation(s) for health.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - health
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-health-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-improvement-requests-api
+  name: ADRO Improvement Requests API
+  description: The improvement_requests API from ADRO — 1 operation(s) for improvement_requests.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - improvement_requests
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-improvement-requests-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-job-api
+  name: ADRO Job API
+  description: The job API from ADRO — 4 operation(s) for job.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - job
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-job-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-job-notifications-api
+  name: ADRO Job Notifications API
+  description: The job-notifications API from ADRO — 3 operation(s) for job-notifications.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - job-notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-job-notifications-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-jobs-api
+  name: ADRO Jobs API
+  description: The jobs API from ADRO — 24 operation(s) for jobs.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-les-api
+  name: ADRO Les API
+  description: The les API from ADRO — 21 operation(s) for les.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - les
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-les-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-patches-api
+  name: ADRO Patches API
+  description: The patches API from ADRO — 11 operation(s) for patches.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - patches
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-patches-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-payments-api
+  name: ADRO Payments API
+  description: The payments API from ADRO — 12 operation(s) for payments.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - payments
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-payments-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-plans-api
+  name: ADRO Plans API
+  description: The plans API from ADRO — 16 operation(s) for plans.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - plans
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-plans-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-presigned-url-api
+  name: ADRO Presigned URL API
+  description: The presigned_url API from ADRO — 2 operation(s) for presigned_url.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - presigned_url
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-presigned-url-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-projects-api
+  name: ADRO Projects API
+  description: The projects API from ADRO — 21 operation(s) for projects.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - projects
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-projects-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-racing-api
+  name: ADRO Racing API
+  description: The racing API from ADRO — 6 operation(s) for racing.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - racing
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-racing-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-sample-stls-api
+  name: ADRO Sample Stls API
+  description: The sample-stls API from ADRO — 2 operation(s) for sample-stls.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - sample-stls
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-sample-stls-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-sketch-api
+  name: ADRO Sketch API
+  description: The sketch API from ADRO — 13 operation(s) for sketch.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - sketch
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-sketch-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-subscriptions-api
+  name: ADRO Subscriptions API
+  description: The subscriptions API from ADRO — 2 operation(s) for subscriptions.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-subscriptions-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-teams-api
+  name: ADRO Teams API
+  description: The teams API from ADRO — 6 operation(s) for teams.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - teams
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-teams-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-tenants-api
+  name: ADRO Tenants API
+  description: The tenants API from ADRO — 1 operation(s) for tenants.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - tenants
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-tenants-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-uploads-api
+  name: ADRO Uploads API
+  description: The uploads API from ADRO — 2 operation(s) for uploads.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - uploads
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-uploads-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-verifier-api
+  name: ADRO Verifier API
+  description: The verifier API from ADRO — 2 operation(s) for verifier.
+  humanURL: https://api.aoxlabs.com/swagger/
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - verifier
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-verifier-api-openapi.yml
+  - type: APIReference
+    url: https://api.aoxlabs.com/swagger/
+  - type: Authentication
+    url: authentication/adro1b33-authentication.yml
+  - type: Conventions
+    url: conventions/adro1b33-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adro1b33-problem-types.yml
+  - type: DataModel
+    url: data-model/adro1b33-data-model.yml
 common:
 - type: Website
   url: https://adro.com/
@@ -149,7 +726,7 @@ common:
 - type: ChangeLog
   url: https://aoxlabs.com/board
 - type: OpenAPI
-  url: openapi/adro1b33-aox-openapi.yaml
+  url: openapi/_original/adro1b33-aox-openapi.yaml
 - type: MCPServer
   url: mcp/adro1b33-mcp.yml
 - type: LLMsTxt
@@ -188,7 +765,6 @@ common:
   url: security/adro1b33-domain-security.yml
 - type: OAuthScopes
   url: scopes/adro1b33-scopes.yml
-
 x-enrichment:
   date: '2026-09-07'
   status: enriched
