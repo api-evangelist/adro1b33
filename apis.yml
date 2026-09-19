@@ -86,6 +86,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Account
+  tags_raw:
   - accounts
   properties:
   - type: OpenAPI
@@ -106,6 +108,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Artificial Intelligence
+  tags_raw:
   - Ai
   properties:
   - type: OpenAPI
@@ -126,6 +130,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Announcements
+  tags_raw:
   - announcements
   properties:
   - type: OpenAPI
@@ -146,6 +152,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Artifacts
+  tags_raw:
   - artifacts
   properties:
   - type: OpenAPI
@@ -186,6 +194,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Assets
+  tags_raw:
   - assets
   properties:
   - type: OpenAPI
@@ -206,6 +216,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Boards
+  tags_raw:
   - board
   properties:
   - type: OpenAPI
@@ -226,6 +238,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Book Demo
+  tags_raw:
   - book_demo
   properties:
   - type: OpenAPI
@@ -246,6 +260,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Credit
+  tags_raw:
   - credits
   properties:
   - type: OpenAPI
@@ -326,6 +342,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -345,7 +363,8 @@ apis:
   description: The improvement_requests API from ADRO — 1 operation(s) for improvement_requests.
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
-  tags:
+  tags: []
+  tags_raw:
   - improvement_requests
   properties:
   - type: OpenAPI
@@ -366,6 +385,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Job
+  tags_raw:
   - job
   properties:
   - type: OpenAPI
@@ -406,6 +427,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Job
+  tags_raw:
   - jobs
   properties:
   - type: OpenAPI
@@ -446,6 +469,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Patches
+  tags_raw:
   - patches
   properties:
   - type: OpenAPI
@@ -466,6 +491,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Payments
+  tags_raw:
   - payments
   properties:
   - type: OpenAPI
@@ -486,6 +513,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Plans
+  tags_raw:
   - plans
   properties:
   - type: OpenAPI
@@ -505,7 +534,8 @@ apis:
   description: The presigned_url API from ADRO — 2 operation(s) for presigned_url.
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
-  tags:
+  tags: []
+  tags_raw:
   - presigned_url
   properties:
   - type: OpenAPI
@@ -526,6 +556,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Project
+  tags_raw:
   - projects
   properties:
   - type: OpenAPI
@@ -546,6 +578,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Racing
+  tags_raw:
   - racing
   properties:
   - type: OpenAPI
@@ -586,6 +620,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Sketch
+  tags_raw:
   - sketch
   properties:
   - type: OpenAPI
@@ -606,6 +642,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Subscription
+  tags_raw:
   - subscriptions
   properties:
   - type: OpenAPI
@@ -626,6 +664,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Team
+  tags_raw:
   - teams
   properties:
   - type: OpenAPI
@@ -646,6 +686,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Tenants
+  tags_raw:
   - tenants
   properties:
   - type: OpenAPI
@@ -666,6 +708,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Uploads
+  tags_raw:
   - uploads
   properties:
   - type: OpenAPI
@@ -686,6 +730,8 @@ apis:
   humanURL: https://api.aoxlabs.com/swagger/
   baseURL: https://api.aoxlabs.com
   tags:
+  - Verifier
+  tags_raw:
   - verifier
   properties:
   - type: OpenAPI
