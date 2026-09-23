@@ -1,0 +1,19 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Tenants API
+  version: 1.0.0
+tags:
+- name: Tenants
+paths:
+  /tenants/exists/:
+    post:
+      operationId: tenants_exists_create
+      tags:
+      - Tenants
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Tenants exists create
+      x-summary-source: derived

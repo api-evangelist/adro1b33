@@ -1,0 +1,130 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Deletion Executions API
+  version: 1.0.0
+tags:
+- name: deletion-executions
+paths:
+  /deletion-executions/{execution_uid}/:
+    get:
+      operationId: deletion_executions_retrieve
+      description: Return safe progress to a member of the execution's actual Team only.
+      summary: 영구 삭제 실행 상태 조회
+      parameters:
+      - in: path
+        name: execution_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - deletion-executions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletionExecutionStatus'
+          description: ''
+components:
+  schemas:
+    DeletionExecutionStatus:
+      type: object
+      description: Team-safe execution progress. Storage targets and errors stay private.
+      properties:
+        executionId:
+          type: string
+          format: uuid
+          readOnly: true
+        resourceType:
+          type: string
+          readOnly: true
+        resourceUid:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - scheduled
+          - pending
+          - running
+          - retry
+          - blocked
+          - succeeded
+          - failed
+          - cancelled
+          type: string
+          description: '* `scheduled` - Scheduled
+
+            * `pending` - Pending
+
+            * `running` - Running
+
+            * `retry` - Retry
+
+            * `blocked` - Blocked for manual review
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled'
+          x-spec-enum-id: 2ff34784721dc0e0
+          readOnly: true
+        phase:
+          enum:
+          - s3_purge
+          - db_finalize
+          type: string
+          description: '* `s3_purge` - S3 purge
+
+            * `db_finalize` - Database finalization'
+          x-spec-enum-id: eb377700a0ac201c
+          readOnly: true
+        scheduledFor:
+          type: string
+          format: date-time
+          readOnly: true
+        claimedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        nextRetryAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        deletedObjectCount:
+          type: integer
+          readOnly: true
+        deletedVersionCount:
+          type: integer
+          readOnly: true
+        deletedBytes:
+          type: integer
+          readOnly: true
+        isTerminal:
+          type: string
+          readOnly: true
+      required:
+      - claimedAt
+      - completedAt
+      - deletedBytes
+      - deletedObjectCount
+      - deletedVersionCount
+      - executionId
+      - isTerminal
+      - nextRetryAt
+      - phase
+      - resourceType
+      - resourceUid
+      - scheduledFor
+      - status

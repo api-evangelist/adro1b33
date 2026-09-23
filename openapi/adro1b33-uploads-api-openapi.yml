@@ -1,0 +1,526 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Uploads API
+  version: 1.0.0
+tags:
+- name: Uploads
+paths:
+  /uploads/:
+    get:
+      operationId: uploads_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: 페이지당 반환할 결과 수.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: 결과를 반환할 초기 인덱스.
+        schema:
+          type: integer
+      tags:
+      - Uploads
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFileUploadTrackerList'
+          description: ''
+      summary: Uploads list
+      x-summary-source: derived
+    post:
+      operationId: uploads_create
+      tags:
+      - Uploads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadTracker'
+          description: ''
+      summary: Uploads create
+      x-summary-source: derived
+  /uploads/{id}/:
+    get:
+      operationId: uploads_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Uploads
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadTracker'
+          description: ''
+      summary: Uploads retrieve
+      x-summary-source: derived
+    put:
+      operationId: uploads_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Uploads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadTracker'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadTracker'
+          description: ''
+      summary: Uploads update
+      x-summary-source: derived
+    patch:
+      operationId: uploads_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Uploads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFileUploadTracker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFileUploadTracker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFileUploadTracker'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadTracker'
+          description: ''
+      summary: Uploads partial update
+      x-summary-source: derived
+    delete:
+      operationId: uploads_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Uploads
+      responses:
+        '204':
+          description: No response body
+      summary: Uploads destroy
+      x-summary-source: derived
+components:
+  schemas:
+    Artifact:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        artifactRole:
+          enum:
+          - PROJECT_THUMBNAIL_IMAGE
+          - PROJECT_SOURCE_STL
+          - OPTIMIZED_STL
+          - G2_SUMMARY_IMAGE
+          - G2_SHAPE_REPORT_IMAGE
+          - G2_FIGS_ZIP
+          - G1_INPUT_STL
+          - G1_SUMMARY_GIF
+          - G1_FIGS_ZIP
+          - G1_NORMAL_DISPLACEMENT_VTP
+          - RESULT_MESH
+          - RESULT_HISTORY
+          - RESULT_SUMMARY_JSON
+          - RESULT_FLOW_VOLUME
+          - RESULT_GEOMETRY_SCALE
+          - RESULT_PREVIEW_POINTS
+          - RESULT_PROXY_MESH
+          - RESULT_PROXY_LAYOUT
+          - RESULT_PROXY_ATLAS
+          - STREAMLINES_BIN
+          - FLOWFIELD_BIN
+          - G4_SUMMARY_IMAGE
+          - G4_FIGS_ZIP
+          - STEP_EXPORT_ASSEMBLY
+          - STEP_EXPORT_PART_STEP
+          - STEP_EXPORT_PART_STL
+          - ASSET_FLOW_VISUALIZATION_IMAGE
+          - ASSET_RENDERED_IMAGE
+          - S2_FINAL_FIELD_IMAGE
+          - S2_REPLAY_FRAMES
+          - RACING_BASELINE_GLB
+          - RACING_OPTIMIZED_GLB
+          - USER_PROFILE_IMAGE
+          type: string
+          description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
+
+            * `PROJECT_SOURCE_STL` - Project Source STL
+
+            * `OPTIMIZED_STL` - Optimized STL
+
+            * `G2_SUMMARY_IMAGE` - G2 Summary Image
+
+            * `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image
+
+            * `G2_FIGS_ZIP` - G2 Figs ZIP
+
+            * `G1_INPUT_STL` - G1 Input STL
+
+            * `G1_SUMMARY_GIF` - G1 Summary GIF
+
+            * `G1_FIGS_ZIP` - G1 Figs ZIP
+
+            * `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP
+
+            * `RESULT_MESH` - Result Mesh
+
+            * `RESULT_HISTORY` - Result History
+
+            * `RESULT_SUMMARY_JSON` - Result Summary JSON
+
+            * `RESULT_FLOW_VOLUME` - Result Flow Volume
+
+            * `RESULT_GEOMETRY_SCALE` - Result Geometry Scale
+
+            * `RESULT_PREVIEW_POINTS` - Result Preview Points
+
+            * `RESULT_PROXY_MESH` - Result Proxy Mesh
+
+            * `RESULT_PROXY_LAYOUT` - Result Proxy Layout
+
+            * `RESULT_PROXY_ATLAS` - Result Proxy Atlas
+
+            * `STREAMLINES_BIN` - Streamlines Binary
+
+            * `FLOWFIELD_BIN` - Flow Field Binary
+
+            * `G4_SUMMARY_IMAGE` - G4 Summary Image
+
+            * `G4_FIGS_ZIP` - G4 Figs ZIP
+
+            * `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly
+
+            * `STEP_EXPORT_PART_STEP` - STEP Export Part STEP
+
+            * `STEP_EXPORT_PART_STL` - STEP Export Part STL
+
+            * `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image
+
+            * `ASSET_RENDERED_IMAGE` - Asset Rendered Image
+
+            * `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image
+
+            * `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames
+
+            * `RACING_BASELINE_GLB` - Racing Baseline GLB
+
+            * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
+
+            * `USER_PROFILE_IMAGE` - User Profile Image'
+          x-spec-enum-id: ef52df4c3b39155d
+        storageProvider:
+          enum:
+          - S3
+          - GCS
+          - AZURE
+          type: string
+          description: '* `S3` - Amazon S3
+
+            * `GCS` - Google Cloud Storage
+
+            * `AZURE` - Azure Blob Storage'
+          x-spec-enum-id: 3e1757d60d74052a
+        s3Bucket:
+          type: string
+          maxLength: 255
+        s3Key:
+          type: string
+          maxLength: 1024
+        s3Url:
+          type: string
+          readOnly: true
+        fileName:
+          type: string
+          readOnly: true
+        contentType:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        checksumSha256:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artifactRole
+      - createdAt
+      - fileName
+      - id
+      - s3Bucket
+      - s3Key
+      - s3Url
+      - uid
+    PatchedFileUploadTracker:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        userId:
+          type: integer
+          readOnly: true
+        uploadId:
+          type: string
+          maxLength: 255
+        fileName:
+          type: string
+          maxLength: 255
+        contentType:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        fileSize:
+          type:
+          - integer
+          - 'null'
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        status:
+          enum:
+          - pending
+          - uploading
+          - completed
+          - failed
+          - cancelled
+          type: string
+          description: '* `pending` - Pending
+
+            * `uploading` - Uploading
+
+            * `completed` - Completed
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled'
+          x-spec-enum-id: 09b6c2bacd3dd5f3
+        progressPercent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        bytesUploaded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        s3Bucket:
+          type: string
+          maxLength: 255
+        s3Key:
+          type: string
+          maxLength: 1024
+        artifact:
+          allOf:
+          - $ref: '#/components/schemas/Artifact'
+          readOnly: true
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+    FileUploadTracker:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        userId:
+          type: integer
+          readOnly: true
+        uploadId:
+          type: string
+          maxLength: 255
+        fileName:
+          type: string
+          maxLength: 255
+        contentType:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        fileSize:
+          type:
+          - integer
+          - 'null'
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        status:
+          enum:
+          - pending
+          - uploading
+          - completed
+          - failed
+          - cancelled
+          type: string
+          description: '* `pending` - Pending
+
+            * `uploading` - Uploading
+
+            * `completed` - Completed
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled'
+          x-spec-enum-id: 09b6c2bacd3dd5f3
+        progressPercent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        bytesUploaded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        s3Bucket:
+          type: string
+          maxLength: 255
+        s3Key:
+          type: string
+          maxLength: 1024
+        artifact:
+          allOf:
+          - $ref: '#/components/schemas/Artifact'
+          readOnly: true
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artifact
+      - completedAt
+      - createdAt
+      - fileName
+      - id
+      - s3Bucket
+      - s3Key
+      - updatedAt
+      - uploadId
+      - userId
+    PaginatedFileUploadTrackerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileUploadTracker'

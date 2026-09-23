@@ -1,0 +1,108 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Verifier API
+  version: 1.0.0
+tags:
+- name: Verifier
+paths:
+  /verifier/email_verifier/:
+    post:
+      operationId: verifier_email_verifier_create
+      description: '이메일 인증
+
+        ---'
+      tags:
+      - Verifier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierCreate'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailVerifierCreate'
+          description: ''
+      summary: Verifier email verifier create
+      x-summary-source: derived
+  /verifier/email_verifier/confirm/:
+    post:
+      operationId: verifier_email_verifier_confirm_create
+      description: '이메일 인증 확인
+
+        ---
+
+        응답값의 token값으로 회원가입의 emailToken으로 사용'
+      tags:
+      - Verifier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailVerifierConfirm'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailVerifierConfirm'
+          description: ''
+      summary: Verifier email verifier confirm create
+      x-summary-source: derived
+components:
+  schemas:
+    EmailVerifierCreate:
+      type: object
+      description: "회원가입 이메일 인증 메일 발송 (6자리 인증번호 방식)\n\nrequest: email, purpose(email_verification 한정)\nflow:\n    1. 가입된 이메일 중복 체크\n    2. EmailVerifier 레코드 생성 + 인증번호 메일 발송\n\n비밀번호 재설정(password_reset)은 이 공개 엔드포인트에서 허용하지 않는다 —\n가입 여부를 먼저 검사하는 accounts 앱(PasswordReset)을 통해서만 발송한다."
+      properties:
+        email:
+          type: string
+          format: email
+          title: 이메일
+          maxLength: 254
+        purpose:
+          enum:
+          - email_verification
+          type: string
+          description: '* `email_verification` - 회원가입 이메일 인증'
+          x-spec-enum-id: eb09df945970aa2a
+      required:
+      - email
+      - purpose
+    EmailVerifierConfirm:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        code:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - code
+      - email
+      - token

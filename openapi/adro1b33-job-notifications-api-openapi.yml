@@ -1,0 +1,43 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Job Notifications API
+  version: 1.0.0
+tags:
+- name: job-notifications
+paths:
+  /job-notifications/:
+    get:
+      operationId: job_notifications_retrieve
+      tags:
+      - job-notifications
+      responses:
+        '200':
+          description: No response body
+      summary: Job notifications retrieve
+      x-summary-source: derived
+  /job-notifications/{notification_id}/read/:
+    post:
+      operationId: job_notifications_read_create
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - job-notifications
+      responses:
+        '200':
+          description: No response body
+      summary: Job notifications read create
+      x-summary-source: derived
+  /job-notifications/read-all/:
+    post:
+      operationId: job_notifications_read_all_create
+      tags:
+      - job-notifications
+      responses:
+        '200':
+          description: No response body
+      summary: Job notifications read all create
+      x-summary-source: derived

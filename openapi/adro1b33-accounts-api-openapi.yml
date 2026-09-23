@@ -1,0 +1,1002 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Accounts API
+  version: 1.0.0
+tags:
+- name: Accounts
+paths:
+  /accounts/login/:
+    post:
+      operationId: accounts_login_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+      summary: Accounts login create
+      x-summary-source: derived
+  /accounts/logout/:
+    post:
+      operationId: accounts_logout_create
+      tags:
+      - Accounts
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts logout create
+      x-summary-source: derived
+  /accounts/me/:
+    get:
+      operationId: accounts_me_retrieve
+      tags:
+      - Accounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+          description: ''
+      summary: Accounts me retrieve
+      x-summary-source: derived
+    delete:
+      operationId: accounts_me_destroy
+      tags:
+      - Accounts
+      responses:
+        '204':
+          description: No response body
+      summary: Accounts me destroy
+      x-summary-source: derived
+  /accounts/me/force-password-change/:
+    post:
+      operationId: accounts_me_force_password_change_create
+      description: 'must_change_password=True 계정 전용 강제 비밀번호 변경.
+
+
+        old-password 검증을 생략하는 대신, must_change_password 플래그가 켜진 계정만
+
+        허용하는 것으로 보안을 대체한다.'
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserForcePasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserForcePasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserForcePasswordChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts me force password change create
+      x-summary-source: derived
+  /accounts/me/password-change/:
+    put:
+      operationId: accounts_me_password_change_update
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts me password change update
+      x-summary-source: derived
+  /accounts/me/password-verify/:
+    post:
+      operationId: accounts_me_password_verify_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasswordVerify'
+          description: ''
+      summary: Accounts me password verify create
+      x-summary-source: derived
+  /accounts/me/usage/:
+    get:
+      operationId: accounts_me_usage_retrieve
+      parameters:
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+      tags:
+      - Accounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeUsage'
+          description: ''
+      summary: Accounts me usage retrieve
+      x-summary-source: derived
+  /accounts/password-reset/:
+    post:
+      operationId: accounts_password_reset_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts password reset create
+      x-summary-source: derived
+  /accounts/password-reset-confirm/:
+    post:
+      operationId: accounts_password_reset_confirm_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetConfirm'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts password reset confirm create
+      x-summary-source: derived
+  /accounts/password_change/:
+    put:
+      operationId: accounts_password_change_update
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts password change update
+      x-summary-source: derived
+  /accounts/password_verify/:
+    post:
+      operationId: accounts_password_verify_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasswordVerify'
+          description: ''
+      summary: Accounts password verify create
+      x-summary-source: derived
+  /accounts/search/:
+    get:
+      operationId: accounts_search_list
+      tags:
+      - Accounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSearchResult'
+          description: ''
+      summary: Accounts search list
+      x-summary-source: derived
+  /accounts/signup/:
+    post:
+      operationId: accounts_signup_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+          description: ''
+      summary: Accounts signup create
+      x-summary-source: derived
+  /accounts/social-login/:
+    post:
+      operationId: accounts_social_login_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSocialLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSocialLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSocialLogin'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSocialLogin'
+          description: ''
+      summary: Accounts social login create
+      x-summary-source: derived
+  /accounts/social-register/:
+    post:
+      operationId: accounts_social_register_create
+      description: 소셜 신규 가입 — register_token 으로 계정 생성 후 쿠키 세팅.
+      tags:
+      - Accounts
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Accounts social register create
+      x-summary-source: derived
+  /accounts/team-switch/:
+    post:
+      operationId: accounts_team_switch_create
+      tags:
+      - Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamSwitchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TeamSwitchRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TeamSwitchRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts team switch create
+      x-summary-source: derived
+  /accounts/teams/:
+    get:
+      operationId: accounts_teams_retrieve
+      tags:
+      - Accounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsResponse'
+          description: ''
+      summary: Accounts teams retrieve
+      x-summary-source: derived
+  /accounts/token/refresh/:
+    post:
+      operationId: accounts_token_refresh_create
+      tags:
+      - Accounts
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      summary: Accounts token refresh create
+      x-summary-source: derived
+components:
+  schemas:
+    TenantFeatureAccess:
+      type: object
+      properties:
+        validationDes:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        manualOptimization:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        market:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        racingDiv:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        g3:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        submenus:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      required:
+      - g3
+      - manualOptimization
+      - market
+      - racingDiv
+      - submenus
+      - validationDes
+    UserSocialLogin:
+      type: object
+      properties:
+        code:
+          type: string
+          writeOnly: true
+        socialAccessToken:
+          type: string
+          writeOnly: true
+        state:
+          enum:
+          - google
+          type: string
+          description: '* `google` - google'
+          x-spec-enum-id: 6ad05742f68a2748
+          writeOnly: true
+        accessToken:
+          type: string
+          readOnly: true
+        refreshToken:
+          type: string
+          readOnly: true
+        registerToken:
+          type: string
+          readOnly: true
+        isRegister:
+          type: boolean
+          readOnly: true
+      required:
+      - accessToken
+      - isRegister
+      - refreshToken
+      - registerToken
+      - state
+    AccountTeam:
+      type: object
+      properties:
+        id:
+          type: integer
+        uid:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        role:
+          type:
+          - string
+          - 'null'
+        displayNameOverride:
+          type:
+          - string
+          - 'null'
+        tenantId:
+          type:
+          - integer
+          - 'null'
+        tenantSchemaName:
+          type: string
+        capabilities:
+          $ref: '#/components/schemas/TeamCapabilities'
+      required:
+      - id
+      - name
+    UserPasswordVerify:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - oldPassword
+      - token
+    TeamStorageUsage:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        usedBytes:
+          type: integer
+        quotaBytes:
+          type:
+          - integer
+          - 'null'
+        baseQuotaBytes:
+          type:
+          - integer
+          - 'null'
+        addonQuotaBytes:
+          type:
+          - integer
+          - 'null'
+        maxAddonBytes:
+          type:
+          - integer
+          - 'null'
+        availableBytes:
+          type:
+          - integer
+          - 'null'
+        usagePercent:
+          type:
+          - number
+          - 'null'
+          format: double
+        isOverQuota:
+          type: boolean
+        objectCount:
+          type: integer
+        measuredAt:
+          type: string
+          format: date-time
+        source:
+          enum:
+          - s3
+          - artifact_db
+          type: string
+          description: '* `s3` - s3
+
+            * `artifact_db` - artifact_db'
+          x-spec-enum-id: 8a4851ae1bab9fd0
+        isEstimated:
+          type: boolean
+      required:
+      - addonQuotaBytes
+      - availableBytes
+      - baseQuotaBytes
+      - isEstimated
+      - isOverQuota
+      - maxAddonBytes
+      - measuredAt
+      - objectCount
+      - quotaBytes
+      - source
+      - teamId
+      - usagePercent
+      - usedBytes
+    SignupResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        teamId:
+          type: integer
+        teamName:
+          type: string
+      required:
+      - displayName
+      - email
+      - id
+      - teamId
+      - teamName
+    StorageUsageSummary:
+      type: object
+      properties:
+        totalSizeBytes:
+          type: integer
+        g1TotalSizeBytes:
+          type: integer
+        g2TotalSizeBytes:
+          type: integer
+        g4TotalSizeBytes:
+          type: integer
+        frontierTotalSizeBytes:
+          type: integer
+      required:
+      - g1TotalSizeBytes
+      - g2TotalSizeBytes
+      - totalSizeBytes
+    MeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        userType:
+          type: string
+        isPlatformAdmin:
+          type: boolean
+        role:
+          type:
+          - string
+          - 'null'
+        isSuperAdmin:
+          type: boolean
+        canViewPlatform:
+          type: boolean
+        canManagePlatform:
+          type: boolean
+        mustChangePassword:
+          type: boolean
+        defaultTeamId:
+          type:
+          - integer
+          - 'null'
+        socialKind:
+          type:
+          - string
+          - 'null'
+        tenantFeatureAccess:
+          $ref: '#/components/schemas/TenantFeatureAccess'
+        billingMode:
+          enum:
+          - TEAM
+          - TENANT
+          type: string
+          description: '* `TEAM` - TEAM
+
+            * `TENANT` - TENANT'
+          x-spec-enum-id: b4a3018a77249123
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountTeam'
+      required:
+      - billingMode
+      - canManagePlatform
+      - canViewPlatform
+      - defaultTeamId
+      - displayName
+      - email
+      - id
+      - isPlatformAdmin
+      - isSuperAdmin
+      - mustChangePassword
+      - teams
+      - tenantFeatureAccess
+      - userType
+    LoginResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        teamId:
+          type:
+          - integer
+          - 'null'
+        teamName:
+          type:
+          - string
+          - 'null'
+        userType:
+          type: string
+        mustChangePassword:
+          type: boolean
+      required:
+      - detail
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    TeamCapabilities:
+      type: object
+      description: 'role→액션 매핑으로 계산한 capability boolean 7종.
+
+
+        `app.teams.permissions.get_team_capabilities` 반환 dict 스키마와 1:1 대응한다
+
+        (설계 문서 §3.6). 필드명은 스네이크로 두되 camel-case 렌더러가 응답에서
+
+        canManageTeamSettings 형태로 직렬화한다.'
+      properties:
+        canManageTeamSettings:
+          type: boolean
+        canManageTeamMembers:
+          type: boolean
+        canManageJobRuns:
+          type: boolean
+        canCreateProjects:
+          type: boolean
+        canManageProjects:
+          type: boolean
+        canManageBilling:
+          type: boolean
+        canAccessPreviewFeatures:
+          type: boolean
+      required:
+      - canAccessPreviewFeatures
+      - canCreateProjects
+      - canManageBilling
+      - canManageJobRuns
+      - canManageProjects
+      - canManageTeamMembers
+      - canManageTeamSettings
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        displayName:
+          type: string
+          default: ''
+          maxLength: 150
+        inviteToken:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        emailToken:
+          type:
+          - string
+          - 'null'
+          writeOnly: true
+      required:
+      - email
+      - password
+    JobDailyUsage:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        g1TotalSeconds:
+          type: integer
+        g2TotalSeconds:
+          type: integer
+        g4TotalSeconds:
+          type: integer
+        frontierTotalSeconds:
+          type: integer
+      required:
+      - date
+      - g1TotalSeconds
+      - g2TotalSeconds
+    TeamSwitchRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+      required:
+      - teamId
+    UserMeUsage:
+      type: object
+      properties:
+        jobDailyUsage:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobDailyUsage'
+          readOnly: true
+        storageUsageByProject:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageUsage'
+          readOnly: true
+        storageUsage:
+          allOf:
+          - $ref: '#/components/schemas/TeamStorageUsage'
+          readOnly: true
+      required:
+      - jobDailyUsage
+      - storageUsage
+      - storageUsageByProject
+    UserPasswordReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    UserPasswordChange:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        passwordConfirm:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - passwordConfirm
+      - token
+    UserSearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+      required:
+      - displayName
+      - email
+      - id
+    StorageUsage:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/StorageUsageSummary'
+        project:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageUsageProject'
+      required:
+      - project
+      - summary
+    StorageUsageProject:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
+          type: string
+        mode:
+          type: string
+        totalSizeBytes:
+          type: integer
+      required:
+      - mode
+      - projectId
+      - projectName
+      - totalSizeBytes
+    UserPasswordResetConfirm:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        token:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        passwordConfirm:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      - passwordConfirm
+      - token
+    UserForcePasswordChange:
+      type: object
+      description: 'must_change_password=True 계정 전용 강제 변경 시리얼라이저.
+
+
+        기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 —
+
+        대신 View 에서 must_change_password 플래그로 접근을 제한한다.'
+      properties:
+        password:
+          type: string
+          writeOnly: true
+        passwordConfirm:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - passwordConfirm
+    TeamsResponse:
+      type: object
+      properties:
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountTeam'
+      required:
+      - teams
+    DetailResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail

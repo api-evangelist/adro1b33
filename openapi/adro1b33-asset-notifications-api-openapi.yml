@@ -1,0 +1,23 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Asset Notifications API
+  version: 1.0.0
+tags:
+- name: asset-notifications
+paths:
+  /asset-notifications/{notification_id}/read/:
+    post:
+      operationId: asset_notifications_read_create
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - asset-notifications
+      responses:
+        '200':
+          description: No response body
+      summary: Asset notifications read create
+      x-summary-source: derived

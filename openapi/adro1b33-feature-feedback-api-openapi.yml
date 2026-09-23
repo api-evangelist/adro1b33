@@ -1,0 +1,33 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Feature Feedback API
+  version: 1.0.0
+tags:
+- name: feature-feedback
+paths:
+  /feature-feedback/:
+    get:
+      operationId: feature_feedback_retrieve
+      tags:
+      - feature-feedback
+      responses:
+        '200':
+          description: No response body
+      summary: Feature feedback retrieve
+      x-summary-source: derived
+  /feature-feedback/{feature_key}/:
+    put:
+      operationId: feature_feedback_update
+      parameters:
+      - in: path
+        name: feature_key
+        schema:
+          type: string
+        required: true
+      tags:
+      - feature-feedback
+      responses:
+        '200':
+          description: No response body
+      summary: Feature feedback update
+      x-summary-source: derived

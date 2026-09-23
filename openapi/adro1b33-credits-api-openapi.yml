@@ -1,0 +1,914 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Credits API
+  version: 1.0.0
+tags:
+- name: Credits
+paths:
+  /credits/buckets/:
+    get:
+      operationId: credits_buckets_list
+      summary: bucket 목록 (active 우선)
+      parameters:
+      - in: query
+        name: include_inactive
+        schema:
+          type: boolean
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditBucket'
+          description: ''
+  /credits/bundles/:
+    get:
+      operationId: credits_bundles_list
+      summary: 크레딧 번들 목록
+      parameters:
+      - in: query
+        name: currency
+        schema:
+          type: string
+      - in: query
+        name: include_inactive
+        schema:
+          type: boolean
+        description: true 면 비활성 번들도 함께 (admin 화면용)
+      tags:
+      - Credits
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditBundle'
+          description: ''
+  /credits/bundles/{bundle_id}/:
+    get:
+      operationId: credits_bundles_retrieve
+      summary: 크레딧 번들 단건 조회
+      parameters:
+      - in: path
+        name: bundle_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: currency
+        schema:
+          type: string
+      tags:
+      - Credits
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditBundle'
+          description: ''
+  /credits/bundles/{bundle_id}/purchase/:
+    post:
+      operationId: credits_bundles_purchase_create
+      summary: 번들 구매 시작 (단건결제 paymentId 채번)
+      parameters:
+      - in: path
+        name: bundle_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BundlePurchaseStartRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BundlePurchaseStartRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BundlePurchaseStartRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneTimePrepareResponse'
+          description: ''
+  /credits/estimate/:
+    get:
+      operationId: credits_estimate_retrieve
+      summary: 예상 소모 크레딧 계산
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditEstimateResponse'
+          description: ''
+  /credits/operations/:
+    get:
+      operationId: credits_operations_list
+      summary: 크레딧 operation 목록 (idempotency 단위, 최신순)
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: integer
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditOperation'
+          description: ''
+  /credits/purchases/:
+    get:
+      operationId: credits_purchases_list
+      summary: 번들 구매 이력
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: integer
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BundlePurchase'
+          description: ''
+  /credits/transactions/:
+    get:
+      operationId: credits_transactions_list
+      summary: 크레딧 거래 내역 (bucket 단위 row, 최신순)
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: integer
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditTransaction'
+          description: ''
+  /credits/usage/jobs/:
+    get:
+      operationId: credits_usage_jobs_retrieve
+      summary: 팀 Job 목록 + 크레딧 소모 요약 (SQS 실시간 차감 검증용)
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: integer
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          description: No response body
+  /credits/usage/jobs/{job_uid}/:
+    get:
+      operationId: credits_usage_jobs_retrieve_2
+      summary: Job 단건 크레딧 소모 상세 — attempt 요약 + 최근 UsageEvent 스트림
+      parameters:
+      - in: query
+        name: events_limit
+        schema:
+          type: integer
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          description: No response body
+  /credits/wallet/:
+    get:
+      operationId: credits_wallet_retrieve
+      summary: 팀 크레딧 지갑 — balance (active buckets 합) + source 별 breakdown
+      parameters:
+      - in: query
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Credits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditWallet'
+          description: ''
+components:
+  schemas:
+    CreditTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        operation:
+          type: integer
+        operationKind:
+          type: string
+          readOnly: true
+        operationIdempotencyKey:
+          type: string
+          readOnly: true
+        bucket:
+          type: integer
+        bucketSource:
+          type: string
+          readOnly: true
+        sequence:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        delta:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        bucketRemainingAfter:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bucket
+      - bucketRemainingAfter
+      - bucketSource
+      - createdAt
+      - delta
+      - id
+      - operation
+      - operationIdempotencyKey
+      - operationKind
+      - sequence
+    PriceEntry:
+      type: object
+      properties:
+        currency:
+          type: string
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        display:
+          $ref: '#/components/schemas/PriceDisplay'
+      required:
+      - currency
+      - display
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
+    CreditOperation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        kind:
+          enum:
+          - GRANT
+          - CONSUME
+          - REFUND_REVERSAL
+          - EXPIRE
+          - COMPENSATION
+          type: string
+          description: '* `GRANT` - 발급
+
+            * `CONSUME` - 차감(사용)
+
+            * `REFUND_REVERSAL` - 환불 회수
+
+            * `EXPIRE` - 만료 소멸
+
+            * `COMPENSATION` - 오류 보상 지급'
+          x-spec-enum-id: 9a773a70abb3a2bc
+        totalDelta:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        walletBalanceAfter:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        unmetAmount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        idempotencyKey:
+          type: string
+          maxLength: 128
+        note:
+          type: string
+          maxLength: 200
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - id
+      - idempotencyKey
+      - kind
+      - totalDelta
+      - walletBalanceAfter
+    BundlePurchase:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          readOnly: true
+        paymentStatus:
+          type: string
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        bundleId:
+          type: integer
+          readOnly: true
+        creditsSnapshot:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        priceSnapshotMinor:
+          type: integer
+          readOnly: true
+        currencySnapshot:
+          type: string
+          maxLength: 8
+        display:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bundleId
+      - createdAt
+      - creditsSnapshot
+      - currencySnapshot
+      - display
+      - paymentId
+      - paymentStatus
+      - priceSnapshotMinor
+      - teamId
+    PaymentCancellation:
+      type: object
+      properties:
+        cancellationId:
+          type: string
+          maxLength: 64
+        amount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        reason:
+          type: string
+          maxLength: 200
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - amount
+      - cancellationId
+      - requestedByUserId
+    BundlePurchaseStartRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        channelKey:
+          type: string
+          maxLength: 128
+        orderName:
+          type: string
+          maxLength: 200
+        currency:
+          type: string
+          maxLength: 8
+        billingCountry:
+          type: string
+          maxLength: 2
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+      required:
+      - provider
+      - teamId
+    CreditBundle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        description:
+          type: string
+        itemCode:
+          type: string
+          maxLength: 10
+        price:
+          allOf:
+          - $ref: '#/components/schemas/PriceEntry'
+          readOnly: true
+        credits:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - credits
+      - id
+      - name
+      - price
+      - updatedAt
+    CreditEstimateTotals:
+      type: object
+      properties:
+        total:
+          type: integer
+      required:
+      - total
+    CreditEstimateVariables:
+      type: object
+      properties:
+        cpu:
+          type:
+          - integer
+          - 'null'
+        gpu:
+          type:
+          - integer
+          - 'null'
+        predSimulatingSeconds:
+          type: integer
+        projectModeMult:
+          type: number
+          format: double
+        objectiveFuncMult:
+          type: number
+          format: double
+        optSteps:
+          type: integer
+        creditPerOptStep:
+          type: number
+          format: double
+        meshCells:
+          type:
+          - integer
+          - 'null'
+        latticePoints:
+          type:
+          - integer
+          - 'null'
+        optAreaMult:
+          type: number
+          format: double
+        optTargetMult:
+          type: number
+          format: double
+      required:
+      - cpu
+      - creditPerOptStep
+      - gpu
+      - latticePoints
+      - meshCells
+      - objectiveFuncMult
+      - optAreaMult
+      - optSteps
+      - optTargetMult
+      - predSimulatingSeconds
+      - projectModeMult
+    CreditEstimateWarning:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        predictedCells:
+          type: integer
+        cellLimit:
+          type: integer
+      required:
+      - cellLimit
+      - code
+      - message
+      - predictedCells
+    CreditEstimateResponse:
+      type: object
+      properties:
+        variables:
+          $ref: '#/components/schemas/CreditEstimateVariables'
+        estimates:
+          $ref: '#/components/schemas/CreditEstimateTotals'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditEstimateWarning'
+      required:
+      - estimates
+      - variables
+      - warnings
+    PriceDisplay:
+      type: object
+      properties:
+        supplyAmount:
+          type: string
+        taxAmount:
+          type: string
+        totalAmount:
+          type: string
+        unitPrice:
+          type: string
+        discountRate:
+          type:
+          - string
+          - 'null'
+      required:
+      - supplyAmount
+      - taxAmount
+      - totalAmount
+    CreditBucket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        source:
+          enum:
+          - SUBSCRIPTION
+          - BONUS
+          - PROMO
+          - PAYG_BUNDLE
+          type: string
+          description: '* `SUBSCRIPTION` - 구독 포함
+
+            * `BONUS` - 보상
+
+            * `PROMO` - 프로모션
+
+            * `PAYG_BUNDLE` - 추가구매 번들'
+          x-spec-enum-id: 2aa13f9f58745ba9
+        grantedAmount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        remainingAmount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        grantedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        referenceType:
+          enum:
+          - PAYMENT
+          - SUBSCRIPTION_CYCLE
+          - ADMIN
+          - PROMO_CAMPAIGN
+          - EXECUTION
+          - ASSET_SALE
+          - ''
+          type: string
+          description: '* `PAYMENT` - 결제
+
+            * `SUBSCRIPTION_CYCLE` - 구독 결제주기
+
+            * `ADMIN` - 관리자
+
+            * `PROMO_CAMPAIGN` - 프로모션
+
+            * `EXECUTION` - 실행
+
+            * `ASSET_SALE` - 에셋 판매'
+          x-spec-enum-id: 167958143e14f3a0
+        referenceId:
+          type: string
+          maxLength: 64
+        note:
+          type: string
+          maxLength: 200
+        isActive:
+          type: boolean
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - expiresAt
+      - grantedAmount
+      - id
+      - isActive
+      - remainingAmount
+      - source
+    OneTimePrepareResponse:
+      type: object
+      description: "단건결제 준비 응답. PaymentSerializer 의 모든 필드 + bypass.\n\nbypass: PG 별로 프론트 SDK 호출에 필요한 추가 페이로드 (예: Galaxia ITEM_CODE).\n        Galaxia/PayLetter/PayPal 각각 백엔드가 채워 보내므로 프론트는 그대로\n        `PortOne.requestPayment({..., bypass})` 의 `bypass` 인자에 전달."
+      properties:
+        paymentId:
+          type: string
+          maxLength: 64
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        type:
+          enum:
+          - ONE_TIME
+          - BILLING
+          type: string
+          description: '* `ONE_TIME` - 단건결제
+
+            * `BILLING` - 빌링키결제'
+          x-spec-enum-id: 1bec82349f1a053f
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+        status:
+          enum:
+          - READY
+          - PAID
+          - VIRTUAL_ACCOUNT_ISSUED
+          - PAY_PENDING
+          - PARTIAL_CANCELLED
+          - CANCELLED
+          - FAILED
+          type: string
+          description: '* `READY` - 결제 대기 (paymentId 채번 직후)
+
+            * `PAID` - 결제 완료
+
+            * `VIRTUAL_ACCOUNT_ISSUED` - 가상계좌 발급 완료
+
+            * `PAY_PENDING` - 결제 승인 대기
+
+            * `PARTIAL_CANCELLED` - 부분 취소
+
+            * `CANCELLED` - 전체 취소
+
+            * `FAILED` - 결제 실패'
+          x-spec-enum-id: f6b6565c3eca53e9
+        billingKey:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        channelKey:
+          type: string
+          maxLength: 128
+        orderName:
+          type: string
+          maxLength: 200
+        amountMinor:
+          type: integer
+          readOnly: true
+        currency:
+          type: string
+          maxLength: 8
+        paidAmountMinor:
+          type: integer
+          readOnly: true
+        cancelledAmountMinor:
+          type: integer
+          readOnly: true
+        refundAvailableAmountMinor:
+          type: integer
+          readOnly: true
+        display:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        pgProvider:
+          type: string
+          maxLength: 64
+        pgTxId:
+          type: string
+          maxLength: 128
+        methodType:
+          type: string
+          maxLength: 32
+        failureCode:
+          type: string
+          maxLength: 64
+        failureMessage:
+          type: string
+        requestedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        paidAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        failedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        cancellations:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentCancellation'
+          readOnly: true
+        bypass:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+          description: 'PG 별 SDK 호출 추가 페이로드. Galaxia 는 {''galaxia'': {''ITEM_CODE'': ''...''}}.'
+      required:
+      - amountMinor
+      - billingKey
+      - bypass
+      - cancellations
+      - cancelledAmountMinor
+      - display
+      - orderName
+      - paidAmountMinor
+      - paymentId
+      - refundAvailableAmountMinor
+      - requestedAt
+      - requestedByUserId
+      - teamId
+      - teamName
+      - type
+    CreditWallet:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        balance:
+          type: integer
+          readOnly: true
+        bucketsBySource:
+          type: object
+          additionalProperties:
+            type: integer
+          readOnly: true
+        billingMode:
+          type: string
+          description: 현재 테넌트의 실제 결제 모드 (TEAM/TENANT). FE 가 Add Credits 숨김에 사용.
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - balance
+      - billingMode
+      - bucketsBySource
+      - createdAt
+      - id
+      - teamId
+      - teamName
+      - updatedAt

@@ -1,0 +1,539 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Les API
+  version: 1.0.0
+tags:
+- name: les
+paths:
+  /les/autoconfig/:
+    post:
+      operationId: les_autoconfig_create
+      description: 'STL 을 한 번 올려 자동설정 제안을 요청한다.
+
+
+        형상 분석(trimesh)은 500MB 입력에서 수십 초가 걸리므로 여기서는 S3 스테이징만
+
+        하고 Celery 로 넘긴다. 프론트는 uid 로 폴링한다.'
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les autoconfig create
+      x-summary-source: derived
+  /les/autoconfig/{uid}/:
+    get:
+      operationId: les_autoconfig_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les autoconfig retrieve
+      x-summary-source: derived
+  /les/autoconfig/{uid}/upload/abort/:
+    post:
+      operationId: les_autoconfig_upload_abort_create
+      description: 중단된 업로드의 파트를 지운다 — 두면 스토리지 비용으로 남는다.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les autoconfig upload abort create
+      x-summary-source: derived
+  /les/autoconfig/{uid}/upload/complete/:
+    post:
+      operationId: les_autoconfig_upload_complete_create
+      description: 파트 업로드가 끝나면 객체를 확정하고 분석을 큐에 넣는다.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LesAutoconfigUploadComplete'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LesAutoconfigUploadComplete'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LesAutoconfigUploadComplete'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesAutoconfig'
+          description: ''
+      summary: Les autoconfig upload complete create
+      x-summary-source: derived
+  /les/autoconfig/upload/init/:
+    post:
+      operationId: les_autoconfig_upload_init_create
+      description: '자동설정 STL 의 멀티파트 업로드를 연다.
+
+
+        파일은 Django 를 통과하지 않는다 — 브라우저가 프리사인 URL 로 S3 에 직접
+
+        병렬 전송한다. 500MB STL 이 앱 서버를 통째로 지나가면 업로드 하나에 수 분이
+
+        걸리고, 그 동안 워커는 아무것도 할 수 없다.'
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les autoconfig upload init create
+      x-summary-source: derived
+  /les/runs/:
+    get:
+      operationId: les_runs_retrieve
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs retrieve
+      x-summary-source: derived
+    post:
+      operationId: les_runs_create
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs create
+      x-summary-source: derived
+  /les/runs/{uid}/:
+    get:
+      operationId: les_runs_retrieve_2
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs retrieve 2
+      x-summary-source: derived
+  /les/runs/{uid}/cancel/:
+    post:
+      operationId: les_runs_cancel_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs cancel create
+      x-summary-source: derived
+  /les/runs/{uid}/delete/:
+    post:
+      operationId: les_runs_delete_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs delete create
+      x-summary-source: derived
+  /les/runs/{uid}/deletion-preview/:
+    get:
+      operationId: les_runs_deletion_preview_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs deletion preview retrieve
+      x-summary-source: derived
+  /les/runs/{uid}/figures/{name}/:
+    get:
+      operationId: les_runs_figures_retrieve
+      parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs figures retrieve
+      x-summary-source: derived
+  /les/runs/{uid}/files/{kind}/:
+    get:
+      operationId: les_runs_files_retrieve
+      parameters:
+      - in: path
+        name: kind
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs files retrieve
+      x-summary-source: derived
+  /les/runs/{uid}/flow-visualization/:
+    get:
+      operationId: les_runs_flow_visualization_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs flow visualization retrieve
+      x-summary-source: derived
+    post:
+      operationId: les_runs_flow_visualization_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs flow visualization create
+      x-summary-source: derived
+  /les/runs/{uid}/flow-visualization/image/:
+    get:
+      operationId: les_runs_flow_visualization_image_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs flow visualization image retrieve
+      x-summary-source: derived
+  /les/runs/{uid}/flow-visualization/image/{view_id}/:
+    get:
+      operationId: les_runs_flow_visualization_image_retrieve_2
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: view_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs flow visualization image retrieve 2
+      x-summary-source: derived
+  /les/runs/{uid}/purge-now/:
+    post:
+      operationId: les_runs_purge_now_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs purge now create
+      x-summary-source: derived
+  /les/runs/{uid}/restore/:
+    post:
+      operationId: les_runs_restore_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs restore create
+      x-summary-source: derived
+  /les/runs/{uid}/viewer/:
+    get:
+      operationId: les_runs_viewer_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les runs viewer retrieve
+      x-summary-source: derived
+  /les/uploads/{uid}/abort/:
+    post:
+      operationId: les_uploads_abort_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les uploads abort create
+      x-summary-source: derived
+  /les/uploads/{uid}/complete/:
+    post:
+      operationId: les_uploads_complete_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - les
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LesInputUploadComplete'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LesInputUploadComplete'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LesInputUploadComplete'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesInputUpload'
+          description: ''
+      summary: Les uploads complete create
+      x-summary-source: derived
+  /les/uploads/init/:
+    post:
+      operationId: les_uploads_init_create
+      description: Open an ordinary LES input upload without proxying STL bytes.
+      tags:
+      - les
+      responses:
+        '200':
+          description: No response body
+      summary: Les uploads init create
+      x-summary-source: derived
+components:
+  schemas:
+    LesAutoconfigUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId
+    _CompletedPart:
+      type: object
+      properties:
+        etag:
+          type: string
+          maxLength: 255
+        partNumber:
+          type: integer
+          maximum: 10000
+          minimum: 1
+      required:
+      - etag
+      - partNumber
+    LesAutoconfig:
+      type: object
+      properties:
+        uid:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        intent:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - pending
+          - ready
+          - failed
+          type: string
+          description: '* `pending` - Pending
+
+            * `ready` - Ready
+
+            * `failed` - Failed'
+          x-spec-enum-id: 95a96ed85bfac560
+          readOnly: true
+        progress:
+          readOnly: true
+        geometry:
+          readOnly: true
+        config:
+          readOnly: true
+        error:
+          type: string
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - config
+      - createdAt
+      - error
+      - geometry
+      - intent
+      - progress
+      - status
+      - stlFilename
+      - uid
+    LesInputUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId
+    LesInputUpload:
+      type: object
+      properties:
+        uid:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+        status:
+          enum:
+          - pending
+          - ready
+          - failed
+          type: string
+          description: '* `pending` - Pending
+
+            * `ready` - Ready
+
+            * `failed` - Failed'
+          x-spec-enum-id: 95a96ed85bfac560
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - sizeBytes
+      - status
+      - stlFilename
+      - uid

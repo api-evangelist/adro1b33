@@ -1,0 +1,375 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend AI API
+  version: 1.0.0
+tags:
+- name: AI
+paths:
+  /ai/projects/{project_uid}/chat/:
+    post:
+      operationId: ai_projects_chat_create
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - AI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AiChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AiChatRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiChatResponse'
+          description: ''
+      summary: Ai projects chat create
+      x-summary-source: derived
+  /ai/projects/{project_uid}/diagnose/:
+    post:
+      operationId: ai_projects_diagnose_create
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - AI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiagnoseRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiagnoseRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiagnoseRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiDiagnosisResponse'
+          description: ''
+      summary: Ai projects diagnose create
+      x-summary-source: derived
+  /ai/projects/{project_uid}/recommend/:
+    post:
+      operationId: ai_projects_recommend_create
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - AI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiAssistRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AiAssistRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AiAssistRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiRecommendationResponse'
+          description: ''
+      summary: Ai projects recommend create
+      x-summary-source: derived
+  /ai/usage/:
+    get:
+      operationId: ai_usage_retrieve
+      description: 현재 창의 AI Assist 사용량 — 패널이 열릴 때 표시용으로 읽는다.
+      tags:
+      - AI
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiUsageResponse'
+          description: ''
+      summary: Ai usage retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    AiChatHistoryItem:
+      type: object
+      properties:
+        role:
+          enum:
+          - user
+          - assistant
+          type: string
+          description: '* `user` - user
+
+            * `assistant` - assistant'
+          x-spec-enum-id: da623bca3e193af6
+        content:
+          type: string
+          maxLength: 3000
+      required:
+      - content
+      - role
+    AiAssistRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+    AiFinding:
+      type: object
+      properties:
+        severity:
+          enum:
+          - blocker
+          - warning
+          - info
+          type: string
+          description: '* `blocker` - blocker
+
+            * `warning` - warning
+
+            * `info` - info'
+          x-spec-enum-id: 89eaa3468c08a8fe
+        title:
+          type: string
+        detail:
+          type: string
+        action:
+          type: string
+      required:
+      - action
+      - detail
+      - severity
+      - title
+    DiagnoseRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+        jobUid:
+          type: string
+          maxLength: 36
+      required:
+      - jobUid
+    AiDiagnosisResponse:
+      type: object
+      properties:
+        summary:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - findings
+      - needsHumanSupport
+      - summary
+      - supportSummary
+    AiUsageResponse:
+      type: object
+      properties:
+        used:
+          type: integer
+        limit:
+          type: integer
+        resetsAt:
+          type: string
+          format: date-time
+      required:
+      - limit
+      - resetsAt
+      - used
+    AiRecommendationChange:
+      type: object
+      properties:
+        path:
+          type: string
+        before: {}
+        after: {}
+        reason:
+          type: string
+      required:
+      - after
+      - before
+      - path
+      - reason
+    AiChatResponse:
+      type: object
+      properties:
+        intent:
+          type: string
+        engine:
+          type: string
+        answer:
+          type: string
+        confidence:
+          enum:
+          - confirmed
+          - likely
+          - uncertain
+          type: string
+          description: '* `confirmed` - confirmed
+
+            * `likely` - likely
+
+            * `uncertain` - uncertain'
+          x-spec-enum-id: ba956d2d6133366d
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        missingInformation:
+          type: array
+          items:
+            type: string
+        sources:
+          type: array
+          items:
+            type: string
+        parameters:
+          type: array
+          items: {}
+        recommendation: {}
+        diagnosis: {}
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - answer
+      - confidence
+      - diagnosis
+      - engine
+      - findings
+      - intent
+      - missingInformation
+      - needsHumanSupport
+      - parameters
+      - recommendation
+      - sources
+      - supportSummary
+    AiChatRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+        intent:
+          enum:
+          - setup_guide
+          - parameter_help
+          - recommendation
+          - diagnosis
+          - usage
+          - support
+          type: string
+          description: '* `setup_guide` - setup_guide
+
+            * `parameter_help` - parameter_help
+
+            * `recommendation` - recommendation
+
+            * `diagnosis` - diagnosis
+
+            * `usage` - usage
+
+            * `support` - support'
+          x-spec-enum-id: 2d57c9fc7f22c92f
+        message:
+          type: string
+          default: ''
+          maxLength: 2000
+        jobUid:
+          type: string
+          default: ''
+          maxLength: 36
+        parameterPath:
+          type: string
+          default: ''
+          maxLength: 160
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiChatHistoryItem'
+      required:
+      - intent
+    AiRecommendationResponse:
+      type: object
+      properties:
+        baseRevision:
+          type: integer
+        summary:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiRecommendationChange'
+        proposedUnifiedConfig: {}
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - baseRevision
+      - changes
+      - findings
+      - needsHumanSupport
+      - proposedUnifiedConfig
+      - summary
+      - supportSummary

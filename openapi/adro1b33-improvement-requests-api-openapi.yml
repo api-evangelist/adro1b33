@@ -1,0 +1,162 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Improvement Requests API
+  version: 1.0.0
+tags:
+- name: improvement_requests
+paths:
+  /improvement-requests/:
+    post:
+      operationId: improvement_requests_create
+      summary: Submit an improvement request
+      tags:
+      - improvement_requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImprovementRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImprovementRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImprovementRequestCreate'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImprovementRequest'
+          description: ''
+components:
+  schemas:
+    ImprovementRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tenantSchema:
+          type: string
+          readOnly: true
+        tenantName:
+          type: string
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        userId:
+          type: integer
+          readOnly: true
+        userEmail:
+          type: string
+          format: email
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        category:
+          enum:
+          - improvement
+          - requirement
+          - other
+          type: string
+          description: '* `improvement` - Improvement
+
+            * `requirement` - Additional requirement
+
+            * `other` - Other'
+          x-spec-enum-id: a54dc59c6316068e
+          readOnly: true
+        categoryLabel:
+          type: string
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        pagePath:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - new
+          - reviewing
+          - resolved
+          - closed
+          type: string
+          description: '* `new` - New
+
+            * `reviewing` - Reviewing
+
+            * `resolved` - Resolved
+
+            * `closed` - Closed'
+          x-spec-enum-id: f58cf3c567404c66
+          readOnly: true
+        adminNote:
+          type: string
+          readOnly: true
+        reviewedByEmail:
+          type: string
+          format: email
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - adminNote
+      - category
+      - categoryLabel
+      - content
+      - createdAt
+      - id
+      - pagePath
+      - reviewedByEmail
+      - status
+      - teamId
+      - teamName
+      - tenantName
+      - tenantSchema
+      - title
+      - updatedAt
+      - userEmail
+      - userId
+    ImprovementRequestCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        category:
+          enum:
+          - improvement
+          - requirement
+          - other
+          type: string
+          description: '* `improvement` - improvement
+
+            * `requirement` - requirement
+
+            * `other` - other'
+          x-spec-enum-id: ab7ebfec83fab8bd
+        content:
+          type: string
+          maxLength: 8000
+        pagePath:
+          type: string
+          default: ''
+          maxLength: 2000
+      required:
+      - category
+      - content
+      - title

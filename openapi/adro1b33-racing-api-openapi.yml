@@ -1,0 +1,337 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Racing API
+  version: 1.0.0
+tags:
+- name: racing
+paths:
+  /racing/executions/{execution_uid}/:
+    post:
+      operationId: racing_executions_create
+      parameters:
+      - in: path
+        name: execution_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing executions create
+      x-summary-source: derived
+  /racing/jobs/:
+    get:
+      operationId: racing_jobs_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceJobListResponse'
+          description: ''
+      summary: Racing jobs retrieve
+      x-summary-source: derived
+  /racing/sessions/:
+    post:
+      operationId: racing_sessions_create
+      tags:
+      - racing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceSessionCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RaceSessionCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RaceSessionCreate'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceSessionResponse'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceSessionResponse'
+          description: ''
+      summary: Racing sessions create
+      x-summary-source: derived
+  /racing/sessions/{session_uid}/:
+    get:
+      operationId: racing_sessions_retrieve
+      parameters:
+      - in: path
+        name: session_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - racing
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceSessionResponse'
+          description: ''
+      summary: Racing sessions retrieve
+      x-summary-source: derived
+  /racing/sessions/{session_uid}/feedback/:
+    post:
+      operationId: racing_sessions_feedback_create
+      parameters:
+      - in: path
+        name: session_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - racing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceFeedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RaceFeedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RaceFeedback'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceSessionResponse'
+          description: ''
+      summary: Racing sessions feedback create
+      x-summary-source: derived
+  /racing/sessions/{session_uid}/laps/:
+    post:
+      operationId: racing_sessions_laps_create
+      parameters:
+      - in: path
+        name: session_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - racing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceLapCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RaceLapCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RaceLapCreate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+      summary: Racing sessions laps create
+      x-summary-source: derived
+components:
+  schemas:
+    RaceSessionCreate:
+      type: object
+      properties:
+        jobUid:
+          type: string
+          maxLength: 36
+        gameBuildId:
+          type: string
+          maxLength: 64
+        vehiclePresetId:
+          enum:
+          - gt-validation-v1
+          - formula-student-validation-v1
+          type: string
+          description: '* `gt-validation-v1` - gt-validation-v1
+
+            * `formula-student-validation-v1` - formula-student-validation-v1'
+          x-spec-enum-id: c9fb85c158588aaa
+          default: gt-validation-v1
+      required:
+      - gameBuildId
+      - jobUid
+    RaceJobListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaceJobResponse'
+      required:
+      - count
+      - results
+    RaceLapCreate:
+      type: object
+      properties:
+        clientLapUid:
+          type: string
+          maxLength: 64
+        variant:
+          enum:
+          - baseline
+          - optimized
+          type: string
+          description: '* `baseline` - baseline
+
+            * `optimized` - optimized'
+          x-spec-enum-id: 25d9810d1ad94602
+        isValid:
+          type: boolean
+        lapTimeMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        sectorTimesMs:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          maxItems: 3
+        maxSpeedKph:
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 0
+        cornerSpeedsKph:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+            minimum: 0
+        referenceResult:
+          type: object
+          additionalProperties: {}
+        invalidReasons:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+      required:
+      - clientLapUid
+      - isValid
+      - variant
+    RaceSessionResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+        status:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        readOnly:
+          type: boolean
+        performanceSnapshot:
+          type: object
+          additionalProperties: {}
+        bestLaps:
+          type: object
+          additionalProperties: {}
+        error:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+      required:
+      - bestLaps
+      - error
+      - expiresAt
+      - performanceSnapshot
+      - readOnly
+      - status
+      - uid
+    RaceJobResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+        projectUid:
+          type: string
+        projectName:
+          type:
+          - string
+          - 'null'
+        solver:
+          type: string
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        availability:
+          type: string
+        reasonCode:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        primaryMetric:
+          type: string
+        aerodynamics:
+          type: object
+          additionalProperties: {}
+      required:
+      - availability
+      - finishedAt
+      - projectName
+      - projectUid
+      - solver
+      - uid
+    RaceFeedback:
+      type: object
+      properties:
+        differenceFelt:
+          type: integer
+          maximum: 5
+          minimum: 1
+        wouldOptimizeAgain:
+          type: boolean
+        comment:
+          type: string
+          default: ''
+          maxLength: 2000
+      required:
+      - differenceFelt
+      - wouldOptimizeAgain

@@ -1,0 +1,543 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Sketch API
+  version: 1.0.0
+tags:
+- name: Sketch
+paths:
+  /sketch/projects/:
+    post:
+      operationId: sketch_projects_create
+      summary: Create an editable Sketch 2D project
+      tags:
+      - Sketch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SketchProjectCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SketchProjectCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SketchProjectCreate'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchProjectState'
+          description: ''
+  /sketch/projects/{project_uid}/sessions/:
+    get:
+      operationId: sketch_projects_sessions_retrieve
+      summary: List Sketch 2D sessions for a project
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchSessionList'
+          description: ''
+  /sketch/projects/{project_uid}/state/:
+    get:
+      operationId: sketch_projects_state_retrieve
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchProjectState'
+          description: ''
+      summary: Sketch projects state retrieve
+      x-summary-source: derived
+    put:
+      operationId: sketch_projects_state_update
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SketchProjectStateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SketchProjectStateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SketchProjectStateUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchProjectState'
+          description: ''
+      summary: Sketch projects state update
+      x-summary-source: derived
+  /sketch/renderings/:
+    post:
+      operationId: sketch_renderings_create
+      description: '선화 한 장을 사실적 렌더로 바꿔 돌려준다.
+
+
+        형상은 클라이언트의 3D 차체가 이미 정했다. 여기서 생성 모델이 하는 일은
+
+        재질과 빛을 입히는 것뿐이고, 프롬프트가 실루엣·시점 보존을 강제한다 —
+
+        그래야 여러 시점의 렌더가 같은 차를 가리키고, 같은 차체에서 나온 공력
+
+        지표와도 어긋나지 않는다.'
+      tags:
+      - Sketch
+      responses:
+        '200':
+          description: No response body
+      summary: Sketch renderings create
+      x-summary-source: derived
+  /sketch/sessions/:
+    post:
+      operationId: sketch_sessions_create
+      summary: Create a Sketch 2D session
+      tags:
+      - Sketch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SketchSessionCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SketchSessionCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SketchSessionCreate'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchSession'
+          description: ''
+  /sketch/sessions/{job_uid}/:
+    get:
+      operationId: sketch_sessions_retrieve
+      summary: Get a Sketch 2D session
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchSession'
+          description: ''
+  /sketch/sessions/{job_uid}/cancel/:
+    post:
+      operationId: sketch_sessions_cancel_create
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchCancelResponse'
+          description: ''
+      summary: Sketch sessions cancel create
+      x-summary-source: derived
+  /sketch/sessions/{job_uid}/conditions/:
+    post:
+      operationId: sketch_sessions_conditions_create
+      summary: Create a new Sketch Job from a source Job with changed conditions
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SketchConditions'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SketchConditions'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SketchConditions'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchSession'
+          description: ''
+  /sketch/sessions/{job_uid}/events/:
+    get:
+      operationId: sketch_sessions_events_retrieve
+      description: SSE data is emitted directly, without the DRF camel-case renderer; event payload keys stay snake_case.
+      summary: Stream Sketch 2D frames as SSE
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - sse
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+            text/event-stream:
+              schema:
+                type: string
+          description: ''
+  /sketch/sessions/{job_uid}/finish/:
+    post:
+      operationId: sketch_sessions_finish_create
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchFinishResponse'
+          description: ''
+      summary: Sketch sessions finish create
+      x-summary-source: derived
+  /sketch/sessions/{job_uid}/geometry/:
+    post:
+      operationId: sketch_sessions_geometry_create
+      summary: Create a new Sketch Job from a source Job with changed geometry
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SketchGeometry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SketchGeometry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SketchGeometry'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SketchSession'
+          description: ''
+  /sketch/sessions/{job_uid}/heartbeat/:
+    post:
+      operationId: sketch_sessions_heartbeat_create
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '204':
+          description: No response body
+      summary: Sketch sessions heartbeat create
+      x-summary-source: derived
+  /sketch/sessions/{job_uid}/stream-ticket/:
+    post:
+      operationId: sketch_sessions_stream_ticket_create
+      description: Issue a short-lived, Job-scoped credential for the binary stream relay.
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          description: No response body
+      summary: Sketch sessions stream ticket create
+      x-summary-source: derived
+components:
+  schemas:
+    SketchSessionList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SketchSession'
+      required:
+      - results
+    SketchGeometry:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+      required:
+      - strokes
+    SketchCancelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        generation:
+          type: integer
+      required:
+      - generation
+      - status
+    SketchProjectState:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectUid:
+          type: string
+        projectStatus:
+          enum:
+          - draft
+          - active
+          type: string
+          description: '* `draft` - draft
+
+            * `active` - active'
+          x-spec-enum-id: bfb862cdb2d36f11
+        revision:
+          type: integer
+        canEdit:
+          type: boolean
+        state: {}
+      required:
+      - canEdit
+      - projectId
+      - projectStatus
+      - projectUid
+      - revision
+      - state
+    SketchProjectCreate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        state:
+          $ref: '#/components/schemas/SketchInput'
+      required:
+      - state
+    SketchFinishResponse:
+      type: object
+      properties:
+        terminal:
+          type: boolean
+        generation:
+          type: integer
+      required:
+      - generation
+      - terminal
+    SketchSession:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        displayName:
+          type: string
+        projectUid:
+          type: string
+        jobUid:
+          type: string
+        restartFromJobUid:
+          type:
+          - string
+          - 'null'
+        restartStage:
+          type:
+          - string
+          - 'null'
+        executionUid:
+          type: string
+        status:
+          type: string
+        phase:
+          type: string
+        generation:
+          type: integer
+        queuePosition:
+          type:
+          - integer
+          - 'null'
+        eventsPath:
+          type: string
+        canControl:
+          type: boolean
+        canCancel:
+          type: boolean
+        input: {}
+        streamMetadata: {}
+        resultSummary: {}
+        finalArtifact: {}
+      required:
+      - canCancel
+      - canControl
+      - createdAt
+      - displayName
+      - eventsPath
+      - executionUid
+      - finalArtifact
+      - generation
+      - input
+      - jobUid
+      - phase
+      - projectUid
+      - queuePosition
+      - restartFromJobUid
+      - restartStage
+      - resultSummary
+      - status
+      - streamMetadata
+    SketchInput:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        conditions:
+          type: object
+          additionalProperties: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+        quality:
+          enum:
+          - coarse
+          - fine
+          type: string
+          description: '* `coarse` - coarse
+
+            * `fine` - fine'
+          x-spec-enum-id: 361df4b011166ecc
+      required:
+      - conditions
+      - penWidthMm
+      - quality
+      - strokes
+    SketchConditions:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        conditions:
+          type: object
+          additionalProperties: {}
+      required:
+      - conditions
+    SketchSessionCreate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        projectUid:
+          type: string
+      required:
+      - projectUid
+    SketchProjectStateUpdate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        revision:
+          type: integer
+          minimum: 0
+        state:
+          $ref: '#/components/schemas/SketchInput'
+      required:
+      - revision
+      - state

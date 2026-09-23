@@ -1,0 +1,788 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Patches API
+  version: 1.0.0
+tags:
+- name: Patches
+paths:
+  /patches/{id}/:
+    put:
+      operationId: patches_update
+      summary: Patch 수정
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patch'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Patch'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Patch'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
+          description: ''
+    delete:
+      operationId: patches_destroy
+      summary: Patch 삭제
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      responses:
+        '204':
+          description: No response body
+  /patches/{id}/artifact-download-url/:
+    get:
+      operationId: patches_artifact_download_url_retrieve
+      summary: Patch artifact download URL 발급
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      - in: query
+        name: kind
+        schema:
+          type: string
+          enum:
+          - atlas
+          - input_preview_points
+          - input_preview_voxels
+          - proxy_layout
+          - proxy_mesh
+          - proxy_mesh_mask
+          - source
+        description: source | input_preview_points | input_preview_voxels | proxy_mesh | proxy_layout | proxy_mesh_mask | atlas
+        required: true
+      tags:
+      - Patches
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/atlas-key/:
+    post:
+      operationId: patches_atlas_key_create
+      summary: Atlas sidecar key 저장
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/proxy-artifacts/:
+    post:
+      operationId: patches_proxy_artifacts_create
+      summary: Proxy worker 산출물 메타데이터 갱신
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
+          description: ''
+  /patches/{id}/proxy-artifacts/presign/:
+    post:
+      operationId: patches_proxy_artifacts_presign_create
+      summary: Source proxy artifact upload URL 발급
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifactPresign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifactPresign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifactPresign'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/proxy-layout-key/:
+    post:
+      operationId: patches_proxy_layout_key_create
+      summary: Proxy layout sidecar key 저장
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/proxy-mask/finalize/:
+    post:
+      operationId: patches_proxy_mask_finalize_create
+      summary: Proxy mask upload completion
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyMaskFinalize'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyMaskFinalize'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyMaskFinalize'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/proxy-mesh-key/:
+    post:
+      operationId: patches_proxy_mesh_key_create
+      summary: Proxy mesh sidecar key 저장
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /patches/{id}/source-artifacts/:
+    post:
+      operationId: patches_source_artifacts_create
+      summary: Source proxy artifact set finalize
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchProxyArtifact'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patch'
+          description: ''
+  /patches/{id}/unmerge/:
+    post:
+      operationId: patches_unmerge_create
+      summary: Source patch 병합 해제
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 패치을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patch'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Patch'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Patch'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchUnmergeResponse'
+          description: ''
+  /patches/merge/:
+    post:
+      operationId: patches_merge_create
+      summary: Source patch 병합
+      tags:
+      - Patches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchMerge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchMerge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchMerge'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatchMergeResponse'
+          description: ''
+components:
+  schemas:
+    PatchProxyArtifactPresign:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        sizeBytes:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          default: application/octet-stream
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+      required:
+      - kind
+      - sizeBytes
+    Patch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        patchType:
+          enum:
+          - source
+          - ref
+          type: string
+          description: '* `source` - Source
+
+            * `ref` - Ref'
+          x-spec-enum-id: 946c46f06a235611
+          readOnly: true
+        label:
+          type: string
+          maxLength: 255
+        category:
+          enum:
+          - optimization
+          - constant
+          - wing
+          - wheel_front
+          - wheel_rear
+          - optimization_target
+          - constant_target
+          - front_wheel
+          - rear_wheel
+          type: string
+          description: '* `optimization` - Optimization
+
+            * `constant` - Constant
+
+            * `wing` - Wing
+
+            * `wheel_front` - Wheel Front
+
+            * `wheel_rear` - Wheel Rear
+
+            * `optimization_target` - Optimization Target
+
+            * `constant_target` - Constant Target
+
+            * `front_wheel` - Front Wheel
+
+            * `rear_wheel` - Rear Wheel'
+          x-spec-enum-id: 5dd1d70043ac53a5
+        artifactId:
+          type:
+          - integer
+          - 'null'
+          description: Associated artifact for source patch
+          readOnly: true
+        triangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: source patch original STL triangle count
+        surfaceArea:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: source/ref patch surface area
+        selectedProxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: ref patch only
+        boundingBox:
+          description: source/ref 공용 bbox payload {min:[x,y,z], max:[x,y,z], ffd_degree?:[i,j,k]}
+        ffdDegree:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+          writeOnly: true
+        proxyMaskSizeBytes:
+          type: integer
+          minimum: 1
+          writeOnly: true
+        normalDisplacementInward:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) normal displacement inward
+        normalDisplacementOutward:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) normal displacement outward
+        planeLimitXMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit x min
+        planeLimitXMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit x max
+        planeLimitYMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit y min
+        planeLimitYMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit y max
+        planeLimitZMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit z min
+        planeLimitZMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit z max
+        inputPreviewPointsKey:
+          type: string
+          description: source patch point preview only
+          maxLength: 1024
+        inputPreviewPoints:
+          description: source patch point preview metadata
+        inputPreviewVoxelsKey:
+          type: string
+          description: source patch voxel preview only
+          maxLength: 1024
+        inputPreviewVoxels:
+          description: source patch voxel preview metadata
+        proxyCacheKey:
+          type: string
+          description: source patch only
+          maxLength: 255
+        proxyMeshKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        proxyLayoutKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        atlasKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        proxyWorkerRevision:
+          type: string
+          description: source patch only
+          maxLength: 64
+        proxyArtifactSignature:
+          type: string
+          description: source patch only
+          maxLength: 128
+        proxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: source patch only
+        hasRefs:
+          type: boolean
+          readOnly: true
+        isMergeOutput:
+          type: boolean
+          readOnly: true
+        isMergePending:
+          type: boolean
+          readOnly: true
+        mergedSourcePatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/MergedSourcePatch'
+          readOnly: true
+        isInitialSourceUpload:
+          type: boolean
+          readOnly: true
+          description: source patch only - uploaded while project was draft
+        sourcePatchId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        mergedIntoPatchId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        proxyMeshMaskKey:
+          type: string
+          description: ref patch only
+          maxLength: 1024
+        sourceProxyArtifactSignature:
+          type: string
+          description: ref patch only — 부모 source patch proxy signature 스냅샷
+          maxLength: 128
+        proxyMaskSignature:
+          type: string
+          description: ref patch only
+          maxLength: 128
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artifactId
+      - createdAt
+      - hasRefs
+      - id
+      - isInitialSourceUpload
+      - isMergeOutput
+      - isMergePending
+      - mergedIntoPatchId
+      - mergedSourcePatches
+      - patchType
+      - sourcePatchId
+      - uid
+      - updatedAt
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status
+    PatchMergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        batchJobId:
+          type: string
+        mergeJobId:
+          type: integer
+        patch:
+          allOf:
+          - $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - batchJobId
+      - mergeJobId
+      - patch
+      - patchId
+      - status
+    PatchMerge:
+      type: object
+      properties:
+        patchIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          minItems: 2
+      required:
+      - patchIds
+    PatchProxyArtifact:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        key:
+          type: string
+        proxyMeshKey:
+          type: string
+        proxyLayoutKey:
+          type: string
+        atlasKey:
+          type: string
+        proxyCacheKey:
+          type: string
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+        triangleCount:
+          type:
+          - integer
+          - 'null'
+        originalMeshTriangleCount:
+          type:
+          - integer
+          - 'null'
+        originalTriangleCount:
+          type:
+          - integer
+          - 'null'
+        surfaceArea:
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 1.0e-06
+        boundingBox: {}
+        proxyMeshMaskKey:
+          type: string
+        selectedProxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+        sourceProxyArtifactSignature:
+          type: string
+        proxyMaskSignature:
+          type: string
+        reservationId:
+          type: string
+          format: uuid
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
+    PatchProxyMaskFinalize:
+      type: object
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - reservationId

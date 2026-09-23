@@ -1,0 +1,1524 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Job API
+  version: 1.0.0
+tags:
+- name: Job
+paths:
+  /job/{id}/export-step/:
+    get:
+      operationId: job_export_step_retrieve
+      description: 'GET /job/{id}/export-step
+
+
+        Morphed-CAD export for STEP-imported projects: bakes the optimization
+
+        result back into the ORIGINAL STEP assembly (moving parts'' NURBS poles
+
+        displaced by the job''s own baseline→morphed mesh delta) plus per-part
+
+        STEP/STL files. Results are cached under {output}/export/ in S3; the
+
+        first call bakes (may take 1–3 minutes on large assemblies).
+
+
+        Response: {available, reason?, assembly?: {filename,url},
+
+        parts?: [{name, step:{filename,url}, stl:{filename,url}}]}'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 작업을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Job
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: ''
+      summary: Job export step retrieve
+      x-summary-source: derived
+  /job/{id}/flowfield/:
+    get:
+      operationId: job_flowfield_retrieve
+      description: 'GET /job/{id}/flowfield
+
+
+        Presigned URL for {output}/flowfield.bin — the compact quantized velocity
+
+        volume (VFLD) the viewer integrates streamlines from CLIENT-side, so
+
+        dragging the seed rake costs no server round trip at all. The flow
+
+        artifact task bakes this alongside streamlines.bin; this endpoint only
+
+        serves the generated artifact, or submits the task when missing/rebaking.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 작업을 식별하는 고유한 정수 값.
+        required: true
+      tags:
+      - Job
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: ''
+      summary: Job flowfield retrieve
+      x-summary-source: derived
+  /job/by-uid/{uid}/:
+    get:
+      operationId: job_by_uid_retrieve
+      description: 'Job 상세, 취소, 모니터링, Result Viewer 엔드포인트.
+
+
+        엔드포인트:
+
+        GET /job// — Job 상세 조회
+
+        GET /job/by-uid// — Job UID 상세 조회
+
+        POST /job//cancel/ — Job 취소
+
+        POST /job//delete/ — Job 소프트 삭제 (실행 중이면 취소 후 삭제)
+
+        GET /job//monitor/ — 대기화면 모니터링 (프론트 5~10초 폴링)
+
+        GET /job//valid-dsns/ — Result Viewer: 유효 DSN 목록
+
+        GET /job//result-mesh/ — Result Viewer: DSN별 mesh presigned URL
+
+        GET /job//streamlines/ — Result Viewer: DSN별 flow streamlines presigned URL
+
+        GET /job//history/ — Result Viewer: 최적화 history CSV
+
+        GET /job//execution-logs/ — Result Viewer: 실행 console 로그'
+      summary: Job UID 상세 조회
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Job
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+          description: ''
+  /job/unified/:
+    post:
+      operationId: job_unified_create
+      description: 'POST /job/unified/ — the canonical job submission endpoint.
+
+
+        (§0.1-1 / §3.2) 이 엔드포인트의 유일한 인가 수단인 팀 멤버십 게이트를 뷰
+
+        서두에서 건다. 멤버십은 반드시 대상 리소스가 실제 속한 팀
+
+        (`project.team_id`) 기준으로 해석한다 — JWT team_id 를 쓰면 팀 A JWT 로 팀 B
+
+        프로젝트에 제출하는 크로스팀 우회가 뚫린다. project_id 부재/미존재는 role
+
+        체크 이전에 즉시 400, 멤버십 None(비멤버/비활성/soft-delete)이면 403(fail-closed).'
+      tags:
+      - Job
+      responses:
+        '200':
+          description: No response body
+      summary: Job unified create
+      x-summary-source: derived
+components:
+  schemas:
+    ParameterizationSpec:
+      type: object
+      properties:
+        mode:
+          enum:
+          - morph
+          - ffd
+          - rbf
+          - sdf
+          type: string
+          description: '* `morph` - morph
+
+            * `ffd` - ffd
+
+            * `rbf` - rbf
+
+            * `sdf` - sdf'
+          x-spec-enum-id: ae3ce64c24db245b
+        engine:
+          enum:
+          - G1
+          - G2
+          - G4
+          type: string
+          description: '* `G1` - G1
+
+            * `G2` - G2
+
+            * `G4` - G4'
+          x-spec-enum-id: d5df67bc8a34864a
+        params:
+          type: object
+          additionalProperties: {}
+      required:
+      - engine
+      - mode
+    PlaneConstraint:
+      type: object
+      properties:
+        axis:
+          enum:
+          - x
+          - y
+          - z
+          type: string
+          description: '* `x` - x
+
+            * `y` - y
+
+            * `z` - z'
+          x-spec-enum-id: 27a7e2bcc96b78e8
+        min:
+          type:
+          - number
+          - 'null'
+          format: double
+        max:
+          type:
+          - number
+          - 'null'
+          format: double
+        minOffset:
+          type:
+          - number
+          - 'null'
+          format: double
+        maxOffset:
+          type:
+          - number
+          - 'null'
+          format: double
+      required:
+      - axis
+    JobExecution:
+      type: object
+      description: Job 상세 응답의 executions[] 블록을 구성하는 실행 상세 정보.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        backendType:
+          enum:
+          - SHARED_HPC
+          - AWS_BATCH
+          - LOCAL
+          - K8S
+          - SKETCH_GPU
+          - SSH_REMOTE
+          type: string
+          description: '* `SHARED_HPC` - Shared HPC
+
+            * `AWS_BATCH` - AWS Batch
+
+            * `LOCAL` - Local
+
+            * `K8S` - Kubernetes
+
+            * `SKETCH_GPU` - Sketch GPU
+
+            * `SSH_REMOTE` - Remote SSH'
+          x-spec-enum-id: 2af077c591bf1be8
+        attemptNo:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        batchJobId:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        batchQueueName:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        batchJobDefinition:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        computeRegion:
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        status:
+          enum:
+          - submitted
+          - pending
+          - runnable
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - timeout
+          type: string
+          description: '* `submitted` - Submitted
+
+            * `pending` - Pending
+
+            * `runnable` - Runnable
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled
+
+            * `timeout` - Timeout'
+          x-spec-enum-id: 0ef3d8c1f80fe2d3
+        statusReason:
+          type:
+          - string
+          - 'null'
+        progress:
+          type: number
+          format: double
+        submittedAt:
+          type: string
+          format: date-time
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        duration:
+          type: string
+          readOnly: true
+      required:
+      - backendType
+      - duration
+      - id
+      - status
+      - uid
+    Patch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        patchType:
+          enum:
+          - source
+          - ref
+          type: string
+          description: '* `source` - Source
+
+            * `ref` - Ref'
+          x-spec-enum-id: 946c46f06a235611
+          readOnly: true
+        label:
+          type: string
+          maxLength: 255
+        category:
+          enum:
+          - optimization
+          - constant
+          - wing
+          - wheel_front
+          - wheel_rear
+          - optimization_target
+          - constant_target
+          - front_wheel
+          - rear_wheel
+          type: string
+          description: '* `optimization` - Optimization
+
+            * `constant` - Constant
+
+            * `wing` - Wing
+
+            * `wheel_front` - Wheel Front
+
+            * `wheel_rear` - Wheel Rear
+
+            * `optimization_target` - Optimization Target
+
+            * `constant_target` - Constant Target
+
+            * `front_wheel` - Front Wheel
+
+            * `rear_wheel` - Rear Wheel'
+          x-spec-enum-id: 5dd1d70043ac53a5
+        artifactId:
+          type:
+          - integer
+          - 'null'
+          description: Associated artifact for source patch
+          readOnly: true
+        triangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: source patch original STL triangle count
+        surfaceArea:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: source/ref patch surface area
+        selectedProxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: ref patch only
+        boundingBox:
+          description: source/ref 공용 bbox payload {min:[x,y,z], max:[x,y,z], ffd_degree?:[i,j,k]}
+        ffdDegree:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+          writeOnly: true
+        proxyMaskSizeBytes:
+          type: integer
+          minimum: 1
+          writeOnly: true
+        normalDisplacementInward:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) normal displacement inward
+        normalDisplacementOutward:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) normal displacement outward
+        planeLimitXMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit x min
+        planeLimitXMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit x max
+        planeLimitYMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit y min
+        planeLimitYMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit y max
+        planeLimitZMin:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit z min
+        planeLimitZMax:
+          type:
+          - number
+          - 'null'
+          format: double
+          title: (constraint) plane limit z max
+        inputPreviewPointsKey:
+          type: string
+          description: source patch point preview only
+          maxLength: 1024
+        inputPreviewPoints:
+          description: source patch point preview metadata
+        inputPreviewVoxelsKey:
+          type: string
+          description: source patch voxel preview only
+          maxLength: 1024
+        inputPreviewVoxels:
+          description: source patch voxel preview metadata
+        proxyCacheKey:
+          type: string
+          description: source patch only
+          maxLength: 255
+        proxyMeshKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        proxyLayoutKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        atlasKey:
+          type: string
+          description: source patch only
+          maxLength: 1024
+        proxyWorkerRevision:
+          type: string
+          description: source patch only
+          maxLength: 64
+        proxyArtifactSignature:
+          type: string
+          description: source patch only
+          maxLength: 128
+        proxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+          description: source patch only
+        hasRefs:
+          type: boolean
+          readOnly: true
+        isMergeOutput:
+          type: boolean
+          readOnly: true
+        isMergePending:
+          type: boolean
+          readOnly: true
+        mergedSourcePatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/MergedSourcePatch'
+          readOnly: true
+        isInitialSourceUpload:
+          type: boolean
+          readOnly: true
+          description: source patch only - uploaded while project was draft
+        sourcePatchId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        mergedIntoPatchId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        proxyMeshMaskKey:
+          type: string
+          description: ref patch only
+          maxLength: 1024
+        sourceProxyArtifactSignature:
+          type: string
+          description: ref patch only — 부모 source patch proxy signature 스냅샷
+          maxLength: 128
+        proxyMaskSignature:
+          type: string
+          description: ref patch only
+          maxLength: 128
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artifactId
+      - createdAt
+      - hasRefs
+      - id
+      - isInitialSourceUpload
+      - isMergeOutput
+      - isMergePending
+      - mergedIntoPatchId
+      - mergedSourcePatches
+      - patchType
+      - sourcePatchId
+      - uid
+      - updatedAt
+    HpcCompute:
+      type: object
+      properties:
+        nProcs:
+          type: integer
+          minimum: 1
+        nProcsMesh:
+          type:
+          - integer
+          - 'null'
+        nodes:
+          type:
+          - integer
+          - 'null'
+        coresPerNode:
+          type:
+          - integer
+          - 'null'
+        walltimeMinutes:
+          type:
+          - integer
+          - 'null'
+        poolKey:
+          type:
+          - string
+          - 'null'
+        paths:
+          type: object
+          additionalProperties: {}
+      required:
+      - nProcs
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
+    JobRunConfigEnvelope:
+      type: object
+      properties:
+        unifiedConfig:
+          allOf:
+          - $ref: '#/components/schemas/CanonicalJobSpec'
+          readOnly: true
+        nativeConfig:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - nativeConfig
+      - unifiedConfig
+    JobStatusEvent:
+      type: object
+      description: Job 상세 응답의 events[] 블록을 구성하는 상태 이벤트.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        source:
+          enum:
+          - API
+          - ADMIN
+          - WORKER
+          - SCHEDULER
+          - EXTERNAL
+          - USER
+          type: string
+          description: '* `API` - API
+
+            * `ADMIN` - Admin
+
+            * `WORKER` - Worker
+
+            * `SCHEDULER` - Scheduler
+
+            * `EXTERNAL` - External System
+
+            * `USER` - User'
+          x-spec-enum-id: 15fa1de5d5d7f5f1
+        status:
+          type: string
+          maxLength: 32
+        progressPercent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        message:
+          type:
+          - string
+          - 'null'
+        metadata: {}
+        recordedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - source
+      - status
+    DomainGrid:
+      type: object
+      properties:
+        x:
+          type: integer
+          minimum: 1
+        y:
+          type: integer
+          minimum: 1
+        z:
+          type: integer
+          minimum: 1
+      required:
+      - x
+      - y
+      - z
+    GeometryTransformSpec:
+      type: object
+      description: Workbench scene rotation, expressed with the Three.js XYZ convention.
+      properties:
+        rotationEulerDeg:
+          type: array
+          items:
+            type: number
+            format: double
+          maxItems: 3
+          minItems: 3
+        rotationOrder:
+          enum:
+          - XYZ
+          type: string
+          description: '* `XYZ` - XYZ'
+          x-spec-enum-id: d4e52030c47c5f9f
+          default: XYZ
+    CanonicalJobSpec:
+      type: object
+      description: 'Validates the ADAPTER-INPUT canonical submission dict (in-flight only).
+
+
+        NOT applied to the Job.run_config envelope. The adapter pops operationMode
+
+        -> Job column and stores the flattened result at run_config.native_config.'
+      properties:
+        schemaVersion:
+          type: string
+          default: '1.0'
+        engine:
+          enum:
+          - G1
+          - G2
+          - G4
+          type: string
+          description: '* `G1` - G1
+
+            * `G2` - G2
+
+            * `G4` - G4'
+          x-spec-enum-id: d5df67bc8a34864a
+        operationMode:
+          enum:
+          - BASIC
+          - PRO
+          type: string
+          description: '* `BASIC` - BASIC
+
+            * `PRO` - PRO'
+          x-spec-enum-id: 7fea7e3fb58f4701
+          default: BASIC
+        geometry:
+          $ref: '#/components/schemas/GeometrySpec'
+        objective:
+          $ref: '#/components/schemas/ObjectiveSpec'
+        constraints:
+          $ref: '#/components/schemas/ConstraintsSpec'
+        optimization:
+          $ref: '#/components/schemas/OptimizationSpec'
+        flow:
+          $ref: '#/components/schemas/FlowSpec'
+        domain:
+          allOf:
+          - $ref: '#/components/schemas/DomainSpec'
+        compute:
+          $ref: '#/components/schemas/ComputeSpec'
+        parameterization:
+          $ref: '#/components/schemas/ParameterizationSpec'
+        engineExtras:
+          type: object
+          additionalProperties: {}
+      required:
+      - compute
+      - engine
+      - flow
+      - geometry
+      - objective
+      - optimization
+      - parameterization
+    Job:
+      type: object
+      description: 'Job 상세 시리얼라이저.
+
+
+        응답 형태:
+
+        - artifacts: {role: artifact_payload} 딕셔너리 (리스트가 아님)
+
+        - canceled_at: 미국식 철자 (모델 필드는 cancelled_at — 영국식)
+
+        - executions / events: 중첩 리스트
+
+
+        비즈니스 로직:
+
+        - perform_cancel(): Job 취소 + AWS Batch 종료 + 상태 이벤트 기록'
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          description: Runtime job name submitted to the execution backend.
+          maxLength: 128
+        displayName:
+          type: string
+          description: Human-friendly run label (e.g. 'Run 3'); user-editable. Distinct from the batch runtime name.
+          maxLength: 128
+        project:
+          allOf:
+          - $ref: '#/components/schemas/SimpleProject'
+          readOnly: true
+        executionBackend:
+          enum:
+          - SHARED_HPC
+          - AWS_BATCH
+          - LOCAL
+          - SSH_REMOTE
+          type: string
+          description: '* `SHARED_HPC` - Shared HPC
+
+            * `AWS_BATCH` - AWS Batch
+
+            * `LOCAL` - Local
+
+            * `SSH_REMOTE` - Remote SSH'
+          x-spec-enum-id: 14feee6ab64a0c6e
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - failed
+          - aborted
+          - cancelled
+          - succeeded
+          type: string
+          x-spec-enum-id: 6b8a9060f1dec637
+          description: '(1:1일 때 프로젝트) 1:N일 때 Job에 대한 상태값 / 상세페이지용 X
+
+
+            * `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `failed` - Failed
+
+            * `aborted` - Aborted
+
+            * `cancelled` - Cancelled
+
+            * `succeeded` - Succeeded'
+        stage:
+          enum:
+          - ffd_setup
+          - grid_setup
+          - meshing
+          - simulating
+          - optimizing
+          - postprocessing
+          - ''
+          - null
+          type:
+          - string
+          - 'null'
+          x-spec-enum-id: e13d93bda64d2665
+          description: 'Latest canonical active_stage snapshot from monitoring_log.json
+
+
+            * `ffd_setup` - FFD Setup
+
+            * `grid_setup` - Grid Setup
+
+            * `meshing` - Meshing
+
+            * `simulating` - Simulating
+
+            * `optimizing` - Optimizing
+
+            * `postprocessing` - Postprocessing'
+        progress:
+          type: number
+          format: double
+          description: Latest execution progress, normalized to 0.0 through 1.0.
+        runConfig:
+          allOf:
+          - $ref: '#/components/schemas/JobRunConfigEnvelope'
+          readOnly: true
+        resultSummary:
+          description: Job execution results
+        result:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Compact result-viewer metadata for successful job detail views.
+          readOnly: true
+        errorSummary:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        errorDetail:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Canonical error object; code-specific wording resolved at read time.
+          readOnly: true
+        payload:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Job payload plus compact result-viewer metadata under result.
+          readOnly: true
+        operationMode:
+          enum:
+          - BASIC
+          - PRO
+          type: string
+          description: '* `BASIC` - Basic
+
+            * `PRO` - Pro'
+          x-spec-enum-id: 8ac5c73d7e96b3a3
+        solverEngine:
+          enum:
+          - G1
+          - G2
+          - G4
+          - S2
+          type: string
+          x-spec-enum-id: 4f8f60f427162f7a
+          readOnly: true
+          description: 'Immutable solver engine snapshot captured when the Job is created.
+
+
+            * `G1` - G1
+
+            * `G2` - G2
+
+            * `G4` - G4
+
+            * `S2` - Sketch 2D'
+        workloadType:
+          enum:
+          - STANDARD
+          - LES
+          type: string
+          x-spec-enum-id: fb11bf304307d132
+          readOnly: true
+          description: 'Solver workload discriminator; LES uses solver_engine=G4 and workload_type=LES.
+
+
+            * `STANDARD` - Standard solver workload
+
+            * `LES` - LES fluid simulation'
+        restartFromJob:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+          description: 원본 Job. 단계 재시작(restart)으로 생성된 Job 이면 설정됨.
+        restartFromJobUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        restartStage:
+          type: string
+          readOnly: true
+          description: '재시작 진입 단계: scratch/mesh/cfd/opt. 일반 신규 제출이면 빈 값.'
+        queuedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        inputSnapshotPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+        summaryFiles:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        summaryGifs:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        figsZipUrl:
+          type:
+          - string
+          - 'null'
+          description: G1/G2/G4 figs.zip presigned S3 URL (succeeded job only)
+          readOnly: true
+        g2FfdBoxes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            additionalProperties: true
+          description: Result viewer bounding boxes from the job input manifest.
+          readOnly: true
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobExecution'
+          readOnly: true
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobStatusEvent'
+          readOnly: true
+        isDeleted:
+          type: boolean
+          readOnly: true
+          description: 소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능).
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 소프트 삭제된 시각.
+        purgeAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각.
+        canRestore:
+          type: boolean
+          readOnly: true
+        deletion:
+          readOnly: true
+        downloadQuota:
+          readOnly: true
+      required:
+      - canRestore
+      - cancelledAt
+      - createdAt
+      - deletedAt
+      - deletion
+      - downloadQuota
+      - errorDetail
+      - errorSummary
+      - events
+      - executionBackend
+      - executions
+      - figsZipUrl
+      - g2FfdBoxes
+      - id
+      - inputSnapshotPatches
+      - isDeleted
+      - operationMode
+      - payload
+      - project
+      - purgeAfter
+      - restartFromJob
+      - restartFromJobUid
+      - restartStage
+      - result
+      - runConfig
+      - solverEngine
+      - summaryFiles
+      - summaryGifs
+      - uid
+      - workloadType
+    OptimizationSpec:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: true
+        cycles:
+          type: integer
+          minimum: 1
+          default: 5
+        deformLimit:
+          type:
+          - number
+          - 'null'
+          format: double
+        method:
+          enum:
+          - adjoint
+          - slsqp
+          - sqp
+          - steepest
+          - adam
+          - sgd
+          - ''
+          type: string
+          description: '* `adjoint` - adjoint
+
+            * `slsqp` - slsqp
+
+            * `sqp` - sqp
+
+            * `steepest` - steepest
+
+            * `adam` - adam
+
+            * `sgd` - sgd'
+          x-spec-enum-id: e92402542252bd8e
+          default: ''
+        gradientMethod:
+          enum:
+          - adjoint
+          - fd
+          type: string
+          description: '* `adjoint` - adjoint
+
+            * `fd` - fd'
+          x-spec-enum-id: 46d5636d932d27b2
+          default: adjoint
+        learningRate:
+          type:
+          - number
+          - 'null'
+          format: double
+        step:
+          type:
+          - number
+          - 'null'
+          format: double
+        nWarmup:
+          type:
+          - integer
+          - 'null'
+        nAdjoint:
+          type:
+          - integer
+          - 'null'
+        nPrimal:
+          type:
+          - integer
+          - 'null'
+        convergence:
+          type: object
+          additionalProperties: {}
+    GeometrySpec:
+      type: object
+      properties:
+        movingPatches:
+          type: array
+          items:
+            type: string
+        constantPatches:
+          type: array
+          items:
+            type: string
+        objectivePatches:
+          type: array
+          items:
+            type: string
+        frontWheelPatch:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        rearWheelPatch:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        scale:
+          type: boolean
+          default: true
+        translate:
+          type: boolean
+          default: true
+        symmetry:
+          enum:
+          - none
+          - x
+          - y
+          - z
+          type: string
+          description: '* `none` - none
+
+            * `x` - x
+
+            * `y` - y
+
+            * `z` - z'
+          x-spec-enum-id: da516b8716586636
+          default: none
+        normalizeLength:
+          type:
+          - number
+          - 'null'
+          format: double
+        maxStlTriangles:
+          type:
+          - integer
+          - 'null'
+        groundClearance:
+          type:
+          - number
+          - 'null'
+          format: double
+        groundClearanceM:
+          type:
+          - number
+          - 'null'
+          format: double
+        transform:
+          allOf:
+          - $ref: '#/components/schemas/GeometryTransformSpec'
+      required:
+      - movingPatches
+    ObjectiveSpec:
+      type: object
+      properties:
+        primary:
+          enum:
+          - drag
+          - lift
+          - liftBalance
+          - efficiency
+          - downforce
+          - multi
+          type: string
+          description: '* `drag` - drag
+
+            * `lift` - lift
+
+            * `liftBalance` - liftBalance
+
+            * `efficiency` - efficiency
+
+            * `downforce` - downforce
+
+            * `multi` - multi'
+          x-spec-enum-id: 1a92fab45dc97f84
+          default: drag
+        monitoringQuantities:
+          type: array
+          items:
+            type: string
+        liftWeight:
+          type:
+          - number
+          - 'null'
+          format: double
+        autoClConstraint:
+          type: boolean
+          default: true
+        clTolerance:
+          type:
+          - number
+          - 'null'
+          format: double
+        clPenalty:
+          type:
+          - number
+          - 'null'
+          format: double
+    ComputeSpec:
+      type: object
+      properties:
+        backend:
+          enum:
+          - SHARED_HPC
+          - AWS_BATCH
+          - LOCAL
+          - K8S
+          type: string
+          description: '* `SHARED_HPC` - SHARED_HPC
+
+            * `AWS_BATCH` - AWS_BATCH
+
+            * `LOCAL` - LOCAL
+
+            * `K8S` - K8S'
+          x-spec-enum-id: e6a90292d1b74a30
+        hpc:
+          allOf:
+          - $ref: '#/components/schemas/HpcCompute'
+        batch:
+          allOf:
+          - $ref: '#/components/schemas/BatchCompute'
+      required:
+      - backend
+    DomainSpec:
+      type: object
+      properties:
+        grid:
+          allOf:
+          - $ref: '#/components/schemas/DomainGrid'
+    BatchCompute:
+      type: object
+      properties:
+        np:
+          type:
+          - integer
+          - 'null'
+        npCfd:
+          type:
+          - integer
+          - 'null'
+        npAdj:
+          type:
+          - integer
+          - 'null'
+        ompThreadsMesh:
+          type:
+          - integer
+          - 'null'
+        queue:
+          type:
+          - string
+          - 'null'
+        jobDefinition:
+          type:
+          - string
+          - 'null'
+        vcpus:
+          type:
+          - integer
+          - 'null'
+        memoryMb:
+          type:
+          - integer
+          - 'null'
+        gpu:
+          type:
+          - integer
+          - 'null'
+        grid:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        timeoutSeconds:
+          type:
+          - integer
+          - 'null'
+    SimpleProject:
+      type: object
+      description: Job 응답에 포함될 간단한 Project 정보.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        mode:
+          enum:
+          - G1
+          - G2
+          - G3
+          - G4
+          - S2
+          type: string
+          description: '* `G1` - G1
+
+            * `G2` - G2
+
+            * `G3` - G3
+
+            * `G4` - G4
+
+            * `S2` - Sketch 2D'
+          x-spec-enum-id: b6373ee318bc60a4
+      required:
+      - id
+      - uid
+    ConstraintsSpec:
+      type: object
+      properties:
+        maxOutwardDisplacement:
+          type:
+          - number
+          - 'null'
+          format: double
+        maxInwardDisplacement:
+          type:
+          - number
+          - 'null'
+          format: double
+        maxInitChange:
+          type:
+          - number
+          - 'null'
+          format: double
+        regularizationRadius:
+          type:
+          - number
+          - 'null'
+          format: double
+        planeConstraints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaneConstraint'
+        boundingSurfaces:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        wheelDistance:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        freeze:
+          type: object
+          additionalProperties: {}
+    FlowSpec:
+      type: object
+      properties:
+        freestreamVelocityMps:
+          type:
+          - number
+          - 'null'
+          format: double
+        latticeVelocity:
+          type:
+          - number
+          - 'null'
+          format: double
+        velocity:
+          type:
+          - number
+          - 'null'
+          format: double
+        mach:
+          type:
+          - number
+          - 'null'
+          format: double
+        aoa:
+          type:
+          - number
+          - 'null'
+          format: double
+        reynolds:
+          type:
+          - number
+          - 'null'
+          format: double
+        reynoldsLength:
+          type:
+          - number
+          - 'null'
+          format: double
+        flowDirection:
+          type: array
+          items:
+            type: number
+            format: double
+          maxItems: 3
+          minItems: 3
+        turbIntensity:
+          type:
+          - number
+          - 'null'
+          format: double
+        turb2lamViscRatio:
+          type:
+          - number
+          - 'null'
+          format: double
+        smagorinsky:
+          type:
+          - number
+          - 'null'
+          format: double
+        precision:
+          enum:
+          - DP
+          - SPDP
+          type: string
+          description: '* `DP` - DP
+
+            * `SPDP` - SPDP'
+          x-spec-enum-id: 9f9c00f0c36bcc5e
+          default: DP
+        mesh:
+          type: object
+          additionalProperties: {}
