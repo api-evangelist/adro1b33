@@ -407,36 +407,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    LesAutoconfigUploadComplete:
-      type: object
-      properties:
-        uploadId:
-          type: string
-          maxLength: 512
-        completedParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/_CompletedPart'
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - completedParts
-      - reservationId
-      - uploadId
-    _CompletedPart:
-      type: object
-      properties:
-        etag:
-          type: string
-          maxLength: 255
-        partNumber:
-          type: integer
-          maximum: 10000
-          minimum: 1
-      required:
-      - etag
-      - partNumber
     LesAutoconfig:
       type: object
       properties:
@@ -502,6 +472,19 @@ components:
       - completedParts
       - reservationId
       - uploadId
+    _CompletedPart:
+      type: object
+      properties:
+        etag:
+          type: string
+          maxLength: 255
+        partNumber:
+          type: integer
+          maximum: 10000
+          minimum: 1
+      required:
+      - etag
+      - partNumber
     LesInputUpload:
       type: object
       properties:
@@ -537,3 +520,20 @@ components:
       - status
       - stlFilename
       - uid
+    LesAutoconfigUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId

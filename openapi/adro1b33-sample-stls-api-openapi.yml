@@ -43,6 +43,19 @@ paths:
           description: ''
 components:
   schemas:
+    SampleStlDownload:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        expiresIn:
+          type: integer
+          readOnly: true
+      required:
+      - expiresIn
+      - url
     SampleStl:
       type: object
       properties:
@@ -63,16 +76,3 @@ components:
       - label
       - s3Key
       - unit
-    SampleStlDownload:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-        expiresIn:
-          type: integer
-          readOnly: true
-      required:
-      - expiresIn
-      - url

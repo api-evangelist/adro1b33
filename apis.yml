@@ -59,12 +59,11 @@ apis:
     UCP implementation rather than ADRO-authored code; the endpoint, merchant profile and catalog are
     ADRO's.
   humanURL: https://adro.com/llms.txt
-  baseURL: https://adro.com
   image: https://adro.com/cdn/shop/files/adro_logo_klaviyo.png?v=1785437102
   tags:
   - E-Commerce
   - MCP
-  - agent-native
+  - Agent-Native
   - Automotive
   tags_raw:
   - ecommerce
@@ -80,6 +79,9 @@ apis:
     url: llms/adro1b33-llms.txt
   - type: WellKnown
     url: well-known/adro1b33-well-known.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: ucp
 - aid: adro1b33:adro1b33-accounts-api
   name: ADRO Accounts API
   description: The accounts API from ADRO — 18 operation(s) for accounts.

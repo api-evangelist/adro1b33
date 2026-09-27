@@ -159,6 +159,99 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    FileUploadTracker:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        userId:
+          type: integer
+          readOnly: true
+        uploadId:
+          type: string
+          maxLength: 255
+        fileName:
+          type: string
+          maxLength: 255
+        contentType:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        fileSize:
+          type:
+          - integer
+          - 'null'
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        status:
+          enum:
+          - pending
+          - uploading
+          - completed
+          - failed
+          - cancelled
+          type: string
+          description: '* `pending` - Pending
+
+            * `uploading` - Uploading
+
+            * `completed` - Completed
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled'
+          x-spec-enum-id: 09b6c2bacd3dd5f3
+        progressPercent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        bytesUploaded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        s3Bucket:
+          type: string
+          maxLength: 255
+        s3Key:
+          type: string
+          maxLength: 1024
+        artifact:
+          allOf:
+          - $ref: '#/components/schemas/Artifact'
+          readOnly: true
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - artifact
+      - completedAt
+      - createdAt
+      - fileName
+      - id
+      - s3Bucket
+      - s3Key
+      - updatedAt
+      - uploadId
+      - userId
     Artifact:
       type: object
       properties:
@@ -406,99 +499,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    FileUploadTracker:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        userId:
-          type: integer
-          readOnly: true
-        uploadId:
-          type: string
-          maxLength: 255
-        fileName:
-          type: string
-          maxLength: 255
-        contentType:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        fileSize:
-          type:
-          - integer
-          - 'null'
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        status:
-          enum:
-          - pending
-          - uploading
-          - completed
-          - failed
-          - cancelled
-          type: string
-          description: '* `pending` - Pending
-
-            * `uploading` - Uploading
-
-            * `completed` - Completed
-
-            * `failed` - Failed
-
-            * `cancelled` - Cancelled'
-          x-spec-enum-id: 09b6c2bacd3dd5f3
-        progressPercent:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        bytesUploaded:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        s3Bucket:
-          type: string
-          maxLength: 255
-        s3Key:
-          type: string
-          maxLength: 1024
-        artifact:
-          allOf:
-          - $ref: '#/components/schemas/Artifact'
-          readOnly: true
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        completedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - artifact
-      - completedAt
-      - createdAt
-      - fileName
-      - id
-      - s3Bucket
-      - s3Key
-      - updatedAt
-      - uploadId
-      - userId
     PaginatedFileUploadTrackerList:
       type: object
       required:

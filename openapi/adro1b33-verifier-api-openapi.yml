@@ -71,6 +71,23 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    EmailVerifierConfirm:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        code:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - code
+      - email
+      - token
     EmailVerifierCreate:
       type: object
       description: "회원가입 이메일 인증 메일 발송 (6자리 인증번호 방식)\n\nrequest: email, purpose(email_verification 한정)\nflow:\n    1. 가입된 이메일 중복 체크\n    2. EmailVerifier 레코드 생성 + 인증번호 메일 발송\n\n비밀번호 재설정(password_reset)은 이 공개 엔드포인트에서 허용하지 않는다 —\n가입 여부를 먼저 검사하는 accounts 앱(PasswordReset)을 통해서만 발송한다."
@@ -89,20 +106,3 @@ components:
       required:
       - email
       - purpose
-    EmailVerifierConfirm:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          writeOnly: true
-        code:
-          type: string
-          writeOnly: true
-        token:
-          type: string
-          readOnly: true
-      required:
-      - code
-      - email
-      - token

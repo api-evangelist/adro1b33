@@ -368,36 +368,6 @@ paths:
           description: ''
 components:
   schemas:
-    PatchProxyArtifactPresign:
-      type: object
-      properties:
-        kind:
-          enum:
-          - proxy_mesh
-          - proxy_layout
-          - atlas
-          type: string
-          description: '* `proxy_mesh` - proxy_mesh
-
-            * `proxy_layout` - proxy_layout
-
-            * `atlas` - atlas'
-          x-spec-enum-id: 52920026f3197740
-        sizeBytes:
-          type: integer
-          minimum: 1
-        contentType:
-          type: string
-          default: application/octet-stream
-        proxyWorkerRevision:
-          type: string
-        proxyArtifactSignature:
-          type: string
-        proxyCacheKey:
-          type: string
-      required:
-      - kind
-      - sizeBytes
     Patch:
       type: object
       properties:
@@ -642,27 +612,62 @@ components:
       - sourcePatchId
       - uid
       - updatedAt
-    PatchUnmergeResponse:
+    PatchProxyArtifactPresign:
       type: object
       properties:
-        status:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
           type: string
-        patchId:
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        sizeBytes:
           type: integer
-        restoredPatchIds:
-          type: array
-          items:
-            type: integer
-        restoredPatches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Patch'
+          minimum: 1
+        contentType:
+          type: string
+          default: application/octet-stream
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+      required:
+      - kind
+      - sizeBytes
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
           readOnly: true
       required:
-      - patchId
-      - restoredPatchIds
-      - restoredPatches
-      - status
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
+    PatchProxyMaskFinalize:
+      type: object
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - reservationId
     PatchMergeResponse:
       type: object
       properties:
@@ -684,17 +689,6 @@ components:
       - patch
       - patchId
       - status
-    PatchMerge:
-      type: object
-      properties:
-        patchIds:
-          type: array
-          items:
-            type: integer
-            minimum: 1
-          minItems: 2
-      required:
-      - patchIds
     PatchProxyArtifact:
       type: object
       properties:
@@ -760,29 +754,35 @@ components:
         reservationId:
           type: string
           format: uuid
-    MergedSourcePatch:
+    PatchMerge:
       type: object
       properties:
-        id:
+        patchIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          minItems: 2
+      required:
+      - patchIds
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
           type: integer
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        boundingBox:
-          readOnly: true
-        inputPreviewPoints:
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
           readOnly: true
       required:
-      - boundingBox
-      - id
-      - inputPreviewPoints
-      - label
-    PatchProxyMaskFinalize:
-      type: object
-      properties:
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - reservationId
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status

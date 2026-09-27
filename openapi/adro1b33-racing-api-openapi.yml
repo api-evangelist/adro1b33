@@ -162,40 +162,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    RaceSessionCreate:
-      type: object
-      properties:
-        jobUid:
-          type: string
-          maxLength: 36
-        gameBuildId:
-          type: string
-          maxLength: 64
-        vehiclePresetId:
-          enum:
-          - gt-validation-v1
-          - formula-student-validation-v1
-          type: string
-          description: '* `gt-validation-v1` - gt-validation-v1
-
-            * `formula-student-validation-v1` - formula-student-validation-v1'
-          x-spec-enum-id: c9fb85c158588aaa
-          default: gt-validation-v1
-      required:
-      - gameBuildId
-      - jobUid
-    RaceJobListResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/RaceJobResponse'
-      required:
-      - count
-      - results
     RaceLapCreate:
       type: object
       properties:
@@ -248,37 +214,6 @@ components:
       - clientLapUid
       - isValid
       - variant
-    RaceSessionResponse:
-      type: object
-      properties:
-        uid:
-          type: string
-        status:
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
-        readOnly:
-          type: boolean
-        performanceSnapshot:
-          type: object
-          additionalProperties: {}
-        bestLaps:
-          type: object
-          additionalProperties: {}
-        error:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-      required:
-      - bestLaps
-      - error
-      - expiresAt
-      - performanceSnapshot
-      - readOnly
-      - status
-      - uid
     RaceJobResponse:
       type: object
       properties:
@@ -335,3 +270,68 @@ components:
       required:
       - differenceFelt
       - wouldOptimizeAgain
+    RaceSessionCreate:
+      type: object
+      properties:
+        jobUid:
+          type: string
+          maxLength: 36
+        gameBuildId:
+          type: string
+          maxLength: 64
+        vehiclePresetId:
+          enum:
+          - gt-validation-v1
+          - formula-student-validation-v1
+          type: string
+          description: '* `gt-validation-v1` - gt-validation-v1
+
+            * `formula-student-validation-v1` - formula-student-validation-v1'
+          x-spec-enum-id: c9fb85c158588aaa
+          default: gt-validation-v1
+      required:
+      - gameBuildId
+      - jobUid
+    RaceSessionResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+        status:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        readOnly:
+          type: boolean
+        performanceSnapshot:
+          type: object
+          additionalProperties: {}
+        bestLaps:
+          type: object
+          additionalProperties: {}
+        error:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+      required:
+      - bestLaps
+      - error
+      - expiresAt
+      - performanceSnapshot
+      - readOnly
+      - status
+      - uid
+    RaceJobListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaceJobResponse'
+      required:
+      - count
+      - results
