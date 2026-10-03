@@ -412,13 +412,6 @@ paths:
           description: ''
 components:
   schemas:
-    CancelRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-      required:
-      - teamId
     NextBillingPlan:
       type: object
       description: 다음 결제될 플랜 식별 정보.
@@ -433,26 +426,21 @@ components:
       - code
       - id
       - name
-    UpgradeQuoteResponse:
-      type: object
-      properties:
-        upgradeQuote:
-          $ref: '#/components/schemas/UpgradeQuote'
-      required:
-      - upgradeQuote
-    PlanChangeRequest:
+    SubscribeRequest:
       type: object
       properties:
         teamId:
           type: integer
-        planCode:
+        billingKeyId:
           type: string
-          maxLength: 32
+          maxLength: 128
         currency:
           type: string
           maxLength: 8
+        paymentId:
+          type: string
+          maxLength: 128
       required:
-      - planCode
       - teamId
     UpgradeResponse:
       type: object
@@ -567,30 +555,14 @@ components:
       - teamId
       - teamName
       - updatedAt
-    StorageAddonQuoteDisplay:
+    CancelRequest:
       type: object
-      description: Backend-formatted UI strings for a storage add-on quote.
       properties:
-        monthlySupplyAmount:
-          type: string
-        monthlyTaxAmount:
-          type: string
-        monthlyTotalAmount:
-          type: string
-        chargedSupplyAmount:
-          type: string
-        chargedTaxAmount:
-          type: string
-        chargedTotalAmount:
-          type: string
+        teamId:
+          type: integer
       required:
-      - chargedSupplyAmount
-      - chargedTaxAmount
-      - chargedTotalAmount
-      - monthlySupplyAmount
-      - monthlyTaxAmount
-      - monthlyTotalAmount
-    StorageAddonPrice:
+      - teamId
+    PriceEntry:
       type: object
       properties:
         currency:
@@ -601,14 +573,92 @@ components:
           type: integer
         totalAmountMinor:
           type: integer
-        isActive:
-          type: boolean
+        display:
+          $ref: '#/components/schemas/PriceDisplay'
       required:
       - currency
-      - isActive
+      - display
       - supplyAmountMinor
       - taxAmountMinor
       - totalAmountMinor
+    StorageAddonChange:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        unitCount:
+          type: integer
+          minimum: 0
+      required:
+      - teamId
+      - unitCount
+    UpgradeQuoteResponse:
+      type: object
+      properties:
+        upgradeQuote:
+          $ref: '#/components/schemas/UpgradeQuote'
+      required:
+      - upgradeQuote
+    PlanChangeRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        planCode:
+          type: string
+          maxLength: 32
+        currency:
+          type: string
+          maxLength: 8
+      required:
+      - planCode
+      - teamId
+    StorageAddonPurchase:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        unitCount:
+          type: integer
+          minimum: 1
+        currency:
+          type: string
+          maxLength: 8
+      required:
+      - teamId
+      - unitCount
+    PriceDisplay:
+      type: object
+      properties:
+        supplyAmount:
+          type: string
+        taxAmount:
+          type: string
+        totalAmount:
+          type: string
+        unitPrice:
+          type: string
+        discountRate:
+          type:
+          - string
+          - 'null'
+      required:
+      - supplyAmount
+      - taxAmount
+      - totalAmount
+    PlanGateResponse:
+      type: object
+      description: '`/subscriptions/plan-gate/` 응답 — 실행 진입용 구독 판정.'
+      properties:
+        teamId:
+          type: integer
+          readOnly: true
+        hasCurrentPlan:
+          type: boolean
+          readOnly: true
+      required:
+      - hasCurrentPlan
+      - teamId
     Subscription:
       type: object
       properties:
@@ -719,95 +769,29 @@ components:
       - teamId
       - teamName
       - updatedAt
-    UpgradeQuotePlan:
+    StorageAddonQuoteDisplay:
       type: object
+      description: Backend-formatted UI strings for a storage add-on quote.
       properties:
-        id:
-          type: integer
-        code:
+        monthlySupplyAmount:
           type: string
-        name:
+        monthlyTaxAmount:
+          type: string
+        monthlyTotalAmount:
+          type: string
+        chargedSupplyAmount:
+          type: string
+        chargedTaxAmount:
+          type: string
+        chargedTotalAmount:
           type: string
       required:
-      - code
-      - id
-      - name
-    PlanGateResponse:
-      type: object
-      description: '`/subscriptions/plan-gate/` 응답 — 실행 진입용 구독 판정.'
-      properties:
-        teamId:
-          type: integer
-          readOnly: true
-        hasCurrentPlan:
-          type: boolean
-          readOnly: true
-      required:
-      - hasCurrentPlan
-      - teamId
-    SubscriptionCycle:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        subscription:
-          type: integer
-        planSnapshotCode:
-          type: string
-          maxLength: 32
-        planSnapshotMonthlyCredits:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        cycleStartedAt:
-          type: string
-          format: date-time
-        cycleEndsAt:
-          type: string
-          format: date-time
-        status:
-          enum:
-          - PENDING
-          - PAID
-          - FAILED
-          - PRORATED
-          type: string
-          description: '* `PENDING` - 결제 시도 중
-
-            * `PAID` - 결제 성공
-
-            * `FAILED` - 결제 실패
-
-            * `PRORATED` - 업그레이드 일할 지급'
-          x-spec-enum-id: 4bf9b922a073ba54
-          default: PENDING
-        paymentId:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        creditBucketId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        note:
-          type: string
-          maxLength: 200
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - creditBucketId
-      - cycleEndsAt
-      - cycleStartedAt
-      - id
-      - paymentId
-      - planSnapshotCode
-      - subscription
+      - chargedSupplyAmount
+      - chargedTaxAmount
+      - chargedTotalAmount
+      - monthlySupplyAmount
+      - monthlyTaxAmount
+      - monthlyTotalAmount
     TeamStorageAddon:
       type: object
       properties:
@@ -883,78 +867,6 @@ components:
       - subscriptionId
       - teamId
       - unitCount
-    UpgradeQuote:
-      type: object
-      description: 업그레이드 견적 — 결제에 사용되는 백엔드 계산 결과를 그대로 노출.
-      properties:
-        quotedAt:
-          type: string
-          format: date-time
-        currency:
-          type: string
-        currentPlan:
-          $ref: '#/components/schemas/UpgradeQuotePlan'
-        newPlan:
-          $ref: '#/components/schemas/UpgradeQuotePlan'
-        currentPlanPrice:
-          $ref: '#/components/schemas/PriceEntry'
-        newPlanPrice:
-          $ref: '#/components/schemas/PriceEntry'
-        differenceSupplyAmountMinor:
-          type: integer
-        differenceTaxAmountMinor:
-          type: integer
-        differenceTotalAmountMinor:
-          type: integer
-        cycleStartedAt:
-          type: string
-          format: date-time
-        cycleEndsAt:
-          type: string
-          format: date-time
-        usedDays:
-          type: integer
-        remainingDays:
-          type: integer
-        totalDays:
-          type: integer
-        prorationRatio:
-          type: string
-        subtotalAmountMinor:
-          type: integer
-        vatAmountMinor:
-          type: integer
-        totalChargedAmountMinor:
-          type: integer
-        display:
-          type: object
-          additionalProperties: {}
-        monthlyCreditDifference:
-          type: integer
-        proratedCredits:
-          type: integer
-      required:
-      - currency
-      - currentPlan
-      - currentPlanPrice
-      - cycleEndsAt
-      - cycleStartedAt
-      - differenceSupplyAmountMinor
-      - differenceTaxAmountMinor
-      - differenceTotalAmountMinor
-      - display
-      - monthlyCreditDifference
-      - newPlan
-      - newPlanPrice
-      - proratedCredits
-      - prorationRatio
-      - quotedAt
-      - remainingDays
-      - subtotalAmountMinor
-      - totalChargedAmountMinor
-      - totalDays
-      - usedDays
-      - vatAmountMinor
     NextBilling:
       type: object
       description: 다음 사이클에 청구될 플랜 + 금액. `price` 는 플랜 리스트의 가격 객체와 동일 구조.
@@ -966,47 +878,63 @@ components:
       required:
       - plan
       - price
-    StorageAddonPurchase:
+    StorageAddonQuote:
       type: object
       properties:
-        teamId:
-          type: integer
-        unitCount:
-          type: integer
-          minimum: 1
         currency:
           type: string
-          maxLength: 8
-      required:
-      - teamId
-      - unitCount
-    SolverAccessResponse:
-      type: object
-      description: '`/subscriptions/solver-access/` 응답 — 실시간 조회 결과.'
-      properties:
-        teamId:
+        unitCount:
           type: integer
+        unitBytes:
+          type: integer
+        addedBytes:
+          type: integer
+        monthlySupplyAmountMinor:
+          type: integer
+        monthlyTaxAmountMinor:
+          type: integer
+        monthlyTotalAmountMinor:
+          type: integer
+        chargedSupplyAmountMinor:
+          type: integer
+        chargedTaxAmountMinor:
+          type: integer
+        chargedTotalAmountMinor:
+          type: integer
+        cycleStartedAt:
+          type: string
+          format: date-time
+        cycleEndsAt:
+          type: string
+          format: date-time
+        remainingDays:
+          type: integer
+        totalDays:
+          type: integer
+        prorationRatio:
+          type: string
+        display:
+          allOf:
+          - $ref: '#/components/schemas/StorageAddonQuoteDisplay'
           readOnly: true
-        allowedSolvers:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        sourceSubscriptionId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        sourceContractId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
+          description: Backend-formatted currency strings; do not recalculate client-side.
       required:
-      - allowedSolvers
-      - sourceContractId
-      - sourceSubscriptionId
-      - teamId
+      - addedBytes
+      - chargedSupplyAmountMinor
+      - chargedTaxAmountMinor
+      - chargedTotalAmountMinor
+      - currency
+      - cycleEndsAt
+      - cycleStartedAt
+      - display
+      - monthlySupplyAmountMinor
+      - monthlyTaxAmountMinor
+      - monthlyTotalAmountMinor
+      - prorationRatio
+      - remainingDays
+      - totalDays
+      - unitBytes
+      - unitCount
     Plan:
       type: object
       properties:
@@ -1101,47 +1029,68 @@ components:
       - price
       - storageAddonPrices
       - updatedAt
-    PriceEntry:
+    UpgradeQuotePlan:
       type: object
       properties:
-        currency:
+        id:
+          type: integer
+        code:
           type: string
-        supplyAmountMinor:
-          type: integer
-        taxAmountMinor:
-          type: integer
-        totalAmountMinor:
-          type: integer
-        display:
-          $ref: '#/components/schemas/PriceDisplay'
+        name:
+          type: string
       required:
-      - currency
-      - display
-      - supplyAmountMinor
-      - taxAmountMinor
-      - totalAmountMinor
-    StorageAddonQuote:
+      - code
+      - id
+      - name
+    SolverAccessResponse:
       type: object
+      description: '`/subscriptions/solver-access/` 응답 — 실시간 조회 결과.'
       properties:
+        teamId:
+          type: integer
+          readOnly: true
+        allowedSolvers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        sourceSubscriptionId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        sourceContractId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+      required:
+      - allowedSolvers
+      - sourceContractId
+      - sourceSubscriptionId
+      - teamId
+    UpgradeQuote:
+      type: object
+      description: 업그레이드 견적 — 결제에 사용되는 백엔드 계산 결과를 그대로 노출.
+      properties:
+        quotedAt:
+          type: string
+          format: date-time
         currency:
           type: string
-        unitCount:
+        currentPlan:
+          $ref: '#/components/schemas/UpgradeQuotePlan'
+        newPlan:
+          $ref: '#/components/schemas/UpgradeQuotePlan'
+        currentPlanPrice:
+          $ref: '#/components/schemas/PriceEntry'
+        newPlanPrice:
+          $ref: '#/components/schemas/PriceEntry'
+        differenceSupplyAmountMinor:
           type: integer
-        unitBytes:
+        differenceTaxAmountMinor:
           type: integer
-        addedBytes:
-          type: integer
-        monthlySupplyAmountMinor:
-          type: integer
-        monthlyTaxAmountMinor:
-          type: integer
-        monthlyTotalAmountMinor:
-          type: integer
-        chargedSupplyAmountMinor:
-          type: integer
-        chargedTaxAmountMinor:
-          type: integer
-        chargedTotalAmountMinor:
+        differenceTotalAmountMinor:
           type: integer
         cycleStartedAt:
           type: string
@@ -1149,34 +1098,49 @@ components:
         cycleEndsAt:
           type: string
           format: date-time
+        usedDays:
+          type: integer
         remainingDays:
           type: integer
         totalDays:
           type: integer
         prorationRatio:
           type: string
+        subtotalAmountMinor:
+          type: integer
+        vatAmountMinor:
+          type: integer
+        totalChargedAmountMinor:
+          type: integer
         display:
-          allOf:
-          - $ref: '#/components/schemas/StorageAddonQuoteDisplay'
-          readOnly: true
-          description: Backend-formatted currency strings; do not recalculate client-side.
+          type: object
+          additionalProperties: {}
+        monthlyCreditDifference:
+          type: integer
+        proratedCredits:
+          type: integer
       required:
-      - addedBytes
-      - chargedSupplyAmountMinor
-      - chargedTaxAmountMinor
-      - chargedTotalAmountMinor
       - currency
+      - currentPlan
+      - currentPlanPrice
       - cycleEndsAt
       - cycleStartedAt
+      - differenceSupplyAmountMinor
+      - differenceTaxAmountMinor
+      - differenceTotalAmountMinor
       - display
-      - monthlySupplyAmountMinor
-      - monthlyTaxAmountMinor
-      - monthlyTotalAmountMinor
+      - monthlyCreditDifference
+      - newPlan
+      - newPlanPrice
+      - proratedCredits
       - prorationRatio
+      - quotedAt
       - remainingDays
+      - subtotalAmountMinor
+      - totalChargedAmountMinor
       - totalDays
-      - unitBytes
-      - unitCount
+      - usedDays
+      - vatAmountMinor
     StorageAddonCycle:
       type: object
       properties:
@@ -1252,49 +1216,85 @@ components:
       - totalAmountSnapshot
       - unitBytesSnapshot
       - unitCountSnapshot
-    PriceDisplay:
+    StorageAddonPrice:
       type: object
       properties:
-        supplyAmount:
+        currency:
           type: string
-        taxAmount:
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        isActive:
+          type: boolean
+      required:
+      - currency
+      - isActive
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
+    SubscriptionCycle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subscription:
+          type: integer
+        planSnapshotCode:
           type: string
-        totalAmount:
+          maxLength: 32
+        planSnapshotMonthlyCredits:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        cycleStartedAt:
           type: string
-        unitPrice:
+          format: date-time
+        cycleEndsAt:
           type: string
-        discountRate:
+          format: date-time
+        status:
+          enum:
+          - PENDING
+          - PAID
+          - FAILED
+          - PRORATED
+          type: string
+          description: '* `PENDING` - 결제 시도 중
+
+            * `PAID` - 결제 성공
+
+            * `FAILED` - 결제 실패
+
+            * `PRORATED` - 업그레이드 일할 지급'
+          x-spec-enum-id: 4bf9b922a073ba54
+          default: PENDING
+        paymentId:
           type:
           - string
           - 'null'
-      required:
-      - supplyAmount
-      - taxAmount
-      - totalAmount
-    StorageAddonChange:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        unitCount:
-          type: integer
-          minimum: 0
-      required:
-      - teamId
-      - unitCount
-    SubscribeRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        billingKeyId:
+          readOnly: true
+        creditBucketId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        note:
           type: string
-          maxLength: 128
-        currency:
+          maxLength: 200
+        createdAt:
           type: string
-          maxLength: 8
-        paymentId:
-          type: string
-          maxLength: 128
+          format: date-time
+          readOnly: true
       required:
-      - teamId
+      - createdAt
+      - creditBucketId
+      - cycleEndsAt
+      - cycleStartedAt
+      - id
+      - paymentId
+      - planSnapshotCode
+      - subscription

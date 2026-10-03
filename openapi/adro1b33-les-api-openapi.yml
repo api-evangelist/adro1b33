@@ -407,6 +407,58 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    LesInputUpload:
+      type: object
+      properties:
+        uid:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+        status:
+          enum:
+          - pending
+          - ready
+          - failed
+          type: string
+          description: '* `pending` - Pending
+
+            * `ready` - Ready
+
+            * `failed` - Failed'
+          x-spec-enum-id: 95a96ed85bfac560
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - sizeBytes
+      - status
+      - stlFilename
+      - uid
+    LesInputUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId
     LesAutoconfig:
       type: object
       properties:
@@ -455,23 +507,6 @@ components:
       - status
       - stlFilename
       - uid
-    LesInputUploadComplete:
-      type: object
-      properties:
-        uploadId:
-          type: string
-          maxLength: 512
-        completedParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/_CompletedPart'
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - completedParts
-      - reservationId
-      - uploadId
     _CompletedPart:
       type: object
       properties:
@@ -485,41 +520,6 @@ components:
       required:
       - etag
       - partNumber
-    LesInputUpload:
-      type: object
-      properties:
-        uid:
-          type: string
-          readOnly: true
-        stlFilename:
-          type: string
-          readOnly: true
-        sizeBytes:
-          type: integer
-          readOnly: true
-        status:
-          enum:
-          - pending
-          - ready
-          - failed
-          type: string
-          description: '* `pending` - Pending
-
-            * `ready` - Ready
-
-            * `failed` - Failed'
-          x-spec-enum-id: 95a96ed85bfac560
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - sizeBytes
-      - status
-      - stlFilename
-      - uid
     LesAutoconfigUploadComplete:
       type: object
       properties:

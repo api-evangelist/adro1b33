@@ -307,6 +307,236 @@ paths:
           description: ''
 components:
   schemas:
+    Payment:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          maxLength: 64
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        type:
+          enum:
+          - ONE_TIME
+          - BILLING
+          type: string
+          description: '* `ONE_TIME` - 단건결제
+
+            * `BILLING` - 빌링키결제'
+          x-spec-enum-id: 1bec82349f1a053f
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+        status:
+          enum:
+          - READY
+          - PAID
+          - VIRTUAL_ACCOUNT_ISSUED
+          - PAY_PENDING
+          - PARTIAL_CANCELLED
+          - CANCELLED
+          - FAILED
+          type: string
+          description: '* `READY` - 결제 대기 (paymentId 채번 직후)
+
+            * `PAID` - 결제 완료
+
+            * `VIRTUAL_ACCOUNT_ISSUED` - 가상계좌 발급 완료
+
+            * `PAY_PENDING` - 결제 승인 대기
+
+            * `PARTIAL_CANCELLED` - 부분 취소
+
+            * `CANCELLED` - 전체 취소
+
+            * `FAILED` - 결제 실패'
+          x-spec-enum-id: f6b6565c3eca53e9
+        billingKey:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        channelKey:
+          type: string
+          maxLength: 128
+        orderName:
+          type: string
+          maxLength: 200
+        amountMinor:
+          type: integer
+          readOnly: true
+        currency:
+          type: string
+          maxLength: 8
+        paidAmountMinor:
+          type: integer
+          readOnly: true
+        cancelledAmountMinor:
+          type: integer
+          readOnly: true
+        refundAvailableAmountMinor:
+          type: integer
+          readOnly: true
+        display:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        pgProvider:
+          type: string
+          maxLength: 64
+        pgTxId:
+          type: string
+          maxLength: 128
+        methodType:
+          type: string
+          maxLength: 32
+        failureCode:
+          type: string
+          maxLength: 64
+        failureMessage:
+          type: string
+        requestedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        paidAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        failedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        cancellations:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentCancellation'
+          readOnly: true
+      required:
+      - amountMinor
+      - billingKey
+      - cancellations
+      - cancelledAmountMinor
+      - display
+      - orderName
+      - paidAmountMinor
+      - paymentId
+      - refundAvailableAmountMinor
+      - requestedAt
+      - requestedByUserId
+      - teamId
+      - teamName
+      - type
+    TeamBillingProfile:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        billingCountry:
+          type: string
+          maxLength: 2
+        legalName:
+          type: string
+          maxLength: 255
+        billingEmail:
+          type: string
+          format: email
+          maxLength: 254
+        billingAddress:
+          type: string
+        taxId:
+          type: string
+          maxLength: 128
+        countryLockedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      required:
+      - countryLockedAt
+    CheckoutOptions:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        billingProfileRequired:
+          type: boolean
+        billingProfile:
+          allOf:
+          - $ref: '#/components/schemas/TeamBillingProfile'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderCheckoutOption'
+      required:
+      - billingProfile
+      - billingProfileRequired
+      - providers
+      - teamId
+    OneTimePrepareRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+          default: paypal
+        amount:
+          type: integer
+          minimum: 1
+        currency:
+          type: string
+          default: USD
+          maxLength: 8
+        orderName:
+          type: string
+          maxLength: 200
+        channelKey:
+          type: string
+          maxLength: 128
+        billingCountry:
+          type: string
+          maxLength: 2
+      required:
+      - amount
+      - orderName
+      - teamId
     BillingKeySwapRequest:
       type: object
       description: "결제수단 변경(swap) 요청.\n\n프론트 흐름:\n  - PayLetter : `/payments/prepare/?provider=payletter` 로 소액 paymentId 채번 →\n    `requestIssueBillingKeyAndPay` 로 발급+소액결제 → 콜백 billingKey + paymentId 전달.\n  - PayPal/Galaxia : `requestIssueBillingKey` 로 단독발급 → 콜백 billingKey 전달\n    (payment_id 불필요)."
@@ -352,6 +582,102 @@ components:
       - billingEmail
       - billingKey
       - legalName
+      - teamId
+    ProviderCheckoutOption:
+      type: object
+      properties:
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+        currencies:
+          type: array
+          items:
+            enum:
+            - JPY
+            - KRW
+            - USD
+            type: string
+            description: '* `JPY` - JPY
+
+              * `KRW` - KRW
+
+              * `USD` - USD'
+            x-spec-enum-id: b58a39bc60fabdb8
+      required:
+      - currencies
+      - provider
+    CurrentBillingMethod:
+      type: object
+      description: '현재 활성 결제수단 — 표시용 메타만 노출.
+
+
+        보안: raw `billing_key` 는 PortOne 결제 호출용 credential 이므로 브라우저에
+
+        절대 내려주지 않는다 (노출 시 결제 abuse 표면 증가). 구독/결제/교체 호출은
+
+        서버가 팀의 활성 빌링키를 직접 resolve 하므로 FE 는 billing_key 값을 알 필요가 없다.
+
+        채널키 등 내부 식별자도 제외하고 카드 표시 정보만 내려준다.'
+      properties:
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+        method:
+          type: string
+          maxLength: 32
+        cardIssuer:
+          type: string
+          maxLength: 64
+        cardBrand:
+          type: string
+          maxLength: 32
+        cardNumberMasked:
+          type: string
+          maxLength: 32
+    BillingKeyRegisterRequest:
+      type: object
+      properties:
+        billingKey:
+          type: string
+          maxLength: 128
+        teamId:
+          type: integer
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+          default: paypal
+        channelKey:
+          type: string
+          maxLength: 128
+      required:
+      - billingKey
       - teamId
     OneTimePrepareResponse:
       type: object
@@ -505,439 +831,6 @@ components:
       - teamId
       - teamName
       - type
-    CheckoutOptions:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        billingProfileRequired:
-          type: boolean
-        billingProfile:
-          allOf:
-          - $ref: '#/components/schemas/TeamBillingProfile'
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderCheckoutOption'
-      required:
-      - billingProfile
-      - billingProfileRequired
-      - providers
-      - teamId
-    BillingMethodSwap:
-      type: object
-      description: '결제수단 변경(swap) 결과. 새 빌링키 + 후속(환불/폐기) 결과 플래그.
-
-
-        refund_failed / old_delete_failed 가 true 면 발급은 성공했으나 후속이 일부 실패한
-
-        것 (status=COMPLETED_WITH_WARNINGS) — note 에 사유. CS/재시도 대상 식별용.'
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        teamId:
-          type: integer
-          readOnly: true
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-        newBillingKey:
-          allOf:
-          - $ref: '#/components/schemas/BillingKey'
-          readOnly: true
-        oldBillingKey:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        microPaymentId:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        createdByUserId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        reason:
-          type: string
-          maxLength: 200
-        status:
-          enum:
-          - COMPLETED
-          - COMPLETED_WITH_WARNINGS
-          type: string
-          description: '* `COMPLETED` - 완료 (발급+환불+기존폐기 모두 성공)
-
-            * `COMPLETED_WITH_WARNINGS` - 발급 성공 + 후속(환불/폐기) 일부 실패'
-          x-spec-enum-id: 9713d5910cb6bc4a
-        refundFailed:
-          type: boolean
-        oldDeleteFailed:
-          type: boolean
-        note:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - createdByUserId
-      - id
-      - microPaymentId
-      - newBillingKey
-      - oldBillingKey
-      - provider
-      - teamId
-    PaymentCancellation:
-      type: object
-      properties:
-        cancellationId:
-          type: string
-          maxLength: 64
-        amount:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        reason:
-          type: string
-          maxLength: 200
-        requestedByUserId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        cancelledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      required:
-      - amount
-      - cancellationId
-      - requestedByUserId
-    OneTimePrepareRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-          default: paypal
-        amount:
-          type: integer
-          minimum: 1
-        currency:
-          type: string
-          default: USD
-          maxLength: 8
-        orderName:
-          type: string
-          maxLength: 200
-        channelKey:
-          type: string
-          maxLength: 128
-        billingCountry:
-          type: string
-          maxLength: 2
-      required:
-      - amount
-      - orderName
-      - teamId
-    BillingKeyBypassResponse:
-      type: object
-      description: '빌링키 발급 SDK 호출 전 프론트가 가져갈 bypass 페이로드.
-
-
-        별도 prepare 단계가 없는 PG 가 SDK 호출에 추가 파라미터를 요구할 때 사용한다.'
-      properties:
-        bypass:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        channelKey:
-          type: string
-          readOnly: true
-      required:
-      - bypass
-      - channelKey
-    Payment:
-      type: object
-      properties:
-        paymentId:
-          type: string
-          maxLength: 64
-        teamId:
-          type: integer
-          readOnly: true
-        teamName:
-          type: string
-          readOnly: true
-        requestedByUserId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        type:
-          enum:
-          - ONE_TIME
-          - BILLING
-          type: string
-          description: '* `ONE_TIME` - 단건결제
-
-            * `BILLING` - 빌링키결제'
-          x-spec-enum-id: 1bec82349f1a053f
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-        status:
-          enum:
-          - READY
-          - PAID
-          - VIRTUAL_ACCOUNT_ISSUED
-          - PAY_PENDING
-          - PARTIAL_CANCELLED
-          - CANCELLED
-          - FAILED
-          type: string
-          description: '* `READY` - 결제 대기 (paymentId 채번 직후)
-
-            * `PAID` - 결제 완료
-
-            * `VIRTUAL_ACCOUNT_ISSUED` - 가상계좌 발급 완료
-
-            * `PAY_PENDING` - 결제 승인 대기
-
-            * `PARTIAL_CANCELLED` - 부분 취소
-
-            * `CANCELLED` - 전체 취소
-
-            * `FAILED` - 결제 실패'
-          x-spec-enum-id: f6b6565c3eca53e9
-        billingKey:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        channelKey:
-          type: string
-          maxLength: 128
-        orderName:
-          type: string
-          maxLength: 200
-        amountMinor:
-          type: integer
-          readOnly: true
-        currency:
-          type: string
-          maxLength: 8
-        paidAmountMinor:
-          type: integer
-          readOnly: true
-        cancelledAmountMinor:
-          type: integer
-          readOnly: true
-        refundAvailableAmountMinor:
-          type: integer
-          readOnly: true
-        display:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        pgProvider:
-          type: string
-          maxLength: 64
-        pgTxId:
-          type: string
-          maxLength: 128
-        methodType:
-          type: string
-          maxLength: 32
-        failureCode:
-          type: string
-          maxLength: 64
-        failureMessage:
-          type: string
-        requestedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        paidAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        failedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        cancelledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        cancellations:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentCancellation'
-          readOnly: true
-      required:
-      - amountMinor
-      - billingKey
-      - cancellations
-      - cancelledAmountMinor
-      - display
-      - orderName
-      - paidAmountMinor
-      - paymentId
-      - refundAvailableAmountMinor
-      - requestedAt
-      - requestedByUserId
-      - teamId
-      - teamName
-      - type
-    CurrentBillingMethod:
-      type: object
-      description: '현재 활성 결제수단 — 표시용 메타만 노출.
-
-
-        보안: raw `billing_key` 는 PortOne 결제 호출용 credential 이므로 브라우저에
-
-        절대 내려주지 않는다 (노출 시 결제 abuse 표면 증가). 구독/결제/교체 호출은
-
-        서버가 팀의 활성 빌링키를 직접 resolve 하므로 FE 는 billing_key 값을 알 필요가 없다.
-
-        채널키 등 내부 식별자도 제외하고 카드 표시 정보만 내려준다.'
-      properties:
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-        method:
-          type: string
-          maxLength: 32
-        cardIssuer:
-          type: string
-          maxLength: 64
-        cardBrand:
-          type: string
-          maxLength: 32
-        cardNumberMasked:
-          type: string
-          maxLength: 32
-    ProviderCheckoutOption:
-      type: object
-      properties:
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-        currencies:
-          type: array
-          items:
-            enum:
-            - JPY
-            - KRW
-            - USD
-            type: string
-            description: '* `JPY` - JPY
-
-              * `KRW` - KRW
-
-              * `USD` - USD'
-            x-spec-enum-id: b58a39bc60fabdb8
-      required:
-      - currencies
-      - provider
-    CheckoutCancelRequest:
-      type: object
-      description: '결제창 취소/실패 마킹 요청. FE SDK 의 취소·실패 콜백에서 받은 메시지를 그대로 전달.
-
-
-        PG/SDK 별 문구(Galaxia ''[1111, 00] 사용자 결제취소'', PayLetter/PayPal ''사용자가 결제를
-
-        취소하였습니다.'' 등)는 FE 가 원문을 그대로 넣고, 백엔드는 PG 별 분기 없이 저장한다.'
-      properties:
-        failureMessage:
-          type: string
-          default: ''
-          maxLength: 500
-    TeamBillingProfile:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        billingCountry:
-          type: string
-          maxLength: 2
-        legalName:
-          type: string
-          maxLength: 255
-        billingEmail:
-          type: string
-          format: email
-          maxLength: 254
-        billingAddress:
-          type: string
-        taxId:
-          type: string
-          maxLength: 128
-        countryLockedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-      required:
-      - countryLockedAt
     BillingKey:
       type: object
       properties:
@@ -1016,14 +909,65 @@ components:
       - createdByUserId
       - teamId
       - teamName
-    BillingKeyRegisterRequest:
+    BillingKeyBypassResponse:
+      type: object
+      description: '빌링키 발급 SDK 호출 전 프론트가 가져갈 bypass 페이로드.
+
+
+        별도 prepare 단계가 없는 PG 가 SDK 호출에 추가 파라미터를 요구할 때 사용한다.'
+      properties:
+        bypass:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        channelKey:
+          type: string
+          readOnly: true
+      required:
+      - bypass
+      - channelKey
+    PaymentCancellation:
       type: object
       properties:
-        billingKey:
+        cancellationId:
           type: string
-          maxLength: 128
+          maxLength: 64
+        amount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        reason:
+          type: string
+          maxLength: 200
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - amount
+      - cancellationId
+      - requestedByUserId
+    BillingMethodSwap:
+      type: object
+      description: '결제수단 변경(swap) 결과. 새 빌링키 + 후속(환불/폐기) 결과 플래그.
+
+
+        refund_failed / old_delete_failed 가 true 면 발급은 성공했으나 후속이 일부 실패한
+
+        것 (status=COMPLETED_WITH_WARNINGS) — note 에 사유. CS/재시도 대상 식별용.'
+      properties:
+        id:
+          type: integer
+          readOnly: true
         teamId:
           type: integer
+          readOnly: true
         provider:
           enum:
           - payletter
@@ -1036,13 +980,69 @@ components:
 
             * `galaxia` - Galaxia'
           x-spec-enum-id: 57f6d0e06595d82e
-          default: paypal
-        channelKey:
+        newBillingKey:
+          allOf:
+          - $ref: '#/components/schemas/BillingKey'
+          readOnly: true
+        oldBillingKey:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        microPaymentId:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        reason:
           type: string
-          maxLength: 128
+          maxLength: 200
+        status:
+          enum:
+          - COMPLETED
+          - COMPLETED_WITH_WARNINGS
+          type: string
+          description: '* `COMPLETED` - 완료 (발급+환불+기존폐기 모두 성공)
+
+            * `COMPLETED_WITH_WARNINGS` - 발급 성공 + 후속(환불/폐기) 일부 실패'
+          x-spec-enum-id: 9713d5910cb6bc4a
+        refundFailed:
+          type: boolean
+        oldDeleteFailed:
+          type: boolean
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
       required:
-      - billingKey
+      - createdAt
+      - createdByUserId
+      - id
+      - microPaymentId
+      - newBillingKey
+      - oldBillingKey
+      - provider
       - teamId
+    CheckoutCancelRequest:
+      type: object
+      description: '결제창 취소/실패 마킹 요청. FE SDK 의 취소·실패 콜백에서 받은 메시지를 그대로 전달.
+
+
+        PG/SDK 별 문구(Galaxia ''[1111, 00] 사용자 결제취소'', PayLetter/PayPal ''사용자가 결제를
+
+        취소하였습니다.'' 등)는 FE 가 원문을 그대로 넣고, 백엔드는 PG 별 분기 없이 저장한다.'
+      properties:
+        failureMessage:
+          type: string
+          default: ''
+          maxLength: 500
     BillingKeyRegisterAndChargePayletterRequest:
       type: object
       description: 'PayLetter `requestIssueBillingKeyAndPay` 콜백 처리용.

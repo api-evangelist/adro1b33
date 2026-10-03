@@ -426,28 +426,46 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UserPasswordResetConfirm:
+    SignupResponse:
       type: object
       properties:
+        id:
+          type: integer
         email:
           type: string
           format: email
+        displayName:
+          type: string
+        teamId:
+          type: integer
+        teamName:
+          type: string
+      required:
+      - displayName
+      - email
+      - id
+      - teamId
+      - teamName
+    UserPasswordVerify:
+      type: object
+      properties:
+        oldPassword:
+          type: string
           writeOnly: true
         token:
           type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-        passwordConfirm:
-          type: string
-          writeOnly: true
+          readOnly: true
       required:
-      - email
-      - password
-      - passwordConfirm
+      - oldPassword
       - token
-    Signup:
+    DetailResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    LoginRequest:
       type: object
       properties:
         email:
@@ -455,21 +473,6 @@ components:
           format: email
         password:
           type: string
-          writeOnly: true
-          minLength: 8
-        displayName:
-          type: string
-          default: ''
-          maxLength: 150
-        inviteToken:
-          type:
-          - string
-          - 'null'
-          format: uuid
-        emailToken:
-          type:
-          - string
-          - 'null'
           writeOnly: true
       required:
       - email
@@ -507,25 +510,6 @@ components:
       - canManageProjects
       - canManageTeamMembers
       - canManageTeamSettings
-    LoginResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-        teamId:
-          type:
-          - integer
-          - 'null'
-        teamName:
-          type:
-          - string
-          - 'null'
-        userType:
-          type: string
-        mustChangePassword:
-          type: boolean
-      required:
-      - detail
     UserPasswordReset:
       type: object
       properties:
@@ -534,161 +518,70 @@ components:
           format: email
       required:
       - email
-    UserSearchResult:
+    StorageUsageProject:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
+          type: string
+        mode:
+          type: string
+        totalSizeBytes:
+          type: integer
+      required:
+      - mode
+      - projectId
+      - projectName
+      - totalSizeBytes
+    JobDailyUsage:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        g1TotalSeconds:
+          type: integer
+        g2TotalSeconds:
+          type: integer
+        g4TotalSeconds:
+          type: integer
+        frontierTotalSeconds:
+          type: integer
+      required:
+      - date
+      - g1TotalSeconds
+      - g2TotalSeconds
+    AccountTeam:
       type: object
       properties:
         id:
           type: integer
-        email:
+        uid:
           type: string
-          format: email
-        displayName:
+        name:
           type: string
+        slug:
+          type: string
+        role:
+          type:
+          - string
+          - 'null'
+        displayNameOverride:
+          type:
+          - string
+          - 'null'
+        tenantId:
+          type:
+          - integer
+          - 'null'
+        tenantSchemaName:
+          type: string
+        capabilities:
+          $ref: '#/components/schemas/TeamCapabilities'
       required:
-      - displayName
-      - email
       - id
-    LoginRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          writeOnly: true
-      required:
-      - email
-      - password
-    TeamSwitchRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-      required:
-      - teamId
-    UserMeUsage:
-      type: object
-      properties:
-        jobDailyUsage:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobDailyUsage'
-          readOnly: true
-        storageUsageByProject:
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageUsage'
-          readOnly: true
-        storageUsage:
-          allOf:
-          - $ref: '#/components/schemas/TeamStorageUsage'
-          readOnly: true
-      required:
-      - jobDailyUsage
-      - storageUsage
-      - storageUsageByProject
-    UserForcePasswordChange:
-      type: object
-      description: 'must_change_password=True 계정 전용 강제 변경 시리얼라이저.
-
-
-        기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 —
-
-        대신 View 에서 must_change_password 플래그로 접근을 제한한다.'
-      properties:
-        password:
-          type: string
-          writeOnly: true
-        passwordConfirm:
-          type: string
-          writeOnly: true
-      required:
-      - password
-      - passwordConfirm
-    DetailResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    TenantFeatureAccess:
-      type: object
-      properties:
-        validationDes:
-          enum:
-          - hidden
-          - disabled
-          - active
-          type: string
-          description: '* `hidden` - Hidden
-
-            * `disabled` - Disabled
-
-            * `active` - Active'
-          x-spec-enum-id: 718a9c513d88ba39
-        manualOptimization:
-          enum:
-          - hidden
-          - disabled
-          - active
-          type: string
-          description: '* `hidden` - Hidden
-
-            * `disabled` - Disabled
-
-            * `active` - Active'
-          x-spec-enum-id: 718a9c513d88ba39
-        market:
-          enum:
-          - hidden
-          - disabled
-          - active
-          type: string
-          description: '* `hidden` - Hidden
-
-            * `disabled` - Disabled
-
-            * `active` - Active'
-          x-spec-enum-id: 718a9c513d88ba39
-        racingDiv:
-          enum:
-          - hidden
-          - disabled
-          - active
-          type: string
-          description: '* `hidden` - Hidden
-
-            * `disabled` - Disabled
-
-            * `active` - Active'
-          x-spec-enum-id: 718a9c513d88ba39
-        g3:
-          enum:
-          - hidden
-          - disabled
-          - active
-          type: string
-          description: '* `hidden` - Hidden
-
-            * `disabled` - Disabled
-
-            * `active` - Active'
-          x-spec-enum-id: 718a9c513d88ba39
-        submenus:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-      required:
-      - g3
-      - manualOptimization
-      - market
-      - racingDiv
-      - submenus
-      - validationDes
+      - name
     MeResponse:
       type: object
       properties:
@@ -816,30 +709,157 @@ components:
       - teamId
       - usagePercent
       - usedBytes
-    StorageUsage:
+    TeamsResponse:
       type: object
       properties:
-        summary:
-          $ref: '#/components/schemas/StorageUsageSummary'
-        project:
+        teams:
           type: array
           items:
-            $ref: '#/components/schemas/StorageUsageProject'
+            $ref: '#/components/schemas/AccountTeam'
       required:
-      - project
-      - summary
-    UserPasswordVerify:
+      - teams
+    TenantFeatureAccess:
       type: object
       properties:
-        oldPassword:
+        validationDes:
+          enum:
+          - hidden
+          - disabled
+          - active
           type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        manualOptimization:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        market:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        racingDiv:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        g3:
+          enum:
+          - hidden
+          - disabled
+          - active
+          type: string
+          description: '* `hidden` - Hidden
+
+            * `disabled` - Disabled
+
+            * `active` - Active'
+          x-spec-enum-id: 718a9c513d88ba39
+        submenus:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      required:
+      - g3
+      - manualOptimization
+      - market
+      - racingDiv
+      - submenus
+      - validationDes
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        displayName:
+          type: string
+          default: ''
+          maxLength: 150
+        inviteToken:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        emailToken:
+          type:
+          - string
+          - 'null'
+          writeOnly: true
+      required:
+      - email
+      - password
+    UserPasswordResetConfirm:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
           writeOnly: true
         token:
           type: string
-          readOnly: true
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        passwordConfirm:
+          type: string
+          writeOnly: true
       required:
-      - oldPassword
+      - email
+      - password
+      - passwordConfirm
       - token
+    UserForcePasswordChange:
+      type: object
+      description: 'must_change_password=True 계정 전용 강제 변경 시리얼라이저.
+
+
+        기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 —
+
+        대신 View 에서 must_change_password 플래그로 접근을 제한한다.'
+      properties:
+        password:
+          type: string
+          writeOnly: true
+        passwordConfirm:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - passwordConfirm
     UserSocialLogin:
       type: object
       properties:
@@ -874,6 +894,18 @@ components:
       - refreshToken
       - registerToken
       - state
+    StorageUsage:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/StorageUsageSummary'
+        project:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageUsageProject'
+      required:
+      - project
+      - summary
     StorageUsageSummary:
       type: object
       properties:
@@ -891,54 +923,67 @@ components:
       - g1TotalSizeBytes
       - g2TotalSizeBytes
       - totalSizeBytes
-    AccountTeam:
+    UserSearchResult:
       type: object
       properties:
         id:
           type: integer
-        uid:
+        email:
           type: string
-        name:
+          format: email
+        displayName:
           type: string
-        slug:
+      required:
+      - displayName
+      - email
+      - id
+    UserMeUsage:
+      type: object
+      properties:
+        jobDailyUsage:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobDailyUsage'
+          readOnly: true
+        storageUsageByProject:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageUsage'
+          readOnly: true
+        storageUsage:
+          allOf:
+          - $ref: '#/components/schemas/TeamStorageUsage'
+          readOnly: true
+      required:
+      - jobDailyUsage
+      - storageUsage
+      - storageUsageByProject
+    TeamSwitchRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+      required:
+      - teamId
+    LoginResponse:
+      type: object
+      properties:
+        detail:
           type: string
-        role:
-          type:
-          - string
-          - 'null'
-        displayNameOverride:
-          type:
-          - string
-          - 'null'
-        tenantId:
+        teamId:
           type:
           - integer
           - 'null'
-        tenantSchemaName:
+        teamName:
+          type:
+          - string
+          - 'null'
+        userType:
           type: string
-        capabilities:
-          $ref: '#/components/schemas/TeamCapabilities'
+        mustChangePassword:
+          type: boolean
       required:
-      - id
-      - name
-    JobDailyUsage:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        g1TotalSeconds:
-          type: integer
-        g2TotalSeconds:
-          type: integer
-        g4TotalSeconds:
-          type: integer
-        frontierTotalSeconds:
-          type: integer
-      required:
-      - date
-      - g1TotalSeconds
-      - g2TotalSeconds
+      - detail
     UserPasswordChange:
       type: object
       properties:
@@ -955,48 +1000,3 @@ components:
       - password
       - passwordConfirm
       - token
-    TeamsResponse:
-      type: object
-      properties:
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountTeam'
-      required:
-      - teams
-    StorageUsageProject:
-      type: object
-      properties:
-        projectId:
-          type: integer
-        projectName:
-          type: string
-        mode:
-          type: string
-        totalSizeBytes:
-          type: integer
-      required:
-      - mode
-      - projectId
-      - projectName
-      - totalSizeBytes
-    SignupResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
-        teamId:
-          type: integer
-        teamName:
-          type: string
-      required:
-      - displayName
-      - email
-      - id
-      - teamId
-      - teamName

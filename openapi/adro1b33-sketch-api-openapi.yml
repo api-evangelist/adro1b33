@@ -331,15 +331,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SketchSessionList:
+    SketchProjectCreate:
       type: object
+      description: Reject retired client controls instead of silently accepting them.
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SketchSession'
+        name:
+          type:
+          - string
+          - 'null'
+        state:
+          $ref: '#/components/schemas/SketchInput'
       required:
-      - results
+      - state
     SketchInput:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -373,6 +376,23 @@ components:
       - penWidthMm
       - quality
       - strokes
+    SketchConditions:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        conditions:
+          type: object
+          additionalProperties: {}
+      required:
+      - conditions
+    SketchSessionCreate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        projectUid:
+          type: string
+      required:
+      - projectUid
     SketchProjectState:
       type: object
       properties:
@@ -401,14 +421,18 @@ components:
       - projectUid
       - revision
       - state
-    SketchSessionCreate:
+    SketchProjectStateUpdate:
       type: object
       description: Reject retired client controls instead of silently accepting them.
       properties:
-        projectUid:
-          type: string
+        revision:
+          type: integer
+          minimum: 0
+        state:
+          $ref: '#/components/schemas/SketchInput'
       required:
-      - projectUid
+      - revision
+      - state
     SketchSession:
       type: object
       properties:
@@ -470,38 +494,6 @@ components:
       - resultSummary
       - status
       - streamMetadata
-    SketchFinishResponse:
-      type: object
-      properties:
-        terminal:
-          type: boolean
-        generation:
-          type: integer
-      required:
-      - generation
-      - terminal
-    SketchCancelResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        generation:
-          type: integer
-      required:
-      - generation
-      - status
-    SketchProjectCreate:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        state:
-          $ref: '#/components/schemas/SketchInput'
-      required:
-      - state
     SketchGeometry:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -520,24 +512,32 @@ components:
           minimum: 1.0e-06
       required:
       - strokes
-    SketchConditions:
+    SketchCancelResponse:
       type: object
-      description: Reject retired client controls instead of silently accepting them.
       properties:
-        conditions:
-          type: object
-          additionalProperties: {}
-      required:
-      - conditions
-    SketchProjectStateUpdate:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        revision:
+        status:
+          type: string
+        generation:
           type: integer
-          minimum: 0
-        state:
-          $ref: '#/components/schemas/SketchInput'
       required:
-      - revision
-      - state
+      - generation
+      - status
+    SketchSessionList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SketchSession'
+      required:
+      - results
+    SketchFinishResponse:
+      type: object
+      properties:
+        terminal:
+          type: boolean
+        generation:
+          type: integer
+      required:
+      - generation
+      - terminal

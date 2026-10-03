@@ -368,6 +368,38 @@ paths:
           description: ''
 components:
   schemas:
+    PatchMerge:
+      type: object
+      properties:
+        patchIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          minItems: 2
+      required:
+      - patchIds
+    PatchMergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        batchJobId:
+          type: string
+        mergeJobId:
+          type: integer
+        patch:
+          allOf:
+          - $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - batchJobId
+      - mergeJobId
+      - patch
+      - patchId
+      - status
     Patch:
       type: object
       properties:
@@ -612,6 +644,53 @@ components:
       - sourcePatchId
       - uid
       - updatedAt
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status
+    PatchProxyMaskFinalize:
+      type: object
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - reservationId
     PatchProxyArtifactPresign:
       type: object
       properties:
@@ -642,53 +721,6 @@ components:
       required:
       - kind
       - sizeBytes
-    MergedSourcePatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        boundingBox:
-          readOnly: true
-        inputPreviewPoints:
-          readOnly: true
-      required:
-      - boundingBox
-      - id
-      - inputPreviewPoints
-      - label
-    PatchProxyMaskFinalize:
-      type: object
-      properties:
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - reservationId
-    PatchMergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        batchJobId:
-          type: string
-        mergeJobId:
-          type: integer
-        patch:
-          allOf:
-          - $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - batchJobId
-      - mergeJobId
-      - patch
-      - patchId
-      - status
     PatchProxyArtifact:
       type: object
       properties:
@@ -754,35 +786,3 @@ components:
         reservationId:
           type: string
           format: uuid
-    PatchMerge:
-      type: object
-      properties:
-        patchIds:
-          type: array
-          items:
-            type: integer
-            minimum: 1
-          minItems: 2
-      required:
-      - patchIds
-    PatchUnmergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        restoredPatchIds:
-          type: array
-          items:
-            type: integer
-        restoredPatches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - patchId
-      - restoredPatchIds
-      - restoredPatches
-      - status

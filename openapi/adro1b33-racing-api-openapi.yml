@@ -162,58 +162,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    RaceLapCreate:
+    RaceJobListResponse:
       type: object
       properties:
-        clientLapUid:
-          type: string
-          maxLength: 64
-        variant:
-          enum:
-          - baseline
-          - optimized
-          type: string
-          description: '* `baseline` - baseline
-
-            * `optimized` - optimized'
-          x-spec-enum-id: 25d9810d1ad94602
-        isValid:
-          type: boolean
-        lapTimeMs:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-        sectorTimesMs:
+        count:
+          type: integer
+        results:
           type: array
           items:
-            type: integer
-            minimum: 1
-          maxItems: 3
-        maxSpeedKph:
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 0
-        cornerSpeedsKph:
-          type: object
-          additionalProperties:
-            type: number
-            format: double
-            minimum: 0
-        referenceResult:
-          type: object
-          additionalProperties: {}
-        invalidReasons:
-          type: array
-          items:
-            type: string
-            maxLength: 64
+            $ref: '#/components/schemas/RaceJobResponse'
       required:
-      - clientLapUid
-      - isValid
-      - variant
+      - count
+      - results
     RaceJobResponse:
       type: object
       properties:
@@ -270,28 +230,58 @@ components:
       required:
       - differenceFelt
       - wouldOptimizeAgain
-    RaceSessionCreate:
+    RaceLapCreate:
       type: object
       properties:
-        jobUid:
-          type: string
-          maxLength: 36
-        gameBuildId:
+        clientLapUid:
           type: string
           maxLength: 64
-        vehiclePresetId:
+        variant:
           enum:
-          - gt-validation-v1
-          - formula-student-validation-v1
+          - baseline
+          - optimized
           type: string
-          description: '* `gt-validation-v1` - gt-validation-v1
+          description: '* `baseline` - baseline
 
-            * `formula-student-validation-v1` - formula-student-validation-v1'
-          x-spec-enum-id: c9fb85c158588aaa
-          default: gt-validation-v1
+            * `optimized` - optimized'
+          x-spec-enum-id: 25d9810d1ad94602
+        isValid:
+          type: boolean
+        lapTimeMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        sectorTimesMs:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          maxItems: 3
+        maxSpeedKph:
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 0
+        cornerSpeedsKph:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+            minimum: 0
+        referenceResult:
+          type: object
+          additionalProperties: {}
+        invalidReasons:
+          type: array
+          items:
+            type: string
+            maxLength: 64
       required:
-      - gameBuildId
-      - jobUid
+      - clientLapUid
+      - isValid
+      - variant
     RaceSessionResponse:
       type: object
       properties:
@@ -323,15 +313,25 @@ components:
       - readOnly
       - status
       - uid
-    RaceJobListResponse:
+    RaceSessionCreate:
       type: object
       properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/RaceJobResponse'
+        jobUid:
+          type: string
+          maxLength: 36
+        gameBuildId:
+          type: string
+          maxLength: 64
+        vehiclePresetId:
+          enum:
+          - gt-validation-v1
+          - formula-student-validation-v1
+          type: string
+          description: '* `gt-validation-v1` - gt-validation-v1
+
+            * `formula-student-validation-v1` - formula-student-validation-v1'
+          x-spec-enum-id: c9fb85c158588aaa
+          default: gt-validation-v1
       required:
-      - count
-      - results
+      - gameBuildId
+      - jobUid

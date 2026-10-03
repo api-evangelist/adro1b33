@@ -32,6 +32,35 @@ paths:
           description: ''
 components:
   schemas:
+    ImprovementRequestCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        category:
+          enum:
+          - improvement
+          - requirement
+          - other
+          type: string
+          description: '* `improvement` - improvement
+
+            * `requirement` - requirement
+
+            * `other` - other'
+          x-spec-enum-id: ab7ebfec83fab8bd
+        content:
+          type: string
+          maxLength: 8000
+        pagePath:
+          type: string
+          default: ''
+          maxLength: 2000
+      required:
+      - category
+      - content
+      - title
     ImprovementRequest:
       type: object
       properties:
@@ -131,32 +160,3 @@ components:
       - updatedAt
       - userEmail
       - userId
-    ImprovementRequestCreate:
-      type: object
-      properties:
-        title:
-          type: string
-          maxLength: 200
-        category:
-          enum:
-          - improvement
-          - requirement
-          - other
-          type: string
-          description: '* `improvement` - improvement
-
-            * `requirement` - requirement
-
-            * `other` - other'
-          x-spec-enum-id: ab7ebfec83fab8bd
-        content:
-          type: string
-          maxLength: 8000
-        pagePath:
-          type: string
-          default: ''
-          maxLength: 2000
-      required:
-      - category
-      - content
-      - title

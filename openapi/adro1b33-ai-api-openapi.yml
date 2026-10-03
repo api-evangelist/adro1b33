@@ -117,24 +117,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    AiDiagnosisResponse:
-      type: object
-      properties:
-        summary:
-          type: string
-        findings:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiFinding'
-        needsHumanSupport:
-          type: boolean
-        supportSummary:
-          type: string
-      required:
-      - findings
-      - needsHumanSupport
-      - summary
-      - supportSummary
     AiChatRequest:
       type: object
       properties:
@@ -187,6 +169,137 @@ components:
             $ref: '#/components/schemas/AiChatHistoryItem'
       required:
       - intent
+    AiUsageResponse:
+      type: object
+      properties:
+        used:
+          type: integer
+        limit:
+          type: integer
+        resetsAt:
+          type: string
+          format: date-time
+      required:
+      - limit
+      - resetsAt
+      - used
+    AiFinding:
+      type: object
+      properties:
+        severity:
+          enum:
+          - blocker
+          - warning
+          - info
+          type: string
+          description: '* `blocker` - blocker
+
+            * `warning` - warning
+
+            * `info` - info'
+          x-spec-enum-id: 89eaa3468c08a8fe
+        title:
+          type: string
+        detail:
+          type: string
+        action:
+          type: string
+      required:
+      - action
+      - detail
+      - severity
+      - title
+    AiRecommendationResponse:
+      type: object
+      properties:
+        baseRevision:
+          type: integer
+        summary:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiRecommendationChange'
+        proposedUnifiedConfig: {}
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - baseRevision
+      - changes
+      - findings
+      - needsHumanSupport
+      - proposedUnifiedConfig
+      - summary
+      - supportSummary
+    AiAssistRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+    AiChatHistoryItem:
+      type: object
+      properties:
+        role:
+          enum:
+          - user
+          - assistant
+          type: string
+          description: '* `user` - user
+
+            * `assistant` - assistant'
+          x-spec-enum-id: da623bca3e193af6
+        content:
+          type: string
+          maxLength: 3000
+      required:
+      - content
+      - role
+    DiagnoseRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+        jobUid:
+          type: string
+          maxLength: 36
+      required:
+      - jobUid
+    AiRecommendationChange:
+      type: object
+      properties:
+        path:
+          type: string
+        before: {}
+        after: {}
+        reason:
+          type: string
+      required:
+      - after
+      - before
+      - path
+      - reason
     AiChatResponse:
       type: object
       properties:
@@ -242,134 +355,21 @@ components:
       - recommendation
       - sources
       - supportSummary
-    AiUsageResponse:
+    AiDiagnosisResponse:
       type: object
       properties:
-        used:
-          type: integer
-        limit:
-          type: integer
-        resetsAt:
-          type: string
-          format: date-time
-      required:
-      - limit
-      - resetsAt
-      - used
-    AiChatHistoryItem:
-      type: object
-      properties:
-        role:
-          enum:
-          - user
-          - assistant
-          type: string
-          description: '* `user` - user
-
-            * `assistant` - assistant'
-          x-spec-enum-id: da623bca3e193af6
-        content:
-          type: string
-          maxLength: 3000
-      required:
-      - content
-      - role
-    AiRecommendationChange:
-      type: object
-      properties:
-        path:
-          type: string
-        before: {}
-        after: {}
-        reason:
-          type: string
-      required:
-      - after
-      - before
-      - path
-      - reason
-    DiagnoseRequest:
-      type: object
-      properties:
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: ko
-        jobUid:
-          type: string
-          maxLength: 36
-      required:
-      - jobUid
-    AiRecommendationResponse:
-      type: object
-      properties:
-        baseRevision:
-          type: integer
         summary:
           type: string
         findings:
           type: array
           items:
             $ref: '#/components/schemas/AiFinding'
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiRecommendationChange'
-        proposedUnifiedConfig: {}
         needsHumanSupport:
           type: boolean
         supportSummary:
           type: string
       required:
-      - baseRevision
-      - changes
       - findings
       - needsHumanSupport
-      - proposedUnifiedConfig
       - summary
       - supportSummary
-    AiFinding:
-      type: object
-      properties:
-        severity:
-          enum:
-          - blocker
-          - warning
-          - info
-          type: string
-          description: '* `blocker` - blocker
-
-            * `warning` - warning
-
-            * `info` - info'
-          x-spec-enum-id: 89eaa3468c08a8fe
-        title:
-          type: string
-        detail:
-          type: string
-        action:
-          type: string
-      required:
-      - action
-      - detail
-      - severity
-      - title
-    AiAssistRequest:
-      type: object
-      properties:
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: ko
