@@ -749,6 +749,9 @@ apis:
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
 common:
+- type: CapabilityMap
+  url: capabilities/adro1b33-capability-edges.yml
+  name: ADRO Business Capability Map
 - type: Website
   url: https://adro.com/
 - type: Website

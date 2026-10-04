@@ -1,0 +1,48 @@
+slug: adro1b33
+provider: ADRO
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Plans
+  spec_file: adro1b33-plans-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.88
+  evidence: POST /plans/{code}/subscribe/ 구독 시작; POST /plans/{code}/upgrade/ 플랜 업그레이드; POST /subscriptions/cancel/
+    구독 해지 예약; GET /subscriptions/plan-gate/
+  reason: Plan catalogue, subscribe, upgrade/downgrade with proration quotes, cancel/resume, subscription
+    cycles and entitlement gating (solver-access) span the whole subscription commercial lifecycle, so
+    the L1 is asserted without a single L2.
+- tag: Payments
+  spec_file: adro1b33-payments-api-openapi.yml
+  capability_id: BC-4250.40
+  capability_id_l1: BC-4250
+  capability_name: Payment Collection & Dunning
+  confidence: 0.85
+  evidence: POST /billing-keys/ 빌링키 등록; GET /billing-keys/current/ 현재 활성(ISSUED) 결제수단 1건 조회; POST /payments/{payment_id}/verify/
+    결제 검증
+  reason: Operations manage stored payment methods (billing keys via PG/PortOne), run and verify charges,
+    and hold a team billing profile — payment-method management and payment authorisation for a subscription
+    service.
+- tag: Credits
+  spec_file: adro1b33-credits-api-openapi.yml
+  capability_id: BC-4250
+  capability_id_l1: BC-4250
+  capability_name: Subscription Billing & Revenue Management
+  confidence: 0.8
+  evidence: GET /credits/wallet/  팀 크레딧 지갑 — balance (active buckets 합); POST /credits/bundles/{bundle_id}/purchase/  번들
+    구매 시작 (단건결제 paymentId 채번); GET /credits/usage/jobs/  팀 Job 목록 + 크레딧 소모 요약
+  reason: 'Prepaid credit commercial model for the SaaS: bundle catalogue and purchase, wallet balance,
+    transaction ledger, consumption estimates and per-job usage metering (UsageEvent). Clearly subscription/usage
+    billing and revenue management; spans metering, rating and payment so no single L2 is named.'
