@@ -331,60 +331,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SketchProjectCreate:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        state:
-          $ref: '#/components/schemas/SketchInput'
-      required:
-      - state
-    SketchInput:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        board:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        strokes:
-          type: array
-          items: {}
-        conditions:
-          type: object
-          additionalProperties: {}
-        penWidthMm:
-          type: number
-          format: double
-          minimum: 1.0e-06
-        quality:
-          enum:
-          - coarse
-          - fine
-          type: string
-          description: '* `coarse` - coarse
-
-            * `fine` - fine'
-          x-spec-enum-id: 361df4b011166ecc
-      required:
-      - conditions
-      - penWidthMm
-      - quality
-      - strokes
-    SketchConditions:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        conditions:
-          type: object
-          additionalProperties: {}
-      required:
-      - conditions
     SketchSessionCreate:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -421,18 +367,76 @@ components:
       - projectUid
       - revision
       - state
-    SketchProjectStateUpdate:
+    SketchFinishResponse:
+      type: object
+      properties:
+        terminal:
+          type: boolean
+        generation:
+          type: integer
+      required:
+      - generation
+      - terminal
+    SketchSessionList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SketchSession'
+      required:
+      - results
+    SketchInput:
       type: object
       description: Reject retired client controls instead of silently accepting them.
       properties:
-        revision:
-          type: integer
-          minimum: 0
-        state:
-          $ref: '#/components/schemas/SketchInput'
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        conditions:
+          type: object
+          additionalProperties: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+        quality:
+          enum:
+          - coarse
+          - fine
+          type: string
+          description: '* `coarse` - coarse
+
+            * `fine` - fine'
+          x-spec-enum-id: 361df4b011166ecc
       required:
-      - revision
-      - state
+      - conditions
+      - penWidthMm
+      - quality
+      - strokes
+    SketchGeometry:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+      required:
+      - strokes
     SketchSession:
       type: object
       properties:
@@ -494,24 +498,30 @@ components:
       - resultSummary
       - status
       - streamMetadata
-    SketchGeometry:
+    SketchProjectCreate:
       type: object
       description: Reject retired client controls instead of silently accepting them.
       properties:
-        board:
+        name:
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties: {}
-        strokes:
-          type: array
-          items: {}
-        penWidthMm:
-          type: number
-          format: double
-          minimum: 1.0e-06
+        state:
+          $ref: '#/components/schemas/SketchInput'
       required:
-      - strokes
+      - state
+    SketchProjectStateUpdate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        revision:
+          type: integer
+          minimum: 0
+        state:
+          $ref: '#/components/schemas/SketchInput'
+      required:
+      - revision
+      - state
     SketchCancelResponse:
       type: object
       properties:
@@ -522,22 +532,12 @@ components:
       required:
       - generation
       - status
-    SketchSessionList:
+    SketchConditions:
       type: object
+      description: Reject retired client controls instead of silently accepting them.
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SketchSession'
+        conditions:
+          type: object
+          additionalProperties: {}
       required:
-      - results
-    SketchFinishResponse:
-      type: object
-      properties:
-        terminal:
-          type: boolean
-        generation:
-          type: integer
-      required:
-      - generation
-      - terminal
+      - conditions

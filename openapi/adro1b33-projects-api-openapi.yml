@@ -767,78 +767,223 @@ paths:
           description: ''
 components:
   schemas:
-    PatchCreate:
+    ProjectList:
       type: object
       properties:
-        category:
-          type: string
-          default: optimization
-          maxLength: 50
-        sourcePatchId:
-          type:
-          - integer
-          - 'null'
-        sourceArtifactId:
-          type:
-          - integer
-          - 'null'
-        selectedProxyTriangleCount:
+        id:
           type: integer
-          minimum: 0
-        surfaceArea:
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 1.0e-06
-        boundingBox: {}
-        ffdDegree:
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-        proxyMeshMaskKey:
+          readOnly: true
+        uid:
           type: string
-        sourceProxyArtifactSignature:
-          type: string
-        proxyMaskSignature:
-          type: string
-      required:
-      - selectedProxyTriangleCount
-    SourceUploadComplete:
-      type: object
-      properties:
-        fileName:
-          type: string
-        contentType:
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        name:
           type:
           - string
           - 'null'
-        objectKey:
+          maxLength: 255
+        mode:
+          enum:
+          - G1
+          - G2
+          - G3
+          - G4
+          - S2
           type: string
-        uploadId:
+          description: '* `G1` - G1
+
+            * `G2` - G2
+
+            * `G3` - G3
+
+            * `G4` - G4
+
+            * `S2` - Sketch 2D'
+          x-spec-enum-id: b6373ee318bc60a4
+        slug:
           type: string
-        reservationId:
+          maxLength: 160
+        description:
+          type:
+          - string
+          - 'null'
+        g1NodeKey:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: SM g1-nodes 의 노드 키 (G1 mode 에서만 사용, immutable)
+        lastActivityAt:
           type: string
-          format: uuid
-        proxyWorkerRevision:
+          format: date-time
+          readOnly: true
+        createdAt:
           type: string
-        proxyArtifactSignature:
+          format: date-time
+          readOnly: true
+        updatedAt:
           type: string
-        proxyCacheKey:
-          type: string
-        completedParts:
+          format: date-time
+          readOnly: true
+        archivedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        isDeleted:
+          type: boolean
+          readOnly: true
+          description: 소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능).
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 소프트 삭제된 시각.
+        purgeAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각.
+        canRestore:
+          type: boolean
+          readOnly: true
+        deletion:
+          readOnly: true
+        downloadQuota:
+          readOnly: true
+        jobsCount:
+          type: integer
+          readOnly: true
+        patchesCount:
+          type: integer
+          readOnly: true
+        thumbnailUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+          readOnly: true
+        thumbnailS3Key:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        thumbnailSourceSignature:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - canRestore
+      - createdAt
+      - deletedAt
+      - deletion
+      - downloadQuota
+      - g1NodeKey
+      - id
+      - isDeleted
+      - jobsCount
+      - lastActivityAt
+      - patchesCount
+      - purgeAfter
+      - slug
+      - teamId
+      - thumbnailS3Key
+      - thumbnailSourceSignature
+      - thumbnailUrl
+      - uid
+      - updatedAt
+    PaginatedJobListList:
+      type: object
+      properties:
+        count:
+          type: integer
+        cursor:
+          type:
+          - string
+          - 'null'
+        results:
           type: array
           items:
-            type: object
-            additionalProperties: {}
+            $ref: '#/components/schemas/JobList'
+    ProjectDownloadTicket:
+      type: object
+      properties:
+        downloadId:
+          type: string
+          format: uuid
+        limit:
+          type: integer
+        used:
+          type: integer
+        remaining:
+          type: integer
+        canDownload:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDownloadFile'
       required:
-      - completedParts
-      - fileName
-      - objectKey
-      - reservationId
-      - uploadId
+      - canDownload
+      - downloadId
+      - expiresAt
+      - files
+      - limit
+      - remaining
+      - updatedAt
+      - used
+    ClientExportRequest:
+      type: object
+      properties:
+        format:
+          enum:
+          - stl
+          - zip
+          type: string
+          description: '* `stl` - stl
+
+            * `zip` - zip'
+          x-spec-enum-id: 0963a3e761963666
+        itemCount:
+          type: integer
+          maximum: 1000
+          minimum: 1
+      required:
+      - format
+      - itemCount
+    ProjectThumbnail:
+      type: object
+      properties:
+        thumbnailUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        thumbnailS3Key:
+          type:
+          - string
+          - 'null'
+        thumbnailSourceSignature:
+          type:
+          - string
+          - 'null'
+      required:
+      - thumbnailS3Key
+      - thumbnailSourceSignature
+      - thumbnailUrl
     SourceFile:
       type: object
       description: source_files 항목 하나. POST(생성) / PUT(수정) 공용.
@@ -873,33 +1018,23 @@ components:
       - s3Key
       - surfaceArea
       - triangleCount
-    WorkbenchState:
+    SourceUploadInit:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        projectId:
-          type: integer
-          readOnly: true
-        unifiedConfig:
-          description: Solver-independent editable project configuration.
-        revision:
-          type: integer
-          readOnly: true
-          description: Monotonic revision used for conditional workbench UI state updates.
-        updatedAt:
+        fileName:
           type: string
-          format: date-time
-          readOnly: true
+        sizeBytes:
+          type: integer
+          minimum: 1
+        contentType:
+          type:
+          - string
+          - 'null'
       required:
-      - id
-      - projectId
-      - revision
-      - updatedAt
-    JobList:
+      - fileName
+      - sizeBytes
+    ProjectCreate:
       type: object
-      description: Job 목록용 경량 시리얼라이저.
       properties:
         id:
           type: integer
@@ -908,121 +1043,44 @@ components:
           type: string
           readOnly: true
         name:
+          type:
+          - string
+          - 'null'
+        mode:
           type: string
-          description: Runtime job name submitted to the execution backend.
-          maxLength: 128
-        displayName:
+          default: G2
+        slug:
           type: string
-          description: Human-friendly run label (e.g. 'Run 3'); user-editable. Distinct from the batch runtime name.
-          maxLength: 128
-        projectId:
+        description:
+          type:
+          - string
+          - 'null'
+        teamId:
           type:
           - integer
           - 'null'
-          description: Associated project
+        g1NodeKey:
+          type:
+          - string
+          - 'null'
           readOnly: true
-        executionBackend:
-          enum:
-          - SHARED_HPC
-          - AWS_BATCH
-          - LOCAL
-          - SSH_REMOTE
+          description: SM g1-nodes 의 노드 키 (G1 mode 에서만 사용, immutable)
+        node:
           type: string
-          description: '* `SHARED_HPC` - Shared HPC
-
-            * `AWS_BATCH` - AWS Batch
-
-            * `LOCAL` - Local
-
-            * `SSH_REMOTE` - Remote SSH'
-          x-spec-enum-id: 14feee6ab64a0c6e
-        status:
-          enum:
-          - queued
-          - running
-          - cancelling
-          - cancellation_failed
-          - failed
-          - aborted
-          - cancelled
-          - succeeded
-          type: string
-          x-spec-enum-id: 6b8a9060f1dec637
-          description: '(1:1일 때 프로젝트) 1:N일 때 Job에 대한 상태값 / 상세페이지용 X
-
-
-            * `queued` - Queued
-
-            * `running` - Running
-
-            * `cancelling` - Cancelling
-
-            * `cancellation_failed` - Cancellation failed
-
-            * `failed` - Failed
-
-            * `aborted` - Aborted
-
-            * `cancelled` - Cancelled
-
-            * `succeeded` - Succeeded'
-        progress:
-          type: number
-          format: double
-          description: Latest execution progress, normalized to 0.0 through 1.0.
-        operationMode:
-          enum:
-          - BASIC
-          - PRO
-          type: string
-          description: '* `BASIC` - Basic
-
-            * `PRO` - Pro'
-          x-spec-enum-id: 8ac5c73d7e96b3a3
-        solverEngine:
-          enum:
-          - G1
-          - G2
-          - G4
-          - S2
-          - ''
-          type: string
-          x-spec-enum-id: 4f8f60f427162f7a
-          description: 'Immutable solver engine snapshot captured when the Job is created.
-
-
-            * `G1` - G1
-
-            * `G2` - G2
-
-            * `G4` - G4
-
-            * `S2` - Sketch 2D'
-        workloadType:
-          enum:
-          - STANDARD
-          - LES
-          type: string
-          x-spec-enum-id: fb11bf304307d132
-          description: 'Solver workload discriminator; LES uses solver_engine=G4 and workload_type=LES.
-
-
-            * `STANDARD` - Standard solver workload
-
-            * `LES` - LES fluid simulation'
-        queuedAt:
-          type: string
-          format: date-time
-        finishedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        cancelledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
+          writeOnly: true
+          description: 'G1 전용: 사용할 G1 노드 키 (예: us-east-1-node-1/us-east-2-node-1/eu-west-1-node-1). 비우면 자동 선택.'
+        sourceFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceFile'
+        projectInputUnionBoundingBox:
+          readOnly: true
+        projectInputViewerTranslate:
+          readOnly: true
+        workbenchState:
+          allOf:
+          - $ref: '#/components/schemas/WorkbenchState'
+          readOnly: true
         createdAt:
           type: string
           format: date-time
@@ -1031,78 +1089,46 @@ components:
           type: string
           format: date-time
           readOnly: true
-        resultSummary:
-          description: Job execution results
-        errorSummary:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        thumbnailUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-          readOnly: true
-        duration:
-          type: string
-          readOnly: true
-        executionsCount:
-          type: string
-          readOnly: true
-        restartFromJobUid:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        restartStage:
-          type: string
-          description: '재시작 진입 단계: scratch/mesh/cfd/opt. 일반 신규 제출이면 빈 값.'
-          maxLength: 16
-        isDeleted:
-          type: boolean
-          readOnly: true
-          description: 소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능).
-        deletedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-          description: 소프트 삭제된 시각.
-        purgeAfter:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-          description: 삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각.
-        canRestore:
-          type: boolean
-          readOnly: true
-        deletion:
-          readOnly: true
-        downloadQuota:
-          readOnly: true
       required:
-      - canRestore
       - createdAt
-      - deletedAt
-      - deletion
-      - downloadQuota
-      - duration
-      - errorSummary
-      - executionBackend
-      - executionsCount
+      - g1NodeKey
       - id
-      - isDeleted
-      - operationMode
-      - projectId
-      - purgeAfter
-      - restartFromJobUid
-      - thumbnailUrl
       - uid
       - updatedAt
+      - workbenchState
+    SourceUploadComplete:
+      type: object
+      properties:
+        fileName:
+          type: string
+        contentType:
+          type:
+          - string
+          - 'null'
+        objectKey:
+          type: string
+        uploadId:
+          type: string
+        reservationId:
+          type: string
+          format: uuid
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+        completedParts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - completedParts
+      - fileName
+      - objectKey
+      - reservationId
+      - uploadId
     Patch:
       type: object
       properties:
@@ -1347,26 +1373,50 @@ components:
       - sourcePatchId
       - uid
       - updatedAt
-    ProjectThumbnail:
+    DownloadItemRequest:
       type: object
       properties:
-        thumbnailUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-        thumbnailS3Key:
-          type:
-          - string
-          - 'null'
-        thumbnailSourceSignature:
-          type:
-          - string
-          - 'null'
+        artifactUid:
+          type: string
+          maxLength: 36
+        fileId:
+          type: string
+          maxLength: 128
+        role:
+          type: string
+          maxLength: 40
+    SourceUploadAbort:
+      type: object
+      properties:
+        objectKey:
+          type: string
+        uploadId:
+          type: string
+        reservationId:
+          type: string
+          format: uuid
       required:
-      - thumbnailS3Key
-      - thumbnailSourceSignature
-      - thumbnailUrl
+      - objectKey
+      - reservationId
+      - uploadId
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
     Project:
       type: object
       properties:
@@ -1521,177 +1571,72 @@ components:
       - uid
       - updatedAt
       - workbenchState
-    MeshPredictResponse:
+    PatchCreate:
       type: object
       properties:
-        solverType:
-          enum:
-          - G1
-          - G2
+        category:
           type: string
-          description: '* `G1` - G1
-
-            * `G2` - G2'
-          x-spec-enum-id: 7419f4880cbd06f5
-        totalArea:
-          type: number
+          default: optimization
+          maxLength: 50
+        sourcePatchId:
+          type:
+          - integer
+          - 'null'
+        sourceArtifactId:
+          type:
+          - integer
+          - 'null'
+        selectedProxyTriangleCount:
+          type: integer
+          minimum: 0
+        surfaceArea:
+          type:
+          - number
+          - 'null'
           format: double
-        totalFacets:
-          type: integer
-        meshCells:
+          minimum: 1.0e-06
+        boundingBox: {}
+        ffdDegree:
           type:
-          - integer
+          - array
           - 'null'
-        predictedCells:
-          type:
-          - integer
-          - 'null'
-        cellLimit:
-          type:
-          - integer
-          - 'null'
+          items:
+            type: integer
+        proxyMeshMaskKey:
+          type: string
+        sourceProxyArtifactSignature:
+          type: string
+        proxyMaskSignature:
+          type: string
       required:
-      - meshCells
-      - solverType
-      - totalArea
-      - totalFacets
-    DownloadQuota:
+      - selectedProxyTriangleCount
+    WorkbenchState:
       type: object
       properties:
-        limit:
+        id:
           type: integer
           readOnly: true
-        used:
+        projectId:
           type: integer
           readOnly: true
-        remaining:
-          type: string
+        unifiedConfig:
+          description: Solver-independent editable project configuration.
+        revision:
+          type: integer
           readOnly: true
-        canDownload:
-          type: string
-          readOnly: true
+          description: Monotonic revision used for conditional workbench UI state updates.
         updatedAt:
           type: string
           format: date-time
           readOnly: true
       required:
-      - canDownload
-      - limit
-      - remaining
+      - id
+      - projectId
+      - revision
       - updatedAt
-      - used
-    PaginatedJobListList:
+    JobList:
       type: object
-      properties:
-        count:
-          type: integer
-        cursor:
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobList'
-    PaginatedProjectListList:
-      type: object
-      properties:
-        count:
-          type: integer
-        cursor:
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectList'
-    SourceUploadInit:
-      type: object
-      properties:
-        fileName:
-          type: string
-        sizeBytes:
-          type: integer
-          minimum: 1
-        contentType:
-          type:
-          - string
-          - 'null'
-      required:
-      - fileName
-      - sizeBytes
-    SourceUploadAbort:
-      type: object
-      properties:
-        objectKey:
-          type: string
-        uploadId:
-          type: string
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - objectKey
-      - reservationId
-      - uploadId
-    ProjectThumbnailRequest:
-      type: object
-      properties:
-        s3Bucket:
-          type: string
-        s3Key:
-          type: string
-        contentType:
-          type: string
-          default: image/webp
-        width:
-          type: integer
-          minimum: 1
-        height:
-          type: integer
-          minimum: 1
-        sourceSignature:
-          type: string
-          maxLength: 128
-      required:
-      - height
-      - s3Bucket
-      - s3Key
-      - sourceSignature
-      - width
-    GeometryRotationResponse:
-      type: object
-      properties:
-        rotationEulerDeg:
-          type: array
-          items:
-            type: number
-            format: double
-        rotationPivot:
-          type: array
-          items:
-            type: number
-            format: double
-        patchBoundingBoxes:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-        projectInputUnionBoundingBox: {}
-        projectInputViewerTranslate:
-          type: array
-          items:
-            type: number
-            format: double
-      required:
-      - patchBoundingBoxes
-      - projectInputUnionBoundingBox
-      - projectInputViewerTranslate
-      - rotationEulerDeg
-      - rotationPivot
-    ProjectCreate:
-      type: object
+      description: Job 목록용 경량 시리얼라이저.
       properties:
         id:
           type: integer
@@ -1700,44 +1645,121 @@ components:
           type: string
           readOnly: true
         name:
-          type:
-          - string
-          - 'null'
-        mode:
           type: string
-          default: G2
-        slug:
+          description: Runtime job name submitted to the execution backend.
+          maxLength: 128
+        displayName:
           type: string
-        description:
-          type:
-          - string
-          - 'null'
-        teamId:
+          description: Human-friendly run label (e.g. 'Run 3'); user-editable. Distinct from the batch runtime name.
+          maxLength: 128
+        projectId:
           type:
           - integer
           - 'null'
-        g1NodeKey:
+          description: Associated project
+          readOnly: true
+        executionBackend:
+          enum:
+          - SHARED_HPC
+          - AWS_BATCH
+          - LOCAL
+          - SSH_REMOTE
+          type: string
+          description: '* `SHARED_HPC` - Shared HPC
+
+            * `AWS_BATCH` - AWS Batch
+
+            * `LOCAL` - Local
+
+            * `SSH_REMOTE` - Remote SSH'
+          x-spec-enum-id: 14feee6ab64a0c6e
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - failed
+          - aborted
+          - cancelled
+          - succeeded
+          type: string
+          x-spec-enum-id: 6b8a9060f1dec637
+          description: '(1:1일 때 프로젝트) 1:N일 때 Job에 대한 상태값 / 상세페이지용 X
+
+
+            * `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `failed` - Failed
+
+            * `aborted` - Aborted
+
+            * `cancelled` - Cancelled
+
+            * `succeeded` - Succeeded'
+        progress:
+          type: number
+          format: double
+          description: Latest execution progress, normalized to 0.0 through 1.0.
+        operationMode:
+          enum:
+          - BASIC
+          - PRO
+          type: string
+          description: '* `BASIC` - Basic
+
+            * `PRO` - Pro'
+          x-spec-enum-id: 8ac5c73d7e96b3a3
+        solverEngine:
+          enum:
+          - G1
+          - G2
+          - G4
+          - S2
+          - ''
+          type: string
+          x-spec-enum-id: 4f8f60f427162f7a
+          description: 'Immutable solver engine snapshot captured when the Job is created.
+
+
+            * `G1` - G1
+
+            * `G2` - G2
+
+            * `G4` - G4
+
+            * `S2` - Sketch 2D'
+        workloadType:
+          enum:
+          - STANDARD
+          - LES
+          type: string
+          x-spec-enum-id: fb11bf304307d132
+          description: 'Solver workload discriminator; LES uses solver_engine=G4 and workload_type=LES.
+
+
+            * `STANDARD` - Standard solver workload
+
+            * `LES` - LES fluid simulation'
+        queuedAt:
+          type: string
+          format: date-time
+        finishedAt:
           type:
           - string
           - 'null'
-          readOnly: true
-          description: SM g1-nodes 의 노드 키 (G1 mode 에서만 사용, immutable)
-        node:
-          type: string
-          writeOnly: true
-          description: 'G1 전용: 사용할 G1 노드 키 (예: us-east-1-node-1/us-east-2-node-1/eu-west-1-node-1). 비우면 자동 선택.'
-        sourceFiles:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceFile'
-        projectInputUnionBoundingBox:
-          readOnly: true
-        projectInputViewerTranslate:
-          readOnly: true
-        workbenchState:
-          allOf:
-          - $ref: '#/components/schemas/WorkbenchState'
-          readOnly: true
+          format: date-time
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
         createdAt:
           type: string
           format: date-time
@@ -1746,13 +1768,78 @@ components:
           type: string
           format: date-time
           readOnly: true
+        resultSummary:
+          description: Job execution results
+        errorSummary:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        thumbnailUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+          readOnly: true
+        duration:
+          type: string
+          readOnly: true
+        executionsCount:
+          type: string
+          readOnly: true
+        restartFromJobUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        restartStage:
+          type: string
+          description: '재시작 진입 단계: scratch/mesh/cfd/opt. 일반 신규 제출이면 빈 값.'
+          maxLength: 16
+        isDeleted:
+          type: boolean
+          readOnly: true
+          description: 소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능).
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 소프트 삭제된 시각.
+        purgeAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          description: 삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각.
+        canRestore:
+          type: boolean
+          readOnly: true
+        deletion:
+          readOnly: true
+        downloadQuota:
+          readOnly: true
       required:
+      - canRestore
       - createdAt
-      - g1NodeKey
+      - deletedAt
+      - deletion
+      - downloadQuota
+      - duration
+      - errorSummary
+      - executionBackend
+      - executionsCount
       - id
+      - isDeleted
+      - operationMode
+      - projectId
+      - purgeAfter
+      - restartFromJobUid
+      - thumbnailUrl
       - uid
       - updatedAt
-      - workbenchState
     Artifact:
       type: object
       properties:
@@ -1935,133 +2022,61 @@ components:
       - fileId
       - fileName
       - url
-    ProjectDownloadTicket:
+    ProjectThumbnailRequest:
       type: object
       properties:
-        downloadId:
+        s3Bucket:
           type: string
-          format: uuid
-        limit:
+        s3Key:
+          type: string
+        contentType:
+          type: string
+          default: image/webp
+        width:
           type: integer
-        used:
+          minimum: 1
+        height:
           type: integer
-        remaining:
-          type: integer
-        canDownload:
-          type: boolean
-        updatedAt:
-          type: string
-          format: date-time
-        expiresAt:
-          type: string
-          format: date-time
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectDownloadFile'
-      required:
-      - canDownload
-      - downloadId
-      - expiresAt
-      - files
-      - limit
-      - remaining
-      - updatedAt
-      - used
-    WorkbenchStateUpdate:
-      type: object
-      description: 'PUT /projects/{id}/workbench-state/
-
-
-        unified_config: solver-independent project configuration (전체 덮어쓰기)
-
-        expected_revision: 마지막으로 읽은 WorkbenchState revision'
-      properties:
-        unifiedConfig: {}
-        expectedRevision:
-          type: integer
-          minimum: 0
-    ProjectDownloadTicketRequest:
-      type: object
-      properties:
-        source:
-          enum:
-          - JOB_RESULT_ZIP
-          - SUMMARY_FIGURES
-          - LES_FIGURES
-          - G3_EDITED_STL
-          - WORKBENCH_PATCH_EXPORT
-          type: string
-          description: '* `JOB_RESULT_ZIP` - Job result ZIP
-
-            * `SUMMARY_FIGURES` - Summary figures
-
-            * `LES_FIGURES` - LES figures
-
-            * `G3_EDITED_STL` - G3 edited STL
-
-            * `WORKBENCH_PATCH_EXPORT` - Workbench patch export'
-          x-spec-enum-id: 7ce9d8b5eee7ed41
-        jobUid:
-          type: string
-          maxLength: 36
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/DownloadItemRequest'
-        clientExport:
-          $ref: '#/components/schemas/ClientExportRequest'
-      required:
-      - source
-    DownloadItemRequest:
-      type: object
-      properties:
-        artifactUid:
-          type: string
-          maxLength: 36
-        fileId:
+          minimum: 1
+        sourceSignature:
           type: string
           maxLength: 128
-        role:
-          type: string
-          maxLength: 40
-    ClientExportRequest:
+      required:
+      - height
+      - s3Bucket
+      - s3Key
+      - sourceSignature
+      - width
+    GeometryRotationResponse:
       type: object
       properties:
-        format:
-          enum:
-          - stl
-          - zip
-          type: string
-          description: '* `stl` - stl
-
-            * `zip` - zip'
-          x-spec-enum-id: 0963a3e761963666
-        itemCount:
-          type: integer
-          maximum: 1000
-          minimum: 1
+        rotationEulerDeg:
+          type: array
+          items:
+            type: number
+            format: double
+        rotationPivot:
+          type: array
+          items:
+            type: number
+            format: double
+        patchBoundingBoxes:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        projectInputUnionBoundingBox: {}
+        projectInputViewerTranslate:
+          type: array
+          items:
+            type: number
+            format: double
       required:
-      - format
-      - itemCount
-    MergedSourcePatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        boundingBox:
-          readOnly: true
-        inputPreviewPoints:
-          readOnly: true
-      required:
-      - boundingBox
-      - id
-      - inputPreviewPoints
-      - label
+      - patchBoundingBoxes
+      - projectInputUnionBoundingBox
+      - projectInputViewerTranslate
+      - rotationEulerDeg
+      - rotationPivot
     STLArtifactRegister:
       type: object
       properties:
@@ -2086,138 +2101,6 @@ components:
       required:
       - s3Bucket
       - s3Key
-    ProjectList:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        uid:
-          type: string
-          readOnly: true
-        teamId:
-          type: integer
-          readOnly: true
-        name:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        mode:
-          enum:
-          - G1
-          - G2
-          - G3
-          - G4
-          - S2
-          type: string
-          description: '* `G1` - G1
-
-            * `G2` - G2
-
-            * `G3` - G3
-
-            * `G4` - G4
-
-            * `S2` - Sketch 2D'
-          x-spec-enum-id: b6373ee318bc60a4
-        slug:
-          type: string
-          maxLength: 160
-        description:
-          type:
-          - string
-          - 'null'
-        g1NodeKey:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: SM g1-nodes 의 노드 키 (G1 mode 에서만 사용, immutable)
-        lastActivityAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        archivedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        isDeleted:
-          type: boolean
-          readOnly: true
-          description: 소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능).
-        deletedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-          description: 소프트 삭제된 시각.
-        purgeAfter:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-          description: 삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각.
-        canRestore:
-          type: boolean
-          readOnly: true
-        deletion:
-          readOnly: true
-        downloadQuota:
-          readOnly: true
-        jobsCount:
-          type: integer
-          readOnly: true
-        patchesCount:
-          type: integer
-          readOnly: true
-        thumbnailUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-          readOnly: true
-        thumbnailS3Key:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        thumbnailSourceSignature:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      required:
-      - canRestore
-      - createdAt
-      - deletedAt
-      - deletion
-      - downloadQuota
-      - g1NodeKey
-      - id
-      - isDeleted
-      - jobsCount
-      - lastActivityAt
-      - patchesCount
-      - purgeAfter
-      - slug
-      - teamId
-      - thumbnailS3Key
-      - thumbnailSourceSignature
-      - thumbnailUrl
-      - uid
-      - updatedAt
     WorkbenchRuntime:
       type: object
       properties:
@@ -2295,3 +2178,120 @@ components:
       - sceneUnitsPerMeter
       - sourceProcessingFailed
       - sourceProcessingPending
+    WorkbenchStateUpdate:
+      type: object
+      description: 'PUT /projects/{id}/workbench-state/
+
+
+        unified_config: solver-independent project configuration (전체 덮어쓰기)
+
+        expected_revision: 마지막으로 읽은 WorkbenchState revision'
+      properties:
+        unifiedConfig: {}
+        expectedRevision:
+          type: integer
+          minimum: 0
+    DownloadQuota:
+      type: object
+      properties:
+        limit:
+          type: integer
+          readOnly: true
+        used:
+          type: integer
+          readOnly: true
+        remaining:
+          type: string
+          readOnly: true
+        canDownload:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - canDownload
+      - limit
+      - remaining
+      - updatedAt
+      - used
+    ProjectDownloadTicketRequest:
+      type: object
+      properties:
+        source:
+          enum:
+          - JOB_RESULT_ZIP
+          - SUMMARY_FIGURES
+          - LES_FIGURES
+          - G3_EDITED_STL
+          - WORKBENCH_PATCH_EXPORT
+          type: string
+          description: '* `JOB_RESULT_ZIP` - Job result ZIP
+
+            * `SUMMARY_FIGURES` - Summary figures
+
+            * `LES_FIGURES` - LES figures
+
+            * `G3_EDITED_STL` - G3 edited STL
+
+            * `WORKBENCH_PATCH_EXPORT` - Workbench patch export'
+          x-spec-enum-id: 7ce9d8b5eee7ed41
+        jobUid:
+          type: string
+          maxLength: 36
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DownloadItemRequest'
+        clientExport:
+          $ref: '#/components/schemas/ClientExportRequest'
+      required:
+      - source
+    PaginatedProjectListList:
+      type: object
+      properties:
+        count:
+          type: integer
+        cursor:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectList'
+    MeshPredictResponse:
+      type: object
+      properties:
+        solverType:
+          enum:
+          - G1
+          - G2
+          type: string
+          description: '* `G1` - G1
+
+            * `G2` - G2'
+          x-spec-enum-id: 7419f4880cbd06f5
+        totalArea:
+          type: number
+          format: double
+        totalFacets:
+          type: integer
+        meshCells:
+          type:
+          - integer
+          - 'null'
+        predictedCells:
+          type:
+          - integer
+          - 'null'
+        cellLimit:
+          type:
+          - integer
+          - 'null'
+      required:
+      - meshCells
+      - solverType
+      - totalArea
+      - totalFacets

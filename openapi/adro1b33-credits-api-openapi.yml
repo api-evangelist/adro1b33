@@ -271,6 +271,95 @@ paths:
           description: ''
 components:
   schemas:
+    CreditTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        operation:
+          type: integer
+        operationKind:
+          type: string
+          readOnly: true
+        operationIdempotencyKey:
+          type: string
+          readOnly: true
+        bucket:
+          type: integer
+        bucketSource:
+          type: string
+          readOnly: true
+        sequence:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        delta:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        bucketRemainingAfter:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bucket
+      - bucketRemainingAfter
+      - bucketSource
+      - createdAt
+      - delta
+      - id
+      - operation
+      - operationIdempotencyKey
+      - operationKind
+      - sequence
+    BundlePurchase:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          readOnly: true
+        paymentStatus:
+          type: string
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        bundleId:
+          type: integer
+          readOnly: true
+        creditsSnapshot:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        priceSnapshotMinor:
+          type: integer
+          readOnly: true
+        currencySnapshot:
+          type: string
+          maxLength: 8
+        display:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bundleId
+      - createdAt
+      - creditsSnapshot
+      - currencySnapshot
+      - display
+      - paymentId
+      - paymentStatus
+      - priceSnapshotMinor
+      - teamId
     CreditBucket:
       type: object
       properties:
@@ -349,52 +438,32 @@ components:
       - isActive
       - remainingAmount
       - source
-    CreditTransaction:
+    CreditEstimateTotals:
       type: object
       properties:
-        id:
+        total:
           type: integer
-          readOnly: true
-        operation:
-          type: integer
-        operationKind:
-          type: string
-          readOnly: true
-        operationIdempotencyKey:
-          type: string
-          readOnly: true
-        bucket:
-          type: integer
-        bucketSource:
-          type: string
-          readOnly: true
-        sequence:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        delta:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        bucketRemainingAfter:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
       required:
-      - bucket
-      - bucketRemainingAfter
-      - bucketSource
-      - createdAt
-      - delta
-      - id
-      - operation
-      - operationIdempotencyKey
-      - operationKind
-      - sequence
+      - total
+    PriceEntry:
+      type: object
+      properties:
+        currency:
+          type: string
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        display:
+          $ref: '#/components/schemas/PriceDisplay'
+      required:
+      - currency
+      - display
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
     PriceDisplay:
       type: object
       properties:
@@ -414,38 +483,6 @@ components:
       - supplyAmount
       - taxAmount
       - totalAmount
-    BundlePurchaseStartRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        channelKey:
-          type: string
-          maxLength: 128
-        orderName:
-          type: string
-          maxLength: 200
-        currency:
-          type: string
-          maxLength: 8
-        billingCountry:
-          type: string
-          maxLength: 2
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-      required:
-      - provider
-      - teamId
     CreditOperation:
       type: object
       properties:
@@ -499,55 +536,188 @@ components:
       - kind
       - totalDelta
       - walletBalanceAfter
-    CreditEstimateTotals:
+    CreditEstimateWarning:
       type: object
       properties:
-        total:
+        code:
+          type: string
+        message:
+          type: string
+        predictedCells:
+          type: integer
+        cellLimit:
           type: integer
       required:
-      - total
-    BundlePurchase:
+      - cellLimit
+      - code
+      - message
+      - predictedCells
+    CreditEstimateVariables:
       type: object
       properties:
-        paymentId:
-          type: string
-          readOnly: true
-        paymentStatus:
-          type: string
-          readOnly: true
-        teamId:
+        cpu:
+          type:
+          - integer
+          - 'null'
+        gpu:
+          type:
+          - integer
+          - 'null'
+        predSimulatingSeconds:
           type: integer
-          readOnly: true
-        bundleId:
+        projectModeMult:
+          type: number
+          format: double
+        objectiveFuncMult:
+          type: number
+          format: double
+        optSteps:
           type: integer
-          readOnly: true
-        creditsSnapshot:
+        creditPerOptStep:
+          type: number
+          format: double
+        meshCells:
+          type:
+          - integer
+          - 'null'
+        latticePoints:
+          type:
+          - integer
+          - 'null'
+        optAreaMult:
+          type: number
+          format: double
+        optTargetMult:
+          type: number
+          format: double
+      required:
+      - cpu
+      - creditPerOptStep
+      - gpu
+      - latticePoints
+      - meshCells
+      - objectiveFuncMult
+      - optAreaMult
+      - optSteps
+      - optTargetMult
+      - predSimulatingSeconds
+      - projectModeMult
+    CreditEstimateResponse:
+      type: object
+      properties:
+        variables:
+          $ref: '#/components/schemas/CreditEstimateVariables'
+        estimates:
+          $ref: '#/components/schemas/CreditEstimateTotals'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditEstimateWarning'
+      required:
+      - estimates
+      - variables
+      - warnings
+    PaymentCancellation:
+      type: object
+      properties:
+        cancellationId:
+          type: string
+          maxLength: 64
+        amount:
           type: integer
           maximum: 2147483647
           minimum: 0
-        priceSnapshotMinor:
+        reason:
+          type: string
+          maxLength: 200
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - amount
+      - cancellationId
+      - requestedByUserId
+    CreditBundle:
+      type: object
+      properties:
+        id:
           type: integer
           readOnly: true
-        currencySnapshot:
+        name:
           type: string
-          maxLength: 8
-        display:
-          type: object
-          additionalProperties: {}
+          maxLength: 120
+        description:
+          type: string
+        itemCode:
+          type: string
+          maxLength: 10
+        price:
+          allOf:
+          - $ref: '#/components/schemas/PriceEntry'
           readOnly: true
+        credits:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
         createdAt:
           type: string
           format: date-time
           readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
       required:
-      - bundleId
       - createdAt
-      - creditsSnapshot
-      - currencySnapshot
-      - display
-      - paymentId
-      - paymentStatus
-      - priceSnapshotMinor
+      - credits
+      - id
+      - name
+      - price
+      - updatedAt
+    BundlePurchaseStartRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        channelKey:
+          type: string
+          maxLength: 128
+        orderName:
+          type: string
+          maxLength: 200
+        currency:
+          type: string
+          maxLength: 8
+        billingCountry:
+          type: string
+          maxLength: 2
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+      required:
+      - provider
       - teamId
     OneTimePrepareResponse:
       type: object
@@ -701,145 +871,6 @@ components:
       - teamId
       - teamName
       - type
-    CreditBundle:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 120
-        description:
-          type: string
-        itemCode:
-          type: string
-          maxLength: 10
-        price:
-          allOf:
-          - $ref: '#/components/schemas/PriceEntry'
-          readOnly: true
-        credits:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        isActive:
-          type: boolean
-        sortOrder:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - credits
-      - id
-      - name
-      - price
-      - updatedAt
-    PriceEntry:
-      type: object
-      properties:
-        currency:
-          type: string
-        supplyAmountMinor:
-          type: integer
-        taxAmountMinor:
-          type: integer
-        totalAmountMinor:
-          type: integer
-        display:
-          $ref: '#/components/schemas/PriceDisplay'
-      required:
-      - currency
-      - display
-      - supplyAmountMinor
-      - taxAmountMinor
-      - totalAmountMinor
-    PaymentCancellation:
-      type: object
-      properties:
-        cancellationId:
-          type: string
-          maxLength: 64
-        amount:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        reason:
-          type: string
-          maxLength: 200
-        requestedByUserId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        cancelledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      required:
-      - amount
-      - cancellationId
-      - requestedByUserId
-    CreditEstimateVariables:
-      type: object
-      properties:
-        cpu:
-          type:
-          - integer
-          - 'null'
-        gpu:
-          type:
-          - integer
-          - 'null'
-        predSimulatingSeconds:
-          type: integer
-        projectModeMult:
-          type: number
-          format: double
-        objectiveFuncMult:
-          type: number
-          format: double
-        optSteps:
-          type: integer
-        creditPerOptStep:
-          type: number
-          format: double
-        meshCells:
-          type:
-          - integer
-          - 'null'
-        latticePoints:
-          type:
-          - integer
-          - 'null'
-        optAreaMult:
-          type: number
-          format: double
-        optTargetMult:
-          type: number
-          format: double
-      required:
-      - cpu
-      - creditPerOptStep
-      - gpu
-      - latticePoints
-      - meshCells
-      - objectiveFuncMult
-      - optAreaMult
-      - optSteps
-      - optTargetMult
-      - predSimulatingSeconds
-      - projectModeMult
     CreditWallet:
       type: object
       properties:
@@ -881,34 +912,3 @@ components:
       - teamId
       - teamName
       - updatedAt
-    CreditEstimateResponse:
-      type: object
-      properties:
-        variables:
-          $ref: '#/components/schemas/CreditEstimateVariables'
-        estimates:
-          $ref: '#/components/schemas/CreditEstimateTotals'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditEstimateWarning'
-      required:
-      - estimates
-      - variables
-      - warnings
-    CreditEstimateWarning:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        predictedCells:
-          type: integer
-        cellLimit:
-          type: integer
-      required:
-      - cellLimit
-      - code
-      - message
-      - predictedCells

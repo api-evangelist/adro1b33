@@ -412,252 +412,104 @@ paths:
           description: ''
 components:
   schemas:
-    NextBillingPlan:
+    UpgradeQuote:
       type: object
-      description: 다음 결제될 플랜 식별 정보.
+      description: 업그레이드 견적 — 결제에 사용되는 백엔드 계산 결과를 그대로 노출.
       properties:
-        id:
-          type: integer
-        code:
+        quotedAt:
           type: string
-        name:
-          type: string
-      required:
-      - code
-      - id
-      - name
-    SubscribeRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        billingKeyId:
-          type: string
-          maxLength: 128
+          format: date-time
         currency:
           type: string
-          maxLength: 8
-        paymentId:
-          type: string
-          maxLength: 128
-      required:
-      - teamId
-    UpgradeResponse:
-      type: object
-      properties:
-        id:
+        currentPlan:
+          $ref: '#/components/schemas/UpgradeQuotePlan'
+        newPlan:
+          $ref: '#/components/schemas/UpgradeQuotePlan'
+        currentPlanPrice:
+          $ref: '#/components/schemas/PriceEntry'
+        newPlanPrice:
+          $ref: '#/components/schemas/PriceEntry'
+        differenceSupplyAmountMinor:
           type: integer
-          readOnly: true
-        teamId:
+        differenceTaxAmountMinor:
           type: integer
-          readOnly: true
-        teamName:
-          type: string
-          readOnly: true
-        plan:
+        differenceTotalAmountMinor:
           type: integer
-        planCode:
-          type: string
-          readOnly: true
-        planName:
-          type: string
-          readOnly: true
-        billingKey:
-          type: string
-          readOnly: true
-        source:
-          enum:
-          - SELF_SERVE
-          - ADMIN_ASSIGNED
-          type: string
-          description: '* `SELF_SERVE` - 자가 결제
-
-            * `ADMIN_ASSIGNED` - 관리자 할당'
-          x-spec-enum-id: daef43a6d8659a7a
-        status:
-          enum:
-          - ACTIVE
-          - PAST_DUE
-          - CANCELLED
-          - EXPIRED
-          - SCHEDULED
-          type: string
-          description: '* `ACTIVE` - 활성
-
-            * `PAST_DUE` - 재결제 실패 대기
-
-            * `CANCELLED` - 해지 예약(사이클 종료 시 EXPIRED)
-
-            * `EXPIRED` - 만료
-
-            * `SCHEDULED` - 다음 사이클 적용 예약(다운그레이드)'
-          x-spec-enum-id: 44ba4537fdae9638
-        startedAt:
+        cycleStartedAt:
           type: string
           format: date-time
-        anchorDay:
+        cycleEndsAt:
+          type: string
+          format: date-time
+        usedDays:
           type: integer
-          maximum: 32767
-          minimum: 0
-        currentCycleStartedAt:
-          type: string
-          format: date-time
-        currentCycleEndsAt:
-          type: string
-          format: date-time
-        nextBillingAttemptAt:
-          type: string
-          format: date-time
-        nextBilling:
-          allOf:
-          - $ref: '#/components/schemas/NextBilling'
-          readOnly: true
-        cancelAtPeriodEnd:
-          type: boolean
-        failedAttemptCount:
+        remainingDays:
           type: integer
-          maximum: 32767
-          minimum: 0
-        lastFailedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        expiredAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        upgradeQuote:
-          allOf:
-          - $ref: '#/components/schemas/UpgradeQuote'
-      required:
-      - anchorDay
-      - billingKey
-      - createdAt
-      - currentCycleEndsAt
-      - currentCycleStartedAt
-      - id
-      - nextBilling
-      - nextBillingAttemptAt
-      - plan
-      - planCode
-      - planName
-      - startedAt
-      - teamId
-      - teamName
-      - updatedAt
-    CancelRequest:
-      type: object
-      properties:
-        teamId:
+        totalDays:
           type: integer
-      required:
-      - teamId
-    PriceEntry:
-      type: object
-      properties:
-        currency:
+        prorationRatio:
           type: string
-        supplyAmountMinor:
+        subtotalAmountMinor:
           type: integer
-        taxAmountMinor:
+        vatAmountMinor:
           type: integer
-        totalAmountMinor:
+        totalChargedAmountMinor:
           type: integer
         display:
-          $ref: '#/components/schemas/PriceDisplay'
+          type: object
+          additionalProperties: {}
+        monthlyCreditDifference:
+          type: integer
+        proratedCredits:
+          type: integer
       required:
       - currency
+      - currentPlan
+      - currentPlanPrice
+      - cycleEndsAt
+      - cycleStartedAt
+      - differenceSupplyAmountMinor
+      - differenceTaxAmountMinor
+      - differenceTotalAmountMinor
       - display
-      - supplyAmountMinor
-      - taxAmountMinor
-      - totalAmountMinor
-    StorageAddonChange:
+      - monthlyCreditDifference
+      - newPlan
+      - newPlanPrice
+      - proratedCredits
+      - prorationRatio
+      - quotedAt
+      - remainingDays
+      - subtotalAmountMinor
+      - totalChargedAmountMinor
+      - totalDays
+      - usedDays
+      - vatAmountMinor
+    SolverAccessResponse:
       type: object
+      description: '`/subscriptions/solver-access/` 응답 — 실시간 조회 결과.'
       properties:
         teamId:
           type: integer
-        unitCount:
-          type: integer
-          minimum: 0
-      required:
-      - teamId
-      - unitCount
-    UpgradeQuoteResponse:
-      type: object
-      properties:
-        upgradeQuote:
-          $ref: '#/components/schemas/UpgradeQuote'
-      required:
-      - upgradeQuote
-    PlanChangeRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        planCode:
-          type: string
-          maxLength: 32
-        currency:
-          type: string
-          maxLength: 8
-      required:
-      - planCode
-      - teamId
-    StorageAddonPurchase:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        unitCount:
-          type: integer
-          minimum: 1
-        currency:
-          type: string
-          maxLength: 8
-      required:
-      - teamId
-      - unitCount
-    PriceDisplay:
-      type: object
-      properties:
-        supplyAmount:
-          type: string
-        taxAmount:
-          type: string
-        totalAmount:
-          type: string
-        unitPrice:
-          type: string
-        discountRate:
+          readOnly: true
+        allowedSolvers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        sourceSubscriptionId:
           type:
-          - string
+          - integer
           - 'null'
-      required:
-      - supplyAmount
-      - taxAmount
-      - totalAmount
-    PlanGateResponse:
-      type: object
-      description: '`/subscriptions/plan-gate/` 응답 — 실행 진입용 구독 판정.'
-      properties:
-        teamId:
-          type: integer
           readOnly: true
-        hasCurrentPlan:
-          type: boolean
+        sourceContractId:
+          type:
+          - integer
+          - 'null'
           readOnly: true
       required:
-      - hasCurrentPlan
+      - allowedSolvers
+      - sourceContractId
+      - sourceSubscriptionId
       - teamId
     Subscription:
       type: object
@@ -769,29 +621,25 @@ components:
       - teamId
       - teamName
       - updatedAt
-    StorageAddonQuoteDisplay:
+    StorageAddonPrice:
       type: object
-      description: Backend-formatted UI strings for a storage add-on quote.
       properties:
-        monthlySupplyAmount:
+        currency:
           type: string
-        monthlyTaxAmount:
-          type: string
-        monthlyTotalAmount:
-          type: string
-        chargedSupplyAmount:
-          type: string
-        chargedTaxAmount:
-          type: string
-        chargedTotalAmount:
-          type: string
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        isActive:
+          type: boolean
       required:
-      - chargedSupplyAmount
-      - chargedTaxAmount
-      - chargedTotalAmount
-      - monthlySupplyAmount
-      - monthlyTaxAmount
-      - monthlyTotalAmount
+      - currency
+      - isActive
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
     TeamStorageAddon:
       type: object
       properties:
@@ -867,17 +715,42 @@ components:
       - subscriptionId
       - teamId
       - unitCount
-    NextBilling:
+    UpgradeQuotePlan:
       type: object
-      description: 다음 사이클에 청구될 플랜 + 금액. `price` 는 플랜 리스트의 가격 객체와 동일 구조.
       properties:
-        plan:
-          $ref: '#/components/schemas/NextBillingPlan'
-        price:
-          $ref: '#/components/schemas/PriceEntry'
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
       required:
-      - plan
-      - price
+      - code
+      - id
+      - name
+    SubscribeRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        billingKeyId:
+          type: string
+          maxLength: 128
+        currency:
+          type: string
+          maxLength: 8
+        paymentId:
+          type: string
+          maxLength: 128
+      required:
+      - teamId
+    UpgradeQuoteResponse:
+      type: object
+      properties:
+        upgradeQuote:
+          $ref: '#/components/schemas/UpgradeQuote'
+      required:
+      - upgradeQuote
     StorageAddonQuote:
       type: object
       properties:
@@ -1029,8 +902,316 @@ components:
       - price
       - storageAddonPrices
       - updatedAt
-    UpgradeQuotePlan:
+    UpgradeResponse:
       type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        plan:
+          type: integer
+        planCode:
+          type: string
+          readOnly: true
+        planName:
+          type: string
+          readOnly: true
+        billingKey:
+          type: string
+          readOnly: true
+        source:
+          enum:
+          - SELF_SERVE
+          - ADMIN_ASSIGNED
+          type: string
+          description: '* `SELF_SERVE` - 자가 결제
+
+            * `ADMIN_ASSIGNED` - 관리자 할당'
+          x-spec-enum-id: daef43a6d8659a7a
+        status:
+          enum:
+          - ACTIVE
+          - PAST_DUE
+          - CANCELLED
+          - EXPIRED
+          - SCHEDULED
+          type: string
+          description: '* `ACTIVE` - 활성
+
+            * `PAST_DUE` - 재결제 실패 대기
+
+            * `CANCELLED` - 해지 예약(사이클 종료 시 EXPIRED)
+
+            * `EXPIRED` - 만료
+
+            * `SCHEDULED` - 다음 사이클 적용 예약(다운그레이드)'
+          x-spec-enum-id: 44ba4537fdae9638
+        startedAt:
+          type: string
+          format: date-time
+        anchorDay:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        currentCycleStartedAt:
+          type: string
+          format: date-time
+        currentCycleEndsAt:
+          type: string
+          format: date-time
+        nextBillingAttemptAt:
+          type: string
+          format: date-time
+        nextBilling:
+          allOf:
+          - $ref: '#/components/schemas/NextBilling'
+          readOnly: true
+        cancelAtPeriodEnd:
+          type: boolean
+        failedAttemptCount:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        lastFailedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expiredAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        upgradeQuote:
+          allOf:
+          - $ref: '#/components/schemas/UpgradeQuote'
+      required:
+      - anchorDay
+      - billingKey
+      - createdAt
+      - currentCycleEndsAt
+      - currentCycleStartedAt
+      - id
+      - nextBilling
+      - nextBillingAttemptAt
+      - plan
+      - planCode
+      - planName
+      - startedAt
+      - teamId
+      - teamName
+      - updatedAt
+    StorageAddonQuoteDisplay:
+      type: object
+      description: Backend-formatted UI strings for a storage add-on quote.
+      properties:
+        monthlySupplyAmount:
+          type: string
+        monthlyTaxAmount:
+          type: string
+        monthlyTotalAmount:
+          type: string
+        chargedSupplyAmount:
+          type: string
+        chargedTaxAmount:
+          type: string
+        chargedTotalAmount:
+          type: string
+      required:
+      - chargedSupplyAmount
+      - chargedTaxAmount
+      - chargedTotalAmount
+      - monthlySupplyAmount
+      - monthlyTaxAmount
+      - monthlyTotalAmount
+    PriceEntry:
+      type: object
+      properties:
+        currency:
+          type: string
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        display:
+          $ref: '#/components/schemas/PriceDisplay'
+      required:
+      - currency
+      - display
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
+    SubscriptionCycle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subscription:
+          type: integer
+        planSnapshotCode:
+          type: string
+          maxLength: 32
+        planSnapshotMonthlyCredits:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        cycleStartedAt:
+          type: string
+          format: date-time
+        cycleEndsAt:
+          type: string
+          format: date-time
+        status:
+          enum:
+          - PENDING
+          - PAID
+          - FAILED
+          - PRORATED
+          type: string
+          description: '* `PENDING` - 결제 시도 중
+
+            * `PAID` - 결제 성공
+
+            * `FAILED` - 결제 실패
+
+            * `PRORATED` - 업그레이드 일할 지급'
+          x-spec-enum-id: 4bf9b922a073ba54
+          default: PENDING
+        paymentId:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        creditBucketId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        note:
+          type: string
+          maxLength: 200
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - creditBucketId
+      - cycleEndsAt
+      - cycleStartedAt
+      - id
+      - paymentId
+      - planSnapshotCode
+      - subscription
+    PlanGateResponse:
+      type: object
+      description: '`/subscriptions/plan-gate/` 응답 — 실행 진입용 구독 판정.'
+      properties:
+        teamId:
+          type: integer
+          readOnly: true
+        hasCurrentPlan:
+          type: boolean
+          readOnly: true
+      required:
+      - hasCurrentPlan
+      - teamId
+    CancelRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+      required:
+      - teamId
+    NextBilling:
+      type: object
+      description: 다음 사이클에 청구될 플랜 + 금액. `price` 는 플랜 리스트의 가격 객체와 동일 구조.
+      properties:
+        plan:
+          $ref: '#/components/schemas/NextBillingPlan'
+        price:
+          $ref: '#/components/schemas/PriceEntry'
+      required:
+      - plan
+      - price
+    StorageAddonPurchase:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        unitCount:
+          type: integer
+          minimum: 1
+        currency:
+          type: string
+          maxLength: 8
+      required:
+      - teamId
+      - unitCount
+    PlanChangeRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        planCode:
+          type: string
+          maxLength: 32
+        currency:
+          type: string
+          maxLength: 8
+      required:
+      - planCode
+      - teamId
+    PriceDisplay:
+      type: object
+      properties:
+        supplyAmount:
+          type: string
+        taxAmount:
+          type: string
+        totalAmount:
+          type: string
+        unitPrice:
+          type: string
+        discountRate:
+          type:
+          - string
+          - 'null'
+      required:
+      - supplyAmount
+      - taxAmount
+      - totalAmount
+    StorageAddonChange:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        unitCount:
+          type: integer
+          minimum: 0
+      required:
+      - teamId
+      - unitCount
+    NextBillingPlan:
+      type: object
+      description: 다음 결제될 플랜 식별 정보.
       properties:
         id:
           type: integer
@@ -1042,105 +1223,6 @@ components:
       - code
       - id
       - name
-    SolverAccessResponse:
-      type: object
-      description: '`/subscriptions/solver-access/` 응답 — 실시간 조회 결과.'
-      properties:
-        teamId:
-          type: integer
-          readOnly: true
-        allowedSolvers:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        sourceSubscriptionId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        sourceContractId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-      required:
-      - allowedSolvers
-      - sourceContractId
-      - sourceSubscriptionId
-      - teamId
-    UpgradeQuote:
-      type: object
-      description: 업그레이드 견적 — 결제에 사용되는 백엔드 계산 결과를 그대로 노출.
-      properties:
-        quotedAt:
-          type: string
-          format: date-time
-        currency:
-          type: string
-        currentPlan:
-          $ref: '#/components/schemas/UpgradeQuotePlan'
-        newPlan:
-          $ref: '#/components/schemas/UpgradeQuotePlan'
-        currentPlanPrice:
-          $ref: '#/components/schemas/PriceEntry'
-        newPlanPrice:
-          $ref: '#/components/schemas/PriceEntry'
-        differenceSupplyAmountMinor:
-          type: integer
-        differenceTaxAmountMinor:
-          type: integer
-        differenceTotalAmountMinor:
-          type: integer
-        cycleStartedAt:
-          type: string
-          format: date-time
-        cycleEndsAt:
-          type: string
-          format: date-time
-        usedDays:
-          type: integer
-        remainingDays:
-          type: integer
-        totalDays:
-          type: integer
-        prorationRatio:
-          type: string
-        subtotalAmountMinor:
-          type: integer
-        vatAmountMinor:
-          type: integer
-        totalChargedAmountMinor:
-          type: integer
-        display:
-          type: object
-          additionalProperties: {}
-        monthlyCreditDifference:
-          type: integer
-        proratedCredits:
-          type: integer
-      required:
-      - currency
-      - currentPlan
-      - currentPlanPrice
-      - cycleEndsAt
-      - cycleStartedAt
-      - differenceSupplyAmountMinor
-      - differenceTaxAmountMinor
-      - differenceTotalAmountMinor
-      - display
-      - monthlyCreditDifference
-      - newPlan
-      - newPlanPrice
-      - proratedCredits
-      - prorationRatio
-      - quotedAt
-      - remainingDays
-      - subtotalAmountMinor
-      - totalChargedAmountMinor
-      - totalDays
-      - usedDays
-      - vatAmountMinor
     StorageAddonCycle:
       type: object
       properties:
@@ -1216,85 +1298,3 @@ components:
       - totalAmountSnapshot
       - unitBytesSnapshot
       - unitCountSnapshot
-    StorageAddonPrice:
-      type: object
-      properties:
-        currency:
-          type: string
-        supplyAmountMinor:
-          type: integer
-        taxAmountMinor:
-          type: integer
-        totalAmountMinor:
-          type: integer
-        isActive:
-          type: boolean
-      required:
-      - currency
-      - isActive
-      - supplyAmountMinor
-      - taxAmountMinor
-      - totalAmountMinor
-    SubscriptionCycle:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        subscription:
-          type: integer
-        planSnapshotCode:
-          type: string
-          maxLength: 32
-        planSnapshotMonthlyCredits:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        cycleStartedAt:
-          type: string
-          format: date-time
-        cycleEndsAt:
-          type: string
-          format: date-time
-        status:
-          enum:
-          - PENDING
-          - PAID
-          - FAILED
-          - PRORATED
-          type: string
-          description: '* `PENDING` - 결제 시도 중
-
-            * `PAID` - 결제 성공
-
-            * `FAILED` - 결제 실패
-
-            * `PRORATED` - 업그레이드 일할 지급'
-          x-spec-enum-id: 4bf9b922a073ba54
-          default: PENDING
-        paymentId:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        creditBucketId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        note:
-          type: string
-          maxLength: 200
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - creditBucketId
-      - cycleEndsAt
-      - cycleStartedAt
-      - id
-      - paymentId
-      - planSnapshotCode
-      - subscription

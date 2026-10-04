@@ -426,225 +426,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SignupResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
-        teamId:
-          type: integer
-        teamName:
-          type: string
-      required:
-      - displayName
-      - email
-      - id
-      - teamId
-      - teamName
-    UserPasswordVerify:
-      type: object
-      properties:
-        oldPassword:
-          type: string
-          writeOnly: true
-        token:
-          type: string
-          readOnly: true
-      required:
-      - oldPassword
-      - token
-    DetailResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    LoginRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          writeOnly: true
-      required:
-      - email
-      - password
-    TeamCapabilities:
-      type: object
-      description: 'role→액션 매핑으로 계산한 capability boolean 7종.
-
-
-        `app.teams.permissions.get_team_capabilities` 반환 dict 스키마와 1:1 대응한다
-
-        (설계 문서 §3.6). 필드명은 스네이크로 두되 camel-case 렌더러가 응답에서
-
-        canManageTeamSettings 형태로 직렬화한다.'
-      properties:
-        canManageTeamSettings:
-          type: boolean
-        canManageTeamMembers:
-          type: boolean
-        canManageJobRuns:
-          type: boolean
-        canCreateProjects:
-          type: boolean
-        canManageProjects:
-          type: boolean
-        canManageBilling:
-          type: boolean
-        canAccessPreviewFeatures:
-          type: boolean
-      required:
-      - canAccessPreviewFeatures
-      - canCreateProjects
-      - canManageBilling
-      - canManageJobRuns
-      - canManageProjects
-      - canManageTeamMembers
-      - canManageTeamSettings
-    UserPasswordReset:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-      required:
-      - email
-    StorageUsageProject:
-      type: object
-      properties:
-        projectId:
-          type: integer
-        projectName:
-          type: string
-        mode:
-          type: string
-        totalSizeBytes:
-          type: integer
-      required:
-      - mode
-      - projectId
-      - projectName
-      - totalSizeBytes
-    JobDailyUsage:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        g1TotalSeconds:
-          type: integer
-        g2TotalSeconds:
-          type: integer
-        g4TotalSeconds:
-          type: integer
-        frontierTotalSeconds:
-          type: integer
-      required:
-      - date
-      - g1TotalSeconds
-      - g2TotalSeconds
-    AccountTeam:
-      type: object
-      properties:
-        id:
-          type: integer
-        uid:
-          type: string
-        name:
-          type: string
-        slug:
-          type: string
-        role:
-          type:
-          - string
-          - 'null'
-        displayNameOverride:
-          type:
-          - string
-          - 'null'
-        tenantId:
-          type:
-          - integer
-          - 'null'
-        tenantSchemaName:
-          type: string
-        capabilities:
-          $ref: '#/components/schemas/TeamCapabilities'
-      required:
-      - id
-      - name
-    MeResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
-        userType:
-          type: string
-        isPlatformAdmin:
-          type: boolean
-        role:
-          type:
-          - string
-          - 'null'
-        isSuperAdmin:
-          type: boolean
-        canViewPlatform:
-          type: boolean
-        canManagePlatform:
-          type: boolean
-        mustChangePassword:
-          type: boolean
-        defaultTeamId:
-          type:
-          - integer
-          - 'null'
-        socialKind:
-          type:
-          - string
-          - 'null'
-        tenantFeatureAccess:
-          $ref: '#/components/schemas/TenantFeatureAccess'
-        billingMode:
-          enum:
-          - TEAM
-          - TENANT
-          type: string
-          description: '* `TEAM` - TEAM
-
-            * `TENANT` - TENANT'
-          x-spec-enum-id: b4a3018a77249123
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountTeam'
-      required:
-      - billingMode
-      - canManagePlatform
-      - canViewPlatform
-      - defaultTeamId
-      - displayName
-      - email
-      - id
-      - isPlatformAdmin
-      - isSuperAdmin
-      - mustChangePassword
-      - teams
-      - tenantFeatureAccess
-      - userType
     TeamStorageUsage:
       type: object
       properties:
@@ -709,15 +490,72 @@ components:
       - teamId
       - usagePercent
       - usedBytes
-    TeamsResponse:
+    TeamSwitchRequest:
       type: object
       properties:
-        teams:
+        teamId:
+          type: integer
+      required:
+      - teamId
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        displayName:
+          type: string
+          default: ''
+          maxLength: 150
+        inviteToken:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        emailToken:
+          type:
+          - string
+          - 'null'
+          writeOnly: true
+      required:
+      - email
+      - password
+    SignupResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        teamId:
+          type: integer
+        teamName:
+          type: string
+      required:
+      - displayName
+      - email
+      - id
+      - teamId
+      - teamName
+    StorageUsage:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/StorageUsageSummary'
+        project:
           type: array
           items:
-            $ref: '#/components/schemas/AccountTeam'
+            $ref: '#/components/schemas/StorageUsageProject'
       required:
-      - teams
+      - project
+      - summary
     TenantFeatureAccess:
       type: object
       properties:
@@ -794,33 +632,134 @@ components:
       - racingDiv
       - submenus
       - validationDes
-    Signup:
+    UserSearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+      required:
+      - displayName
+      - email
+      - id
+    LoginResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        teamId:
+          type:
+          - integer
+          - 'null'
+        teamName:
+          type:
+          - string
+          - 'null'
+        userType:
+          type: string
+        mustChangePassword:
+          type: boolean
+      required:
+      - detail
+    StorageUsageSummary:
+      type: object
+      properties:
+        totalSizeBytes:
+          type: integer
+        g1TotalSizeBytes:
+          type: integer
+        g2TotalSizeBytes:
+          type: integer
+        g4TotalSizeBytes:
+          type: integer
+        frontierTotalSizeBytes:
+          type: integer
+      required:
+      - g1TotalSizeBytes
+      - g2TotalSizeBytes
+      - totalSizeBytes
+    UserPasswordReset:
       type: object
       properties:
         email:
           type: string
           format: email
-        password:
-          type: string
-          writeOnly: true
-          minLength: 8
-        displayName:
-          type: string
-          default: ''
-          maxLength: 150
-        inviteToken:
-          type:
-          - string
-          - 'null'
-          format: uuid
-        emailToken:
-          type:
-          - string
-          - 'null'
-          writeOnly: true
       required:
       - email
-      - password
+    MeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        userType:
+          type: string
+        isPlatformAdmin:
+          type: boolean
+        role:
+          type:
+          - string
+          - 'null'
+        isSuperAdmin:
+          type: boolean
+        canViewPlatform:
+          type: boolean
+        canManagePlatform:
+          type: boolean
+        mustChangePassword:
+          type: boolean
+        defaultTeamId:
+          type:
+          - integer
+          - 'null'
+        socialKind:
+          type:
+          - string
+          - 'null'
+        tenantFeatureAccess:
+          $ref: '#/components/schemas/TenantFeatureAccess'
+        billingMode:
+          enum:
+          - TEAM
+          - TENANT
+          type: string
+          description: '* `TEAM` - TEAM
+
+            * `TENANT` - TENANT'
+          x-spec-enum-id: b4a3018a77249123
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountTeam'
+      required:
+      - billingMode
+      - canManagePlatform
+      - canViewPlatform
+      - defaultTeamId
+      - displayName
+      - email
+      - id
+      - isPlatformAdmin
+      - isSuperAdmin
+      - mustChangePassword
+      - teams
+      - tenantFeatureAccess
+      - userType
+    DetailResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
     UserPasswordResetConfirm:
       type: object
       properties:
@@ -842,15 +781,66 @@ components:
       - password
       - passwordConfirm
       - token
-    UserForcePasswordChange:
+    AccountTeam:
       type: object
-      description: 'must_change_password=True 계정 전용 강제 변경 시리얼라이저.
-
-
-        기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 —
-
-        대신 View 에서 must_change_password 플래그로 접근을 제한한다.'
       properties:
+        id:
+          type: integer
+        uid:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        role:
+          type:
+          - string
+          - 'null'
+        displayNameOverride:
+          type:
+          - string
+          - 'null'
+        tenantId:
+          type:
+          - integer
+          - 'null'
+        tenantSchemaName:
+          type: string
+        capabilities:
+          $ref: '#/components/schemas/TeamCapabilities'
+      required:
+      - id
+      - name
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    UserPasswordVerify:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - oldPassword
+      - token
+    UserPasswordChange:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
         password:
           type: string
           writeOnly: true
@@ -860,6 +850,46 @@ components:
       required:
       - password
       - passwordConfirm
+      - token
+    UserMeUsage:
+      type: object
+      properties:
+        jobDailyUsage:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobDailyUsage'
+          readOnly: true
+        storageUsageByProject:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageUsage'
+          readOnly: true
+        storageUsage:
+          allOf:
+          - $ref: '#/components/schemas/TeamStorageUsage'
+          readOnly: true
+      required:
+      - jobDailyUsage
+      - storageUsage
+      - storageUsageByProject
+    JobDailyUsage:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        g1TotalSeconds:
+          type: integer
+        g2TotalSeconds:
+          type: integer
+        g4TotalSeconds:
+          type: integer
+        frontierTotalSeconds:
+          type: integer
+      required:
+      - date
+      - g1TotalSeconds
+      - g2TotalSeconds
     UserSocialLogin:
       type: object
       properties:
@@ -894,102 +924,73 @@ components:
       - refreshToken
       - registerToken
       - state
-    StorageUsage:
+    TeamCapabilities:
       type: object
+      description: 'role→액션 매핑으로 계산한 capability boolean 7종.
+
+
+        `app.teams.permissions.get_team_capabilities` 반환 dict 스키마와 1:1 대응한다
+
+        (설계 문서 §3.6). 필드명은 스네이크로 두되 camel-case 렌더러가 응답에서
+
+        canManageTeamSettings 형태로 직렬화한다.'
       properties:
-        summary:
-          $ref: '#/components/schemas/StorageUsageSummary'
-        project:
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageUsageProject'
-      required:
-      - project
-      - summary
-    StorageUsageSummary:
-      type: object
-      properties:
-        totalSizeBytes:
-          type: integer
-        g1TotalSizeBytes:
-          type: integer
-        g2TotalSizeBytes:
-          type: integer
-        g4TotalSizeBytes:
-          type: integer
-        frontierTotalSizeBytes:
-          type: integer
-      required:
-      - g1TotalSizeBytes
-      - g2TotalSizeBytes
-      - totalSizeBytes
-    UserSearchResult:
-      type: object
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-          format: email
-        displayName:
-          type: string
-      required:
-      - displayName
-      - email
-      - id
-    UserMeUsage:
-      type: object
-      properties:
-        jobDailyUsage:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobDailyUsage'
-          readOnly: true
-        storageUsageByProject:
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageUsage'
-          readOnly: true
-        storageUsage:
-          allOf:
-          - $ref: '#/components/schemas/TeamStorageUsage'
-          readOnly: true
-      required:
-      - jobDailyUsage
-      - storageUsage
-      - storageUsageByProject
-    TeamSwitchRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-      required:
-      - teamId
-    LoginResponse:
-      type: object
-      properties:
-        detail:
-          type: string
-        teamId:
-          type:
-          - integer
-          - 'null'
-        teamName:
-          type:
-          - string
-          - 'null'
-        userType:
-          type: string
-        mustChangePassword:
+        canManageTeamSettings:
+          type: boolean
+        canManageTeamMembers:
+          type: boolean
+        canManageJobRuns:
+          type: boolean
+        canCreateProjects:
+          type: boolean
+        canManageProjects:
+          type: boolean
+        canManageBilling:
+          type: boolean
+        canAccessPreviewFeatures:
           type: boolean
       required:
-      - detail
-    UserPasswordChange:
+      - canAccessPreviewFeatures
+      - canCreateProjects
+      - canManageBilling
+      - canManageJobRuns
+      - canManageProjects
+      - canManageTeamMembers
+      - canManageTeamSettings
+    TeamsResponse:
       type: object
       properties:
-        token:
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountTeam'
+      required:
+      - teams
+    StorageUsageProject:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectName:
           type: string
-          writeOnly: true
+        mode:
+          type: string
+        totalSizeBytes:
+          type: integer
+      required:
+      - mode
+      - projectId
+      - projectName
+      - totalSizeBytes
+    UserForcePasswordChange:
+      type: object
+      description: 'must_change_password=True 계정 전용 강제 변경 시리얼라이저.
+
+
+        기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 —
+
+        대신 View 에서 must_change_password 플래그로 접근을 제한한다.'
+      properties:
         password:
           type: string
           writeOnly: true
@@ -999,4 +1000,3 @@ components:
       required:
       - password
       - passwordConfirm
-      - token

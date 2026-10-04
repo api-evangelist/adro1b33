@@ -117,6 +117,24 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    AiDiagnosisResponse:
+      type: object
+      properties:
+        summary:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - findings
+      - needsHumanSupport
+      - summary
+      - supportSummary
     AiChatRequest:
       type: object
       properties:
@@ -169,6 +187,24 @@ components:
             $ref: '#/components/schemas/AiChatHistoryItem'
       required:
       - intent
+    DiagnoseRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+        jobUid:
+          type: string
+          maxLength: 36
+      required:
+      - jobUid
     AiUsageResponse:
       type: object
       properties:
@@ -209,6 +245,20 @@ components:
       - detail
       - severity
       - title
+    AiRecommendationChange:
+      type: object
+      properties:
+        path:
+          type: string
+        before: {}
+        after: {}
+        reason:
+          type: string
+      required:
+      - after
+      - before
+      - path
+      - reason
     AiRecommendationResponse:
       type: object
       properties:
@@ -237,69 +287,6 @@ components:
       - proposedUnifiedConfig
       - summary
       - supportSummary
-    AiAssistRequest:
-      type: object
-      properties:
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: ko
-    AiChatHistoryItem:
-      type: object
-      properties:
-        role:
-          enum:
-          - user
-          - assistant
-          type: string
-          description: '* `user` - user
-
-            * `assistant` - assistant'
-          x-spec-enum-id: da623bca3e193af6
-        content:
-          type: string
-          maxLength: 3000
-      required:
-      - content
-      - role
-    DiagnoseRequest:
-      type: object
-      properties:
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: ko
-        jobUid:
-          type: string
-          maxLength: 36
-      required:
-      - jobUid
-    AiRecommendationChange:
-      type: object
-      properties:
-        path:
-          type: string
-        before: {}
-        after: {}
-        reason:
-          type: string
-      required:
-      - after
-      - before
-      - path
-      - reason
     AiChatResponse:
       type: object
       properties:
@@ -355,21 +342,34 @@ components:
       - recommendation
       - sources
       - supportSummary
-    AiDiagnosisResponse:
+    AiChatHistoryItem:
       type: object
       properties:
-        summary:
+        role:
+          enum:
+          - user
+          - assistant
           type: string
-        findings:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiFinding'
-        needsHumanSupport:
-          type: boolean
-        supportSummary:
+          description: '* `user` - user
+
+            * `assistant` - assistant'
+          x-spec-enum-id: da623bca3e193af6
+        content:
           type: string
+          maxLength: 3000
       required:
-      - findings
-      - needsHumanSupport
-      - summary
-      - supportSummary
+      - content
+      - role
+    AiAssistRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
