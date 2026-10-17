@@ -339,53 +339,18 @@ components:
           type: string
       required:
       - projectUid
-    SketchProjectState:
+    SketchProjectStateUpdate:
       type: object
+      description: Reject retired client controls instead of silently accepting them.
       properties:
-        projectId:
-          type: integer
-        projectUid:
-          type: string
-        projectStatus:
-          enum:
-          - draft
-          - active
-          type: string
-          description: '* `draft` - draft
-
-            * `active` - active'
-          x-spec-enum-id: bfb862cdb2d36f11
         revision:
           type: integer
-        canEdit:
-          type: boolean
-        state: {}
+          minimum: 0
+        state:
+          $ref: '#/components/schemas/SketchInput'
       required:
-      - canEdit
-      - projectId
-      - projectStatus
-      - projectUid
       - revision
       - state
-    SketchFinishResponse:
-      type: object
-      properties:
-        terminal:
-          type: boolean
-        generation:
-          type: integer
-      required:
-      - generation
-      - terminal
-    SketchSessionList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SketchSession'
-      required:
-      - results
     SketchInput:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -419,24 +384,16 @@ components:
       - penWidthMm
       - quality
       - strokes
-    SketchGeometry:
+    SketchCancelResponse:
       type: object
-      description: Reject retired client controls instead of silently accepting them.
       properties:
-        board:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        strokes:
-          type: array
-          items: {}
-        penWidthMm:
-          type: number
-          format: double
-          minimum: 1.0e-06
+        status:
+          type: string
+        generation:
+          type: integer
       required:
-      - strokes
+      - generation
+      - status
     SketchSession:
       type: object
       properties:
@@ -498,6 +455,43 @@ components:
       - resultSummary
       - status
       - streamMetadata
+    SketchSessionList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SketchSession'
+      required:
+      - results
+    SketchGeometry:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+      required:
+      - strokes
+    SketchFinishResponse:
+      type: object
+      properties:
+        terminal:
+          type: boolean
+        generation:
+          type: integer
+      required:
+      - generation
+      - terminal
     SketchProjectCreate:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -510,28 +504,6 @@ components:
           $ref: '#/components/schemas/SketchInput'
       required:
       - state
-    SketchProjectStateUpdate:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        revision:
-          type: integer
-          minimum: 0
-        state:
-          $ref: '#/components/schemas/SketchInput'
-      required:
-      - revision
-      - state
-    SketchCancelResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        generation:
-          type: integer
-      required:
-      - generation
-      - status
     SketchConditions:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -541,3 +513,31 @@ components:
           additionalProperties: {}
       required:
       - conditions
+    SketchProjectState:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectUid:
+          type: string
+        projectStatus:
+          enum:
+          - draft
+          - active
+          type: string
+          description: '* `draft` - draft
+
+            * `active` - active'
+          x-spec-enum-id: bfb862cdb2d36f11
+        revision:
+          type: integer
+        canEdit:
+          type: boolean
+        state: {}
+      required:
+      - canEdit
+      - projectId
+      - projectStatus
+      - projectUid
+      - revision
+      - state

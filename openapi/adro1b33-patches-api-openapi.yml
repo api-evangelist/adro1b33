@@ -368,14 +368,78 @@ paths:
           description: ''
 components:
   schemas:
-    PatchProxyMaskFinalize:
+    PatchMergeResponse:
       type: object
       properties:
-        reservationId:
+        status:
           type: string
-          format: uuid
+        patchId:
+          type: integer
+        batchJobId:
+          type: string
+        mergeJobId:
+          type: integer
+        patch:
+          allOf:
+          - $ref: '#/components/schemas/Patch'
+          readOnly: true
       required:
-      - reservationId
+      - batchJobId
+      - mergeJobId
+      - patch
+      - patchId
+      - status
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status
+    PatchProxyArtifactPresign:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        sizeBytes:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          default: application/octet-stream
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+      required:
+      - kind
+      - sizeBytes
     Patch:
       type: object
       properties:
@@ -703,27 +767,14 @@ components:
       - id
       - inputPreviewPoints
       - label
-    PatchMergeResponse:
+    PatchProxyMaskFinalize:
       type: object
       properties:
-        status:
+        reservationId:
           type: string
-        patchId:
-          type: integer
-        batchJobId:
-          type: string
-        mergeJobId:
-          type: integer
-        patch:
-          allOf:
-          - $ref: '#/components/schemas/Patch'
-          readOnly: true
+          format: uuid
       required:
-      - batchJobId
-      - mergeJobId
-      - patch
-      - patchId
-      - status
+      - reservationId
     PatchMerge:
       type: object
       properties:
@@ -735,54 +786,3 @@ components:
           minItems: 2
       required:
       - patchIds
-    PatchProxyArtifactPresign:
-      type: object
-      properties:
-        kind:
-          enum:
-          - proxy_mesh
-          - proxy_layout
-          - atlas
-          type: string
-          description: '* `proxy_mesh` - proxy_mesh
-
-            * `proxy_layout` - proxy_layout
-
-            * `atlas` - atlas'
-          x-spec-enum-id: 52920026f3197740
-        sizeBytes:
-          type: integer
-          minimum: 1
-        contentType:
-          type: string
-          default: application/octet-stream
-        proxyWorkerRevision:
-          type: string
-        proxyArtifactSignature:
-          type: string
-        proxyCacheKey:
-          type: string
-      required:
-      - kind
-      - sizeBytes
-    PatchUnmergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        restoredPatchIds:
-          type: array
-          items:
-            type: integer
-        restoredPatches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - patchId
-      - restoredPatchIds
-      - restoredPatches
-      - status

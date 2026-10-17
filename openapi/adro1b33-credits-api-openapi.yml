@@ -271,6 +271,164 @@ paths:
           description: ''
 components:
   schemas:
+    PaymentCancellation:
+      type: object
+      properties:
+        cancellationId:
+          type: string
+          maxLength: 64
+        amount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        reason:
+          type: string
+          maxLength: 200
+        requestedByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - amount
+      - cancellationId
+      - requestedByUserId
+    PriceDisplay:
+      type: object
+      properties:
+        supplyAmount:
+          type: string
+        taxAmount:
+          type: string
+        totalAmount:
+          type: string
+        unitPrice:
+          type: string
+        discountRate:
+          type:
+          - string
+          - 'null'
+      required:
+      - supplyAmount
+      - taxAmount
+      - totalAmount
+    BundlePurchase:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          readOnly: true
+        paymentStatus:
+          type: string
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        bundleId:
+          type: integer
+          readOnly: true
+        creditsSnapshot:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        priceSnapshotMinor:
+          type: integer
+          readOnly: true
+        currencySnapshot:
+          type: string
+          maxLength: 8
+        display:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bundleId
+      - createdAt
+      - creditsSnapshot
+      - currencySnapshot
+      - display
+      - paymentId
+      - paymentStatus
+      - priceSnapshotMinor
+      - teamId
+    CreditEstimateVariables:
+      type: object
+      properties:
+        cpu:
+          type:
+          - integer
+          - 'null'
+        gpu:
+          type:
+          - integer
+          - 'null'
+        predSimulatingSeconds:
+          type: integer
+        projectModeMult:
+          type: number
+          format: double
+        objectiveFuncMult:
+          type: number
+          format: double
+        optSteps:
+          type: integer
+        creditPerOptStep:
+          type: number
+          format: double
+        meshCells:
+          type:
+          - integer
+          - 'null'
+        latticePoints:
+          type:
+          - integer
+          - 'null'
+        optAreaMult:
+          type: number
+          format: double
+        optTargetMult:
+          type: number
+          format: double
+      required:
+      - cpu
+      - creditPerOptStep
+      - gpu
+      - latticePoints
+      - meshCells
+      - objectiveFuncMult
+      - optAreaMult
+      - optSteps
+      - optTargetMult
+      - predSimulatingSeconds
+      - projectModeMult
+    PriceEntry:
+      type: object
+      properties:
+        currency:
+          type: string
+        supplyAmountMinor:
+          type: integer
+        taxAmountMinor:
+          type: integer
+        totalAmountMinor:
+          type: integer
+        display:
+          $ref: '#/components/schemas/PriceDisplay'
+      required:
+      - currency
+      - display
+      - supplyAmountMinor
+      - taxAmountMinor
+      - totalAmountMinor
     CreditTransaction:
       type: object
       properties:
@@ -317,49 +475,163 @@ components:
       - operationIdempotencyKey
       - operationKind
       - sequence
-    BundlePurchase:
+    CreditOperation:
       type: object
       properties:
-        paymentId:
-          type: string
-          readOnly: true
-        paymentStatus:
-          type: string
-          readOnly: true
-        teamId:
+        id:
           type: integer
           readOnly: true
-        bundleId:
+        kind:
+          enum:
+          - GRANT
+          - CONSUME
+          - REFUND_REVERSAL
+          - EXPIRE
+          - COMPENSATION
+          type: string
+          description: '* `GRANT` - 발급
+
+            * `CONSUME` - 차감(사용)
+
+            * `REFUND_REVERSAL` - 환불 회수
+
+            * `EXPIRE` - 만료 소멸
+
+            * `COMPENSATION` - 오류 보상 지급'
+          x-spec-enum-id: 9a773a70abb3a2bc
+        totalDelta:
           type: integer
-          readOnly: true
-        creditsSnapshot:
+          maximum: 2147483647
+          minimum: -2147483648
+        walletBalanceAfter:
           type: integer
           maximum: 2147483647
           minimum: 0
-        priceSnapshotMinor:
+        unmetAmount:
           type: integer
-          readOnly: true
-        currencySnapshot:
+          maximum: 2147483647
+          minimum: 0
+        idempotencyKey:
           type: string
-          maxLength: 8
-        display:
-          type: object
-          additionalProperties: {}
-          readOnly: true
+          maxLength: 128
+        note:
+          type: string
+          maxLength: 200
         createdAt:
           type: string
           format: date-time
           readOnly: true
       required:
-      - bundleId
       - createdAt
-      - creditsSnapshot
-      - currencySnapshot
-      - display
-      - paymentId
-      - paymentStatus
-      - priceSnapshotMinor
+      - id
+      - idempotencyKey
+      - kind
+      - totalDelta
+      - walletBalanceAfter
+    BundlePurchaseStartRequest:
+      type: object
+      properties:
+        teamId:
+          type: integer
+        channelKey:
+          type: string
+          maxLength: 128
+        orderName:
+          type: string
+          maxLength: 200
+        currency:
+          type: string
+          maxLength: 8
+        billingCountry:
+          type: string
+          maxLength: 2
+        provider:
+          enum:
+          - payletter
+          - paypal
+          - galaxia
+          type: string
+          description: '* `payletter` - PayLetter
+
+            * `paypal` - PayPal
+
+            * `galaxia` - Galaxia'
+          x-spec-enum-id: 57f6d0e06595d82e
+      required:
+      - provider
       - teamId
+    CreditEstimateResponse:
+      type: object
+      properties:
+        variables:
+          $ref: '#/components/schemas/CreditEstimateVariables'
+        estimates:
+          $ref: '#/components/schemas/CreditEstimateTotals'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditEstimateWarning'
+      required:
+      - estimates
+      - variables
+      - warnings
+    CreditWallet:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teamId:
+          type: integer
+          readOnly: true
+        teamName:
+          type: string
+          readOnly: true
+        balance:
+          type: integer
+          readOnly: true
+        bucketsBySource:
+          type: object
+          additionalProperties:
+            type: integer
+          readOnly: true
+        billingMode:
+          type: string
+          description: 현재 테넌트의 실제 결제 모드 (TEAM/TENANT). FE 가 Add Credits 숨김에 사용.
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - balance
+      - billingMode
+      - bucketsBySource
+      - createdAt
+      - id
+      - teamId
+      - teamName
+      - updatedAt
+    CreditEstimateWarning:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        predictedCells:
+          type: integer
+        cellLimit:
+          type: integer
+      required:
+      - cellLimit
+      - code
+      - message
+      - predictedCells
     CreditBucket:
       type: object
       properties:
@@ -438,287 +710,6 @@ components:
       - isActive
       - remainingAmount
       - source
-    CreditEstimateTotals:
-      type: object
-      properties:
-        total:
-          type: integer
-      required:
-      - total
-    PriceEntry:
-      type: object
-      properties:
-        currency:
-          type: string
-        supplyAmountMinor:
-          type: integer
-        taxAmountMinor:
-          type: integer
-        totalAmountMinor:
-          type: integer
-        display:
-          $ref: '#/components/schemas/PriceDisplay'
-      required:
-      - currency
-      - display
-      - supplyAmountMinor
-      - taxAmountMinor
-      - totalAmountMinor
-    PriceDisplay:
-      type: object
-      properties:
-        supplyAmount:
-          type: string
-        taxAmount:
-          type: string
-        totalAmount:
-          type: string
-        unitPrice:
-          type: string
-        discountRate:
-          type:
-          - string
-          - 'null'
-      required:
-      - supplyAmount
-      - taxAmount
-      - totalAmount
-    CreditOperation:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        kind:
-          enum:
-          - GRANT
-          - CONSUME
-          - REFUND_REVERSAL
-          - EXPIRE
-          - COMPENSATION
-          type: string
-          description: '* `GRANT` - 발급
-
-            * `CONSUME` - 차감(사용)
-
-            * `REFUND_REVERSAL` - 환불 회수
-
-            * `EXPIRE` - 만료 소멸
-
-            * `COMPENSATION` - 오류 보상 지급'
-          x-spec-enum-id: 9a773a70abb3a2bc
-        totalDelta:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        walletBalanceAfter:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        unmetAmount:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        idempotencyKey:
-          type: string
-          maxLength: 128
-        note:
-          type: string
-          maxLength: 200
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - id
-      - idempotencyKey
-      - kind
-      - totalDelta
-      - walletBalanceAfter
-    CreditEstimateWarning:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        predictedCells:
-          type: integer
-        cellLimit:
-          type: integer
-      required:
-      - cellLimit
-      - code
-      - message
-      - predictedCells
-    CreditEstimateVariables:
-      type: object
-      properties:
-        cpu:
-          type:
-          - integer
-          - 'null'
-        gpu:
-          type:
-          - integer
-          - 'null'
-        predSimulatingSeconds:
-          type: integer
-        projectModeMult:
-          type: number
-          format: double
-        objectiveFuncMult:
-          type: number
-          format: double
-        optSteps:
-          type: integer
-        creditPerOptStep:
-          type: number
-          format: double
-        meshCells:
-          type:
-          - integer
-          - 'null'
-        latticePoints:
-          type:
-          - integer
-          - 'null'
-        optAreaMult:
-          type: number
-          format: double
-        optTargetMult:
-          type: number
-          format: double
-      required:
-      - cpu
-      - creditPerOptStep
-      - gpu
-      - latticePoints
-      - meshCells
-      - objectiveFuncMult
-      - optAreaMult
-      - optSteps
-      - optTargetMult
-      - predSimulatingSeconds
-      - projectModeMult
-    CreditEstimateResponse:
-      type: object
-      properties:
-        variables:
-          $ref: '#/components/schemas/CreditEstimateVariables'
-        estimates:
-          $ref: '#/components/schemas/CreditEstimateTotals'
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditEstimateWarning'
-      required:
-      - estimates
-      - variables
-      - warnings
-    PaymentCancellation:
-      type: object
-      properties:
-        cancellationId:
-          type: string
-          maxLength: 64
-        amount:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        reason:
-          type: string
-          maxLength: 200
-        requestedByUserId:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        cancelledAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      required:
-      - amount
-      - cancellationId
-      - requestedByUserId
-    CreditBundle:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 120
-        description:
-          type: string
-        itemCode:
-          type: string
-          maxLength: 10
-        price:
-          allOf:
-          - $ref: '#/components/schemas/PriceEntry'
-          readOnly: true
-        credits:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        isActive:
-          type: boolean
-        sortOrder:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - credits
-      - id
-      - name
-      - price
-      - updatedAt
-    BundlePurchaseStartRequest:
-      type: object
-      properties:
-        teamId:
-          type: integer
-        channelKey:
-          type: string
-          maxLength: 128
-        orderName:
-          type: string
-          maxLength: 200
-        currency:
-          type: string
-          maxLength: 8
-        billingCountry:
-          type: string
-          maxLength: 2
-        provider:
-          enum:
-          - payletter
-          - paypal
-          - galaxia
-          type: string
-          description: '* `payletter` - PayLetter
-
-            * `paypal` - PayPal
-
-            * `galaxia` - Galaxia'
-          x-spec-enum-id: 57f6d0e06595d82e
-      required:
-      - provider
-      - teamId
     OneTimePrepareResponse:
       type: object
       description: "단건결제 준비 응답. PaymentSerializer 의 모든 필드 + bypass.\n\nbypass: PG 별로 프론트 SDK 호출에 필요한 추가 페이로드 (예: Galaxia ITEM_CODE).\n        Galaxia/PayLetter/PayPal 각각 백엔드가 채워 보내므로 프론트는 그대로\n        `PortOne.requestPayment({..., bypass})` 의 `bypass` 인자에 전달."
@@ -871,30 +862,34 @@ components:
       - teamId
       - teamName
       - type
-    CreditWallet:
+    CreditBundle:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-        teamId:
-          type: integer
-          readOnly: true
-        teamName:
+        name:
           type: string
-          readOnly: true
-        balance:
-          type: integer
-          readOnly: true
-        bucketsBySource:
-          type: object
-          additionalProperties:
-            type: integer
-          readOnly: true
-        billingMode:
+          maxLength: 120
+        description:
           type: string
-          description: 현재 테넌트의 실제 결제 모드 (TEAM/TENANT). FE 가 Add Credits 숨김에 사용.
+        itemCode:
+          type: string
+          maxLength: 10
+        price:
+          allOf:
+          - $ref: '#/components/schemas/PriceEntry'
           readOnly: true
+        credits:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
         createdAt:
           type: string
           format: date-time
@@ -904,11 +899,16 @@ components:
           format: date-time
           readOnly: true
       required:
-      - balance
-      - billingMode
-      - bucketsBySource
       - createdAt
+      - credits
       - id
-      - teamId
-      - teamName
+      - name
+      - price
       - updatedAt
+    CreditEstimateTotals:
+      type: object
+      properties:
+        total:
+          type: integer
+      required:
+      - total
