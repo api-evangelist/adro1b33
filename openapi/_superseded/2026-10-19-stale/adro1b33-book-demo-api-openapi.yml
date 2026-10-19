@@ -1,0 +1,178 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Book Demo API
+  version: 1.0.0
+tags:
+- name: Book Demo
+paths:
+  /book_demo/:
+    post:
+      operationId: book_demo_create
+      summary: 데모 예약 신청
+      tags:
+      - Book Demo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDemoCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookDemoCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookDemoCreate'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDemoCreate'
+          description: ''
+components:
+  schemas:
+    BookDemoCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        company:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phoneNumber:
+          type: string
+          maxLength: 50
+        industry:
+          enum:
+          - Automotive
+          - Motorsports
+          - Aerospace & Aviation
+          - Defense
+          - Industrial Manufacturing
+          - Consumer Electronics
+          - Robotics
+          - Transportation & Mobility
+          - Marine & Shipbuilding
+          - Software & IT
+          - AI & Machine Learning
+          - Simulation & Modeling
+          - Research & Academia
+          - Engineering Services
+          - Startup
+          - Consulting
+          - Media & Marketing
+          - Other
+          type: string
+          description: '* `Automotive` - Automotive
+
+            * `Motorsports` - Motorsports
+
+            * `Aerospace & Aviation` - Aerospace & Aviation
+
+            * `Defense` - Defense
+
+            * `Industrial Manufacturing` - Industrial Manufacturing
+
+            * `Consumer Electronics` - Consumer Electronics
+
+            * `Robotics` - Robotics
+
+            * `Transportation & Mobility` - Transportation & Mobility
+
+            * `Marine & Shipbuilding` - Marine & Shipbuilding
+
+            * `Software & IT` - Software & IT
+
+            * `AI & Machine Learning` - AI & Machine Learning
+
+            * `Simulation & Modeling` - Simulation & Modeling
+
+            * `Research & Academia` - Research & Academia
+
+            * `Engineering Services` - Engineering Services
+
+            * `Startup` - Startup
+
+            * `Consulting` - Consulting
+
+            * `Media & Marketing` - Media & Marketing
+
+            * `Other` - Other'
+          x-spec-enum-id: c7a630fa0a654937
+        jobRole:
+          enum:
+          - Exterior Designer
+          - Interior Designer
+          - Concept Designer
+          - Product Designer
+          - Modeler / 3D Artist
+          - Aerodynamics Engineer
+          - CFD Engineer
+          - Mechanical Engineer
+          - Performance Engineer
+          - Product Manager
+          - Founder / CEO
+          - Research Scientist
+          - Student / Intern
+          - Consultant
+          - Other
+          type: string
+          description: '* `Exterior Designer` - Exterior Designer
+
+            * `Interior Designer` - Interior Designer
+
+            * `Concept Designer` - Concept Designer
+
+            * `Product Designer` - Product Designer
+
+            * `Modeler / 3D Artist` - Modeler / 3D Artist
+
+            * `Aerodynamics Engineer` - Aerodynamics Engineer
+
+            * `CFD Engineer` - CFD Engineer
+
+            * `Mechanical Engineer` - Mechanical Engineer
+
+            * `Performance Engineer` - Performance Engineer
+
+            * `Product Manager` - Product Manager
+
+            * `Founder / CEO` - Founder / CEO
+
+            * `Research Scientist` - Research Scientist
+
+            * `Student / Intern` - Student / Intern
+
+            * `Consultant` - Consultant
+
+            * `Other` - Other'
+          x-spec-enum-id: b1c4d7d3d3c29c96
+        privacyConsent:
+          type: boolean
+        marketingConsent:
+          type: boolean
+      required:
+      - email
+      - firstName
+      - id
+      - lastName
+      - name
+      - phoneNumber
+      - privacyConsent

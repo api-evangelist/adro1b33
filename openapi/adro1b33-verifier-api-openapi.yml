@@ -106,3 +106,8 @@ components:
       required:
       - email
       - purpose
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

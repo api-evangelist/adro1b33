@@ -98,6 +98,7 @@ components:
           - S2_REPLAY_FRAMES
           - RACING_BASELINE_GLB
           - RACING_OPTIMIZED_GLB
+          - CWT_RESULT
           - USER_PROFILE_IMAGE
           type: string
           description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
@@ -164,8 +165,10 @@ components:
 
             * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
 
+            * `CWT_RESULT` - Cornering Wind Tunnel Result
+
             * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
+          x-spec-enum-id: ffcff9a4293b8568
           writeOnly: true
           default: PROJECT_SOURCE_STL
         fileName:
@@ -200,3 +203,8 @@ components:
       - projectId
       - s3Bucket
       - url
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

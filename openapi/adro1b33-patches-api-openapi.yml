@@ -368,78 +368,14 @@ paths:
           description: ''
 components:
   schemas:
-    PatchMergeResponse:
+    PatchProxyMaskFinalize:
       type: object
       properties:
-        status:
+        reservationId:
           type: string
-        patchId:
-          type: integer
-        batchJobId:
-          type: string
-        mergeJobId:
-          type: integer
-        patch:
-          allOf:
-          - $ref: '#/components/schemas/Patch'
-          readOnly: true
+          format: uuid
       required:
-      - batchJobId
-      - mergeJobId
-      - patch
-      - patchId
-      - status
-    PatchUnmergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        restoredPatchIds:
-          type: array
-          items:
-            type: integer
-        restoredPatches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - patchId
-      - restoredPatchIds
-      - restoredPatches
-      - status
-    PatchProxyArtifactPresign:
-      type: object
-      properties:
-        kind:
-          enum:
-          - proxy_mesh
-          - proxy_layout
-          - atlas
-          type: string
-          description: '* `proxy_mesh` - proxy_mesh
-
-            * `proxy_layout` - proxy_layout
-
-            * `atlas` - atlas'
-          x-spec-enum-id: 52920026f3197740
-        sizeBytes:
-          type: integer
-          minimum: 1
-        contentType:
-          type: string
-          default: application/octet-stream
-        proxyWorkerRevision:
-          type: string
-        proxyArtifactSignature:
-          type: string
-        proxyCacheKey:
-          type: string
-      required:
-      - kind
-      - sizeBytes
+      - reservationId
     Patch:
       type: object
       properties:
@@ -684,6 +620,96 @@ components:
       - sourcePatchId
       - uid
       - updatedAt
+    PatchMergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        batchJobId:
+          type: string
+        mergeJobId:
+          type: integer
+        patch:
+          allOf:
+          - $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - batchJobId
+      - mergeJobId
+      - patch
+      - patchId
+      - status
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status
+    PatchProxyArtifactPresign:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        sizeBytes:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          default: application/octet-stream
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+      required:
+      - kind
+      - sizeBytes
     PatchProxyArtifact:
       type: object
       properties:
@@ -749,32 +775,6 @@ components:
         reservationId:
           type: string
           format: uuid
-    MergedSourcePatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        boundingBox:
-          readOnly: true
-        inputPreviewPoints:
-          readOnly: true
-      required:
-      - boundingBox
-      - id
-      - inputPreviewPoints
-      - label
-    PatchProxyMaskFinalize:
-      type: object
-      properties:
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - reservationId
     PatchMerge:
       type: object
       properties:
@@ -786,3 +786,8 @@ components:
           minItems: 2
       required:
       - patchIds
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

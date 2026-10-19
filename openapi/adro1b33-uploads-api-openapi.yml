@@ -32,31 +32,6 @@ paths:
           description: ''
       summary: Uploads list
       x-summary-source: derived
-    post:
-      operationId: uploads_create
-      tags:
-      - Uploads
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileUploadTracker'
-          description: ''
-      summary: Uploads create
-      x-summary-source: derived
   /uploads/{id}/:
     get:
       operationId: uploads_retrieve
@@ -78,112 +53,8 @@ paths:
           description: ''
       summary: Uploads retrieve
       x-summary-source: derived
-    put:
-      operationId: uploads_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Uploads
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/FileUploadTracker'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileUploadTracker'
-          description: ''
-      summary: Uploads update
-      x-summary-source: derived
-    patch:
-      operationId: uploads_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Uploads
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedFileUploadTracker'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedFileUploadTracker'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedFileUploadTracker'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileUploadTracker'
-          description: ''
-      summary: Uploads partial update
-      x-summary-source: derived
-    delete:
-      operationId: uploads_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 파일 업로드 추적을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Uploads
-      responses:
-        '204':
-          description: No response body
-      summary: Uploads destroy
-      x-summary-source: derived
 components:
   schemas:
-    PaginatedFileUploadTrackerList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileUploadTracker'
     Artifact:
       type: object
       properties:
@@ -227,6 +98,7 @@ components:
           - S2_REPLAY_FRAMES
           - RACING_BASELINE_GLB
           - RACING_OPTIMIZED_GLB
+          - CWT_RESULT
           - USER_PROFILE_IMAGE
           type: string
           description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
@@ -293,8 +165,10 @@ components:
 
             * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
 
+            * `CWT_RESULT` - Cornering Wind Tunnel Result
+
             * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
+          x-spec-enum-id: ffcff9a4293b8568
         storageProvider:
           enum:
           - S3
@@ -349,6 +223,31 @@ components:
       - s3Key
       - s3Url
       - uid
+    PaginatedFileUploadTrackerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileUploadTracker'
     FileUploadTracker:
       type: object
       properties:
@@ -359,8 +258,10 @@ components:
           type: integer
           readOnly: true
         uploadId:
-          type: string
-          maxLength: 255
+          type:
+          - string
+          - 'null'
+          readOnly: true
         fileName:
           type: string
           maxLength: 255
@@ -380,6 +281,7 @@ components:
           enum:
           - pending
           - uploading
+          - completing
           - completed
           - failed
           - cancelled
@@ -388,12 +290,14 @@ components:
 
             * `uploading` - Uploading
 
+            * `completing` - Completing
+
             * `completed` - Completed
 
             * `failed` - Failed
 
             * `cancelled` - Cancelled'
-          x-spec-enum-id: 09b6c2bacd3dd5f3
+          x-spec-enum-id: 54ac213d1b7bc40e
         progressPercent:
           type: integer
           maximum: 2147483647
@@ -405,10 +309,10 @@ components:
           format: int64
         s3Bucket:
           type: string
-          maxLength: 255
+          readOnly: true
         s3Key:
           type: string
-          maxLength: 1024
+          readOnly: true
         artifact:
           allOf:
           - $ref: '#/components/schemas/Artifact'
@@ -442,85 +346,8 @@ components:
       - updatedAt
       - uploadId
       - userId
-    PatchedFileUploadTracker:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        userId:
-          type: integer
-          readOnly: true
-        uploadId:
-          type: string
-          maxLength: 255
-        fileName:
-          type: string
-          maxLength: 255
-        contentType:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        fileSize:
-          type:
-          - integer
-          - 'null'
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        status:
-          enum:
-          - pending
-          - uploading
-          - completed
-          - failed
-          - cancelled
-          type: string
-          description: '* `pending` - Pending
-
-            * `uploading` - Uploading
-
-            * `completed` - Completed
-
-            * `failed` - Failed
-
-            * `cancelled` - Cancelled'
-          x-spec-enum-id: 09b6c2bacd3dd5f3
-        progressPercent:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        bytesUploaded:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        s3Bucket:
-          type: string
-          maxLength: 255
-        s3Key:
-          type: string
-          maxLength: 1024
-        artifact:
-          allOf:
-          - $ref: '#/components/schemas/Artifact'
-          readOnly: true
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        completedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

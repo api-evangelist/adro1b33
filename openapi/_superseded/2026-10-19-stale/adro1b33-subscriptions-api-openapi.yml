@@ -1,0 +1,42 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Subscriptions API
+  version: 1.0.0
+tags:
+- name: Subscriptions
+paths:
+  /teams/{team_uid}/retained-results/:
+    get:
+      operationId: teams_retained_results_retrieve
+      summary: 구독 종료 팀의 결과 다운로드 목록
+      parameters:
+      - in: path
+        name: team_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Subscriptions
+      responses:
+        '200':
+          description: No response body
+  /teams/{team_uid}/retained-results/{artifact_uid}/download-url/:
+    post:
+      operationId: teams_retained_results_download_url_create
+      summary: 구독 종료 팀의 승인된 결과 Artifact 다운로드 URL
+      parameters:
+      - in: path
+        name: artifact_uid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: team_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Subscriptions
+      responses:
+        '200':
+          description: No response body

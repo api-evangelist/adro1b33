@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Landing Announcements API
+  version: 1.0.0
+tags:
+- name: landing-announcements
+paths:
+  /landing-announcements/:
+    get:
+      operationId: landing_announcements_retrieve
+      tags:
+      - landing-announcements
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingSiteAnnouncementList'
+          description: ''
+      summary: Landing announcements retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    LandingSiteAnnouncement:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        message:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+        category:
+          enum:
+          - system
+          - development
+          type: string
+          description: '* `system` - System
+
+            * `development` - Development'
+          x-spec-enum-id: 4aa83ace04c14f02
+        priority:
+          enum:
+          - normal
+          - urgent
+          type: string
+          description: '* `normal` - Normal
+
+            * `urgent` - Urgent'
+          x-spec-enum-id: 123f1ce285104da5
+        publishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteAnnouncementAttachment'
+          readOnly: true
+        landingDisplay:
+          enum:
+          - none
+          - banner
+          - modal
+          type: string
+          description: '* `none` - None
+
+            * `banner` - Banner
+
+            * `modal` - Modal'
+          x-spec-enum-id: 8b5562f4bf69f6a4
+      required:
+      - attachments
+      - id
+      - message
+      - updatedAt
+    SiteAnnouncementAttachment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        kind:
+          enum:
+          - image
+          - file
+          type: string
+          description: '* `image` - Image
+
+            * `file` - File'
+          x-spec-enum-id: 7a240f368c7b0df7
+        originalName:
+          type: string
+          maxLength: 255
+        contentType:
+          type: string
+          maxLength: 150
+        sizeBytes:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        url:
+          type: string
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - id
+      - kind
+      - originalName
+      - sizeBytes
+      - url
+    LandingSiteAnnouncementList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LandingSiteAnnouncement'
+          readOnly: true
+      required:
+      - results
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

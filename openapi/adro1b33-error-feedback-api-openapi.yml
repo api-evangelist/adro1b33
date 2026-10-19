@@ -15,3 +15,9 @@ paths:
           description: No response body
       summary: Error feedback create
       x-summary-source: derived
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

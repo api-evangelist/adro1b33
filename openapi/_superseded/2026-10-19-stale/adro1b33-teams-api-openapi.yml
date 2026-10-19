@@ -1,0 +1,187 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Teams API
+  version: 1.0.0
+tags:
+- name: Teams
+paths:
+  /teams/:
+    get:
+      operationId: teams_retrieve
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams retrieve
+      x-summary-source: derived
+    post:
+      operationId: teams_create
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams create
+      x-summary-source: derived
+  /teams/{team_id}/:
+    patch:
+      operationId: teams_partial_update
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams partial update
+      x-summary-source: derived
+    delete:
+      operationId: teams_destroy
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '204':
+          description: No response body
+      summary: Teams destroy
+      x-summary-source: derived
+  /teams/{team_id}/invitations/:
+    get:
+      operationId: teams_invitations_retrieve
+      description: '미가입 이메일을 팀에 초대. 가입된 유저는 TeamMemberListCreateView(members API)로
+
+        바로 추가하고, 이 API는 아직 계정이 없는 이메일에게 초대장 메일을 보내는 용도다.'
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams invitations retrieve
+      x-summary-source: derived
+    post:
+      operationId: teams_invitations_create
+      description: '미가입 이메일을 팀에 초대. 가입된 유저는 TeamMemberListCreateView(members API)로
+
+        바로 추가하고, 이 API는 아직 계정이 없는 이메일에게 초대장 메일을 보내는 용도다.'
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams invitations create
+      x-summary-source: derived
+  /teams/{team_id}/invitations/{id}/:
+    delete:
+      operationId: teams_invitations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '204':
+          description: No response body
+      summary: Teams invitations destroy
+      x-summary-source: derived
+  /teams/{team_id}/members/:
+    get:
+      operationId: teams_members_retrieve
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams members retrieve
+      x-summary-source: derived
+    post:
+      operationId: teams_members_create
+      parameters:
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams members create
+      x-summary-source: derived
+  /teams/{team_id}/members/{id}/:
+    patch:
+      operationId: teams_members_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '200':
+          description: No response body
+      summary: Teams members partial update
+      x-summary-source: derived
+    delete:
+      operationId: teams_members_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: team_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Teams
+      responses:
+        '204':
+          description: No response body
+      summary: Teams members destroy
+      x-summary-source: derived

@@ -5,6 +5,40 @@ info:
 tags:
 - name: Sketch
 paths:
+  /sketch/generate/{generation_id}/cancel/:
+    post:
+      operationId: sketch_generate_cancel_create
+      parameters:
+      - in: path
+        name: generation_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          description: No response body
+      summary: Sketch generate cancel create
+      x-summary-source: derived
+  /sketch/generate/{generation_id}/restore/:
+    post:
+      operationId: sketch_generate_restore_create
+      parameters:
+      - in: path
+        name: generation_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Sketch
+      responses:
+        '200':
+          description: No response body
+      summary: Sketch generate restore create
+      x-summary-source: derived
   /sketch/projects/:
     post:
       operationId: sketch_projects_create
@@ -99,26 +133,6 @@ paths:
                 $ref: '#/components/schemas/SketchProjectState'
           description: ''
       summary: Sketch projects state update
-      x-summary-source: derived
-  /sketch/renderings/:
-    post:
-      operationId: sketch_renderings_create
-      description: '선화 한 장을 사실적 렌더로 바꿔 돌려준다.
-
-
-        형상은 클라이언트의 3D 차체가 이미 정했다. 여기서 생성 모델이 하는 일은
-
-        재질과 빛을 입히는 것뿐이고, 프롬프트가 실루엣·시점 보존을 강제한다 —
-
-        그래야 여러 시점의 렌더가 같은 차를 가리키고, 같은 차체에서 나온 공력
-
-        지표와도 어긋나지 않는다.'
-      tags:
-      - Sketch
-      responses:
-        '200':
-          description: No response body
-      summary: Sketch renderings create
       x-summary-source: derived
   /sketch/sessions/:
     post:
@@ -339,6 +353,55 @@ components:
           type: string
       required:
       - projectUid
+    SketchProjectState:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        projectUid:
+          type: string
+        projectStatus:
+          enum:
+          - draft
+          - open
+          - closed
+          type: string
+          description: '* `draft` - draft
+
+            * `open` - open
+
+            * `closed` - closed'
+          x-spec-enum-id: 906e3b46ea84ba5e
+        revision:
+          type: integer
+        canEdit:
+          type: boolean
+        state: {}
+      required:
+      - canEdit
+      - projectId
+      - projectStatus
+      - projectUid
+      - revision
+      - state
+    SketchGeometry:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        board:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        strokes:
+          type: array
+          items: {}
+        penWidthMm:
+          type: number
+          format: double
+          minimum: 1.0e-06
+      required:
+      - strokes
     SketchProjectStateUpdate:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -350,6 +413,28 @@ components:
           $ref: '#/components/schemas/SketchInput'
       required:
       - revision
+      - state
+    SketchFinishResponse:
+      type: object
+      properties:
+        terminal:
+          type: boolean
+        generation:
+          type: integer
+      required:
+      - generation
+      - terminal
+    SketchProjectCreate:
+      type: object
+      description: Reject retired client controls instead of silently accepting them.
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        state:
+          $ref: '#/components/schemas/SketchInput'
+      required:
       - state
     SketchInput:
       type: object
@@ -384,6 +469,15 @@ components:
       - penWidthMm
       - quality
       - strokes
+    SketchSessionList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SketchSession'
+      required:
+      - results
     SketchCancelResponse:
       type: object
       properties:
@@ -455,55 +549,6 @@ components:
       - resultSummary
       - status
       - streamMetadata
-    SketchSessionList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SketchSession'
-      required:
-      - results
-    SketchGeometry:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        board:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        strokes:
-          type: array
-          items: {}
-        penWidthMm:
-          type: number
-          format: double
-          minimum: 1.0e-06
-      required:
-      - strokes
-    SketchFinishResponse:
-      type: object
-      properties:
-        terminal:
-          type: boolean
-        generation:
-          type: integer
-      required:
-      - generation
-      - terminal
-    SketchProjectCreate:
-      type: object
-      description: Reject retired client controls instead of silently accepting them.
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        state:
-          $ref: '#/components/schemas/SketchInput'
-      required:
-      - state
     SketchConditions:
       type: object
       description: Reject retired client controls instead of silently accepting them.
@@ -513,31 +558,8 @@ components:
           additionalProperties: {}
       required:
       - conditions
-    SketchProjectState:
-      type: object
-      properties:
-        projectId:
-          type: integer
-        projectUid:
-          type: string
-        projectStatus:
-          enum:
-          - draft
-          - active
-          type: string
-          description: '* `draft` - draft
-
-            * `active` - active'
-          x-spec-enum-id: bfb862cdb2d36f11
-        revision:
-          type: integer
-        canEdit:
-          type: boolean
-        state: {}
-      required:
-      - canEdit
-      - projectId
-      - projectStatus
-      - projectUid
-      - revision
-      - state
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

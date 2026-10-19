@@ -1,0 +1,880 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Geometry Cleaning API
+  version: 1.0.0
+tags:
+- name: geometry-cleaning
+paths:
+  /geometry-cleaning/jobs/{uid}/:
+    get:
+      operationId: geometry_cleaning_jobs_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning jobs retrieve
+      x-summary-source: derived
+    patch:
+      operationId: geometry_cleaning_jobs_partial_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning jobs partial update
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/ai/chat/:
+    post:
+      operationId: geometry_cleaning_jobs_ai_chat_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+      summary: Geometry cleaning jobs ai chat create
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/ai/proposals/validate/:
+    post:
+      operationId: geometry_cleaning_jobs_ai_proposals_validate_create
+      description: Return a draft patch; no run, execution, S3, Batch or wallet mutation.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+              description: Unspecified request body
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: {}
+              description: Unspecified request body
+          multipart/form-data:
+            schema:
+              type: object
+              additionalProperties: {}
+              description: Unspecified request body
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+      summary: Geometry cleaning jobs ai proposals validate create
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/answers/:
+    post:
+      operationId: geometry_cleaning_jobs_answers_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning jobs answers create
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/cancel/:
+    post:
+      operationId: geometry_cleaning_jobs_cancel_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning jobs cancel create
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/progress/:
+    get:
+      operationId: geometry_cleaning_jobs_progress_retrieve
+      description: Live worker progress for display; reads only the stored progress_key while queued/running.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningProgress'
+          description: ''
+      summary: Geometry cleaning jobs progress retrieve
+      x-summary-source: derived
+  /geometry-cleaning/jobs/{uid}/restart/:
+    post:
+      operationId: geometry_cleaning_jobs_restart_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning jobs restart create
+      x-summary-source: derived
+  /geometry-cleaning/projects/:
+    get:
+      operationId: geometry_cleaning_projects_list
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects list
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/:
+    get:
+      operationId: geometry_cleaning_projects_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects retrieve
+      x-summary-source: derived
+    patch:
+      operationId: geometry_cleaning_projects_partial_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCleaningProjectUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects partial update
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/ai/chat/:
+    post:
+      operationId: geometry_cleaning_projects_ai_chat_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparationChatRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PreparationChatRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PreparationChatRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+      summary: Geometry cleaning projects ai chat create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/ai/proposals/validate/:
+    post:
+      operationId: geometry_cleaning_projects_ai_proposals_validate_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparationProposalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PreparationProposalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PreparationProposalRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+      summary: Geometry cleaning projects ai proposals validate create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/answers/:
+    post:
+      operationId: geometry_cleaning_projects_answers_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningAnswers'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects answers create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/delete/:
+    delete:
+      operationId: geometry_cleaning_projects_delete_destroy
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '204':
+          description: No response body
+      summary: Geometry cleaning projects delete destroy
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/deletion-preview/:
+    get:
+      operationId: geometry_cleaning_projects_deletion_preview_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          description: No response body
+      summary: Geometry cleaning projects deletion preview retrieve
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/jobs/:
+    get:
+      operationId: geometry_cleaning_projects_jobs_list
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects jobs list
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/purge-now/:
+    post:
+      operationId: geometry_cleaning_projects_purge_now_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '202':
+          description: No response body
+      summary: Geometry cleaning projects purge now create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/restore/:
+    post:
+      operationId: geometry_cleaning_projects_restore_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects restore create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/review/:
+    post:
+      operationId: geometry_cleaning_projects_review_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningReview'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects review create
+      x-summary-source: derived
+  /geometry-cleaning/projects/{uid}/start/:
+    post:
+      operationId: geometry_cleaning_projects_start_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningStart'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningStart'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningStart'
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects start create
+      x-summary-source: derived
+  /geometry-cleaning/projects/new/:
+    post:
+      operationId: geometry_cleaning_projects_new_create
+      tags:
+      - geometry-cleaning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CleaningProjectCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CleaningProjectCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CleaningProjectCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleaningRun'
+          description: ''
+      summary: Geometry cleaning projects new create
+      x-summary-source: derived
+components:
+  schemas:
+    CleaningProjectCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        draft:
+          type: boolean
+          default: false
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: en
+        revision:
+          type: string
+          maxLength: 64
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationMessage'
+      required:
+      - message
+      - revision
+    ConversationMessage:
+      type: object
+      properties:
+        role:
+          enum:
+          - user
+          - assistant
+          type: string
+          description: '* `user` - user
+
+            * `assistant` - assistant'
+          x-spec-enum-id: da623bca3e193af6
+        content:
+          type: string
+          maxLength: 4000
+      required:
+      - content
+      - role
+    CleaningProgress:
+      type: object
+      properties:
+        available:
+          type: boolean
+        reason:
+          enum:
+          - not_supported
+          - not_running
+          - not_published
+          - stale
+          - invalid
+          - null
+          type:
+          - string
+          - 'null'
+          description: '* `not_supported` - not_supported
+
+            * `not_running` - not_running
+
+            * `not_published` - not_published
+
+            * `stale` - stale
+
+            * `invalid` - invalid'
+          x-spec-enum-id: efc0f57a2614d49c
+        attempt:
+          type: integer
+        boot:
+          type:
+          - string
+          - 'null'
+        seq:
+          type:
+          - integer
+          - 'null'
+        stage:
+          type:
+          - string
+          - 'null'
+        stageStartedAt:
+          type:
+          - number
+          - 'null'
+          format: double
+        updatedAt:
+          type:
+          - number
+          - 'null'
+          format: double
+        publishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        viewer: {}
+        sourceToWorking: {}
+        scan: {}
+        issuesRev:
+          type:
+          - integer
+          - 'null'
+        issues:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        issueCounts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - attempt
+      - available
+      - boot
+      - issueCounts
+      - issues
+      - issuesRev
+      - publishedAt
+      - reason
+      - scan
+      - seq
+      - sourceToWorking
+      - stage
+      - stageStartedAt
+      - updatedAt
+      - viewer
+    PreparationProposalRequest:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          maxLength: 4096
+        assumeDefaults:
+          type: boolean
+      required:
+      - assumeDefaults
+      - proposalId
+    PatchedCleaningProjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        confirm:
+          type: boolean
+          default: false
+    CleaningReview:
+      type: object
+      properties:
+        revision:
+          type: string
+          maxLength: 64
+        attempt:
+          type: integer
+          minimum: 0
+      required:
+      - attempt
+      - revision
+    PreparationChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: en
+        revision:
+          type: string
+          maxLength: 64
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationMessage'
+        assumeDefaults:
+          type: boolean
+      required:
+      - assumeDefaults
+      - message
+      - revision
+    CleaningStart:
+      type: object
+      properties:
+        assumeDefaults:
+          type: boolean
+          default: false
+        interactive:
+          type: boolean
+          default: false
+    CleaningRun:
+      type: object
+      properties:
+        uid:
+          type: string
+        projectId:
+          type: integer
+        projectUid:
+          type: string
+        projectName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+        sourceFiles:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        attempt:
+          type: integer
+        batchJobId:
+          type: string
+        plan: {}
+        questions: {}
+        viewerUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        files:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        deletion:
+          type: object
+          additionalProperties: {}
+        jobUid:
+          type:
+          - string
+          - 'null'
+        jobName:
+          type: string
+        revision:
+          type: string
+        review: {}
+        usage: {}
+        error:
+          type: string
+      required:
+      - attempt
+      - batchJobId
+      - createdAt
+      - deletion
+      - error
+      - files
+      - jobName
+      - jobUid
+      - plan
+      - projectId
+      - projectName
+      - projectUid
+      - questions
+      - review
+      - revision
+      - sourceFiles
+      - status
+      - uid
+      - usage
+      - viewerUrl
+    CleaningAnswers:
+      type: object
+      properties:
+        answers: {}
+        revision:
+          type: string
+          maxLength: 64
+      required:
+      - answers
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,308 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Comment Threads API
+  version: 1.0.0
+tags:
+- name: comment-threads
+paths:
+  /comment-threads/{thread_id}/:
+    get:
+      operationId: comment_threads_retrieve
+      parameters:
+      - in: path
+        name: thread_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - comment-threads
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommentThread'
+          description: ''
+      summary: Comment threads retrieve
+      x-summary-source: derived
+  /comment-threads/{thread_id}/comments/:
+    get:
+      operationId: comment_threads_comments_retrieve
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+      - in: path
+        name: thread_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - comment-threads
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommentPage'
+          description: ''
+      summary: Comment threads comments retrieve
+      x-summary-source: derived
+    post:
+      operationId: comment_threads_comments_create
+      parameters:
+      - in: path
+        name: thread_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - comment-threads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentContentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentContentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentContentRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectComment'
+          description: ''
+      summary: Comment threads comments create
+      x-summary-source: derived
+components:
+  schemas:
+    CommentContentRequestNode:
+      oneOf:
+      - $ref: '#/components/schemas/CommentTextRequestNode'
+      - $ref: '#/components/schemas/CommentMentionRequestNode'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/CommentTextRequestNode'
+          mention: '#/components/schemas/CommentMentionRequestNode'
+    CommentMentionRequestNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - mention
+          type: string
+          description: '* `mention` - mention'
+          x-spec-enum-id: 9b68383fda6100b7
+        userId:
+          type: integer
+          minimum: 1
+        displayText:
+          type: string
+      required:
+      - type
+      - userId
+    CommentMentionResponseNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - mention
+          type: string
+          description: '* `mention` - mention'
+          x-spec-enum-id: 9b68383fda6100b7
+        userId:
+          type: integer
+          minimum: 1
+        displayText:
+          type:
+          - string
+          - 'null'
+        currentDisplayName:
+          type:
+          - string
+          - 'null'
+        isActiveTeamMember:
+          type: boolean
+      required:
+      - currentDisplayName
+      - displayText
+      - isActiveTeamMember
+      - type
+      - userId
+    CommentContentRequest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentContentRequestNode'
+      required:
+      - content
+    ProjectCommentThread:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        projectId:
+          type: integer
+          readOnly: true
+        createdByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        lastCommentAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - createdByUserId
+      - id
+      - lastCommentAt
+      - projectId
+      - uid
+      - updatedAt
+    CommentTextResponseNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - text
+          type: string
+          description: '* `text` - text'
+          x-spec-enum-id: db74f2b3b2995084
+        text:
+          type: string
+      required:
+      - text
+      - type
+    CommentContentResponseNode:
+      oneOf:
+      - $ref: '#/components/schemas/CommentTextResponseNode'
+      - $ref: '#/components/schemas/CommentMentionResponseNode'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/CommentTextResponseNode'
+          mention: '#/components/schemas/CommentMentionResponseNode'
+    ProjectCommentPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectComment'
+        next:
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - results
+    CommentTextRequestNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - text
+          type: string
+          description: '* `text` - text'
+          x-spec-enum-id: db74f2b3b2995084
+        text:
+          type: string
+      required:
+      - text
+      - type
+    CommentAuthor:
+      type: object
+      properties:
+        userId:
+          type:
+          - integer
+          - 'null'
+        displayName:
+          type:
+          - string
+          - 'null'
+        isActiveTeamMember:
+          type: boolean
+      required:
+      - displayName
+      - isActiveTeamMember
+      - userId
+    ProjectComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        threadId:
+          type: integer
+          readOnly: true
+        authorUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/CommentAuthor'
+          readOnly: true
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentContentResponseNode'
+          readOnly: true
+        revision:
+          type: integer
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - author
+      - authorUserId
+      - content
+      - createdAt
+      - id
+      - revision
+      - threadId
+      - uid
+      - updatedAt
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

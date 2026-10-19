@@ -1,0 +1,4305 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Agent API
+  version: 1.0.0
+tags:
+- name: Agent
+paths:
+  /agent/attachment-capabilities/:
+    get:
+      operationId: agentAttachmentCapabilities
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentCapabilities'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent attachment capabilities
+      x-summary-source: derived
+  /agent/thread-navigation/:
+    get:
+      operationId: agentThreadNavigation
+      parameters:
+      - in: query
+        name: projectCursor
+        schema:
+          type: string
+      - in: query
+        name: projectLimit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+      - in: query
+        name: projectThreadLimit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+      - in: query
+        name: workspaceThreadLimit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadNavigationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent thread navigation
+      x-summary-source: derived
+  /agent/threads/:
+    get:
+      operationId: agentThreadsList
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+      - in: query
+        name: projectUid
+        schema:
+          type: string
+      - in: query
+        name: scope
+        schema:
+          type: string
+          enum:
+          - project
+          - workspace
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - active
+          - archived
+          default: active
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadListResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads list
+      x-summary-source: derived
+    post:
+      operationId: agentThreadsCreate
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentThreadCreateRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads create
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/:
+    get:
+      operationId: agentThreadsRetrieve
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads retrieve
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/archive/:
+    post:
+      operationId: agentThreadsArchive
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentThreadStatusRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AgentError'
+                - $ref: '#/components/schemas/AgentThreadStatusConflict'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads archive
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/attachments/{attachment_uid}/:
+    get:
+      operationId: agentAttachmentsRetrieve
+      parameters:
+      - in: path
+        name: attachment_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent attachments retrieve
+      x-summary-source: derived
+    delete:
+      operationId: agentAttachmentsDelete
+      parameters:
+      - in: path
+        name: attachment_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '202':
+          description: No response body
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent attachments delete
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/attachments/{attachment_uid}/complete/:
+    post:
+      operationId: agentAttachmentsComplete
+      parameters:
+      - in: path
+        name: attachment_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentAttachmentCompleteRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentResponse'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent attachments complete
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/attachments/init/:
+    post:
+      operationId: agentAttachmentsInit
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentAttachmentInitRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentInitResponse'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAttachmentInitResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent attachments init
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/bind-project/:
+    post:
+      operationId: agentThreadsBindProject
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentThreadBindRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AgentError'
+                - $ref: '#/components/schemas/AgentThreadScopeConflict'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads bind project
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/event-pages/:
+    get:
+      operationId: agentEventPages
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: integer
+          minimum: 0
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentEventPageResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent event pages
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/events/:
+    get:
+      operationId: agentEventStream
+      parameters:
+      - in: header
+        name: Last-Event-ID
+        schema:
+          type: integer
+          minimum: 0
+      - in: query
+        name: after
+        schema:
+          type: integer
+          minimum: 0
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - event-stream
+          - json
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                x-agent-envelope:
+                  $ref: '#/components/schemas/AgentEventWireEnvelope'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent event stream
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/memory/:
+    get:
+      operationId: agentMemoryList
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentMemoryResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent memory list
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/messages/:
+    get:
+      operationId: agentMessageHistory
+      parameters:
+      - in: query
+        name: before
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentMessageHistoryResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent message history
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/projection/:
+    get:
+      operationId: agentConversationProjection
+      parameters:
+      - in: query
+        name: messageLimit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 100
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentConversationProjection'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent conversation projection
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/turns/:
+    post:
+      operationId: agentTurnsCreate
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentTurnCreateRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTurnCreateResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent turns create
+      x-summary-source: derived
+  /agent/threads/{thread_uid}/unarchive/:
+    post:
+      operationId: agentThreadsUnarchive
+      parameters:
+      - in: path
+        name: thread_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentThreadStatusRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentThreadResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AgentError'
+                - $ref: '#/components/schemas/AgentThreadStatusConflict'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent threads unarchive
+      x-summary-source: derived
+  /agent/tool-calls/{call_uid}/client-attempts/{attempt_uid}/result/:
+    post:
+      operationId: agentClientResult
+      parameters:
+      - in: header
+        name: X-Agent-Client-Nonce
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: attempt_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: call_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentClientResultRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentClientResultResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent client result
+      x-summary-source: derived
+  /agent/tool-calls/{call_uid}/client-attempts/cancel/:
+    post:
+      operationId: agentClientCancel
+      parameters:
+      - in: path
+        name: call_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentClientCancelRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentClientCancelResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent client cancel
+      x-summary-source: derived
+  /agent/tool-calls/{call_uid}/client-attempts/claim/:
+    post:
+      operationId: agentClientClaim
+      parameters:
+      - in: path
+        name: call_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentClientClaimRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentClientClaimResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent client claim
+      x-summary-source: derived
+  /agent/turns/{turn_uid}/cancel/:
+    post:
+      operationId: agentTurnsCancel
+      parameters:
+      - in: path
+        name: turn_uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentTurnCancelRequest'
+      security:
+      - agentBearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTurnCancelResponse'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTurnCancelResponse'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AgentError'
+                - $ref: '#/components/schemas/AgentTurnStatusConflict'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '415':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentError'
+          description: ''
+      summary: Agent turns cancel
+      x-summary-source: derived
+components:
+  schemas:
+    TextContentBlock:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - text
+        text:
+          type: string
+          minLength: 1
+          maxLength: 1048576
+      required:
+      - schemaVersion
+      - kind
+      - text
+      additionalProperties: false
+    AgentTurnCancelRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        expectedStatusRevision:
+          type: integer
+          minimum: 1
+      required:
+      - clientRequestUid
+      - expectedStatusRevision
+      additionalProperties: false
+    AgentWorkspaceProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        workspaceUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - preparing
+          - ready
+          - in_use
+          - cooling
+          - deleting
+          - deleted
+        statusRevision:
+          type: integer
+          minimum: 1
+        readyEntryCount:
+          type: integer
+          minimum: 0
+        totalEntryCount:
+          type: integer
+          minimum: 0
+        materializedBytes:
+          type: integer
+          minimum: 0
+        declaredTotalBytes:
+          type: integer
+          minimum: 0
+      required:
+      - schemaVersion
+      - workspaceUid
+      - status
+      - statusRevision
+      - readyEntryCount
+      - totalEntryCount
+      - materializedBytes
+      - declaredTotalBytes
+      additionalProperties: false
+    AgentTurnSurfaceRequest:
+      type: object
+      properties:
+        route:
+          type: string
+          minLength: 1
+          maxLength: 2048
+        projectUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        selectedGeometryVersionUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        selectedJobUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        workbenchRevision:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+      required: []
+      additionalProperties: false
+    AgentEventPageResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentEventWireEnvelope'
+          minItems: 0
+        nextAfter:
+          type: integer
+          minimum: 0
+        hasMore:
+          type: boolean
+        latestSequence:
+          type: integer
+          minimum: 0
+      required:
+      - items
+      - nextAfter
+      - hasMore
+      - latestSequence
+      additionalProperties: false
+    AgentMemoryFact:
+      type: object
+      properties:
+        toolName:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - aox_activity_recent_projects
+          - aox_asset_get
+          - aox_asset_registration_candidates
+          - aox_asset_search
+          - aox_comment_list
+          - aox_comment_thread_list
+          - aox_geometry_list
+          - aox_geometry_version_get
+          - aox_geometry_version_list
+          - aox_job_get
+          - aox_job_list
+          - aox_job_result_summary
+          - aox_paper_plane_get_guide
+          - aox_paper_plane_get_ranking
+          - aox_project_get
+          - aox_project_get_summary
+          - aox_project_search
+        projectUids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 36
+          maxItems: 50
+        resourceUids:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 36
+          maxItems: 50
+        returnedCount:
+          type: integer
+          minimum: 0
+          maximum: 50
+        hasMore:
+          type: boolean
+        projectStatus:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - open
+          - closed
+      required:
+      - toolName
+      - projectUids
+      - resourceUids
+      - returnedCount
+      - hasMore
+      - projectStatus
+      additionalProperties: false
+    AgentTurnMessageRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          minLength: 0
+          maxLength: 65536
+        attachments:
+          type: array
+          maxItems: 10
+          uniqueItems: true
+          items:
+            type: object
+            properties:
+              attachmentUid:
+                type: string
+                minLength: 1
+                maxLength: 36
+                format: uuid
+            required:
+            - attachmentUid
+            additionalProperties: false
+      required: []
+      additionalProperties: false
+      anyOf:
+      - required:
+        - text
+        properties:
+          text:
+            minLength: 1
+      - required:
+        - attachments
+        properties:
+          attachments:
+            minItems: 1
+      x-maxTextUtf8Bytes: 65536
+    AgentTurnCancelResponse:
+      type: object
+      properties:
+        turnUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+          - completed
+          - failed
+          - cancelled
+        statusRevision:
+          type: integer
+          minimum: 1
+        eventsUrl:
+          type: string
+          minLength: 1
+          maxLength: 255
+        lastSequence:
+          type: integer
+          minimum: 0
+      required:
+      - turnUid
+      - status
+      - statusRevision
+      - eventsUrl
+      - lastSequence
+      additionalProperties: false
+    AgentTurnProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        turnUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        origin:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - user_message
+          - structured_action
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+          - completed
+          - failed
+          - cancelled
+        statusRevision:
+          type: integer
+          minimum: 1
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        completedAt:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        errorCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - schemaVersion
+      - turnUid
+      - origin
+      - status
+      - statusRevision
+      - createdAt
+      - completedAt
+      - errorCode
+      additionalProperties: false
+    AgentClientResultRequest:
+      oneOf:
+      - type: object
+        properties:
+          resultRequestUid:
+            type: string
+            format: uuid
+          clientInstanceUid:
+            type: string
+            format: uuid
+          status:
+            type: string
+            enum:
+            - succeeded
+          result:
+            oneOf:
+            - type: object
+              properties:
+                route:
+                  type: string
+                  maxLength: 8192
+              required:
+              - route
+              additionalProperties: false
+            - type: object
+              properties:
+                route:
+                  type: string
+                  enum:
+                  - /renewal/paper-plane
+                observation:
+                  type: object
+                  properties:
+                    schemaVersion:
+                      type: integer
+                      enum:
+                      - 1
+                    source:
+                      type: string
+                      enum:
+                      - browser_observation
+                    observedAt:
+                      type: string
+                      format: date-time
+                    phase:
+                      type: string
+                      enum:
+                      - setup
+                      - fold
+                      - analysis
+                      - ready
+                      - flight
+                      - result
+                    paper:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          enum:
+                          - copy
+                          - hanji
+                          - color
+                          - kraft
+                          - card
+                        name:
+                          type: string
+                          maxLength: 150
+                        widthMm:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        heightMm:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        grammageGsm:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                      required:
+                      - id
+                      - name
+                      - widthMm
+                      - heightMm
+                      - grammageGsm
+                      additionalProperties: false
+                    design:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          enum:
+                          - dart
+                          - glider
+                          - free
+                        name:
+                          type: string
+                          maxLength: 150
+                      required:
+                      - id
+                      - name
+                      additionalProperties: false
+                    fold:
+                      type: object
+                      properties:
+                        completedSteps:
+                          type: integer
+                          minimum: 0
+                          maximum: 100
+                        totalSteps:
+                          type: integer
+                          minimum: 0
+                          maximum: 100
+                        customFolds:
+                          type: integer
+                          minimum: 0
+                          maximum: 10000
+                        instruction:
+                          type:
+                          - string
+                          - 'null'
+                          maxLength: 2000
+                        direction:
+                          oneOf:
+                          - type: string
+                            enum:
+                            - valley
+                            - mountain
+                          - type: 'null'
+                        offsetMm:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        progressRatio:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                      required:
+                      - completedSteps
+                      - totalSteps
+                      - customFolds
+                      - instruction
+                      - direction
+                      - offsetMm
+                      - progressRatio
+                      additionalProperties: false
+                    settings:
+                      type: object
+                      properties:
+                        throwSpeedMps:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        throwAngleDeg:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        tailAngleDeg:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                        dihedralDeg:
+                          type:
+                          - number
+                          - 'null'
+                          minimum: -1000000
+                          maximum: 1000000
+                      required:
+                      - throwSpeedMps
+                      - throwAngleDeg
+                      - tailAngleDeg
+                      - dihedralDeg
+                      additionalProperties: false
+                    analysis:
+                      oneOf:
+                      - type: object
+                        properties:
+                          massGrams:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          wingAreaM2:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          wingspanM:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          staticMarginRatio:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          glideRatio:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                        required:
+                        - massGrams
+                        - wingAreaM2
+                        - wingspanM
+                        - staticMarginRatio
+                        - glideRatio
+                        additionalProperties: false
+                      - type: 'null'
+                    result:
+                      oneOf:
+                      - type: object
+                        properties:
+                          distanceMeters:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          flightTimeSeconds:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          maxHeightMeters:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                          driftMetersRight:
+                            type:
+                            - number
+                            - 'null'
+                            minimum: -1000000
+                            maximum: 1000000
+                        required:
+                        - distanceMeters
+                        - flightTimeSeconds
+                        - maxHeightMeters
+                        - driftMetersRight
+                        additionalProperties: false
+                      - type: 'null'
+                  required:
+                  - schemaVersion
+                  - source
+                  - observedAt
+                  - phase
+                  - paper
+                  - design
+                  - fold
+                  - settings
+                  - analysis
+                  - result
+                  additionalProperties: false
+              required:
+              - route
+              - observation
+              additionalProperties: false
+        required:
+        - resultRequestUid
+        - clientInstanceUid
+        - status
+        - result
+        additionalProperties: false
+      - type: object
+        properties:
+          resultRequestUid:
+            type: string
+            format: uuid
+          clientInstanceUid:
+            type: string
+            format: uuid
+          status:
+            type: string
+            enum:
+            - failed
+          result:
+            enum:
+            - null
+          errorCode:
+            type: string
+            enum:
+            - CLIENT_NAVIGATION_FAILED
+            - CLIENT_NAVIGATION_TIMEOUT
+            - CLIENT_ROUTE_REJECTED
+            - CLIENT_OBSERVATION_UNAVAILABLE
+        required:
+        - resultRequestUid
+        - clientInstanceUid
+        - status
+        - result
+        - errorCode
+        additionalProperties: false
+    AgentClientCancelResponse:
+      type: object
+      properties:
+        cancelled:
+          type: boolean
+      required:
+      - cancelled
+      additionalProperties: false
+    AgentMessageHistoryResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentMessageProjection'
+          minItems: 0
+        nextBefore:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 4096
+      required:
+      - items
+      - nextBefore
+      additionalProperties: false
+    AgentAttachmentCompleteRequest:
+      type: object
+      properties:
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 104857600
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+      required:
+      - sizeBytes
+      - sha256
+      additionalProperties: false
+    AgentArtifactProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        artifactUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - staged
+          - published
+          - discarded
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        mediaType:
+          type: string
+          minLength: 1
+          maxLength: 255
+        size:
+          type: integer
+          minimum: 0
+        displayName:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+      required:
+      - schemaVersion
+      - artifactUid
+      - status
+      - statusRevision
+      - mediaType
+      - size
+      - displayName
+      additionalProperties: false
+    AgentError:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      additionalProperties: false
+    AgentEventWireEnvelope:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          minimum: 1
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        turnUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        type:
+          type: string
+          minLength: 1
+          maxLength: 128
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        payload:
+          type: object
+          additionalProperties: true
+      required:
+      - sequence
+      - threadUid
+      - turnUid
+      - type
+      - createdAt
+      - payload
+      additionalProperties: false
+    AgentThreadNavigationResponse:
+      type: object
+      properties:
+        workspace:
+          $ref: '#/components/schemas/AgentThreadListResponse'
+        projects:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentThreadNavigationProjectNode'
+              minItems: 0
+              maxItems: 50
+            nextCursor:
+              type:
+              - string
+              - 'null'
+              minLength: 1
+              maxLength: 8192
+          required:
+          - items
+          - nextCursor
+          additionalProperties: false
+        trashSummary:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+          required:
+          - count
+          additionalProperties: false
+        generatedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - workspace
+      - projects
+      - trashSummary
+      - generatedAt
+      additionalProperties: false
+    AttachmentContentBlock:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - attachment
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        category:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - image
+          - mesh
+          - cad
+        sourceTrust:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - untrusted_user_input
+        originalSha256:
+          type: string
+          minLength: 64
+          maxLength: 64
+        processorProfileVersion:
+          type: string
+          minLength: 1
+          maxLength: 64
+        processorImageDigest:
+          type: string
+          minLength: 71
+          maxLength: 71
+        statusRevision:
+          type: integer
+          minimum: 1
+        derivatives:
+          type: array
+          minItems: 1
+          maxItems: 2
+          items:
+            type: object
+            properties:
+              derivativeUid:
+                type: string
+                minLength: 1
+                maxLength: 36
+                format: uuid
+              kind:
+                type: string
+                minLength: 1
+                maxLength: 128
+                enum:
+                - normalized_image
+                - geometry_manifest
+                - geometry_preview
+              mediaType:
+                type: string
+                minLength: 1
+                maxLength: 128
+                enum:
+                - image/png
+                - application/json
+              sizeBytes:
+                type: integer
+                minimum: 1
+              sha256:
+                type: string
+                minLength: 64
+                maxLength: 64
+            required:
+            - derivativeUid
+            - kind
+            - mediaType
+            - sizeBytes
+            - sha256
+            additionalProperties: false
+      required:
+      - schemaVersion
+      - kind
+      - attachmentUid
+      - category
+      - sourceTrust
+      - originalSha256
+      - processorProfileVersion
+      - processorImageDigest
+      - statusRevision
+      - derivatives
+      additionalProperties: false
+    AgentAttachmentInitResponse:
+      type: object
+      properties:
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        upload:
+          type:
+          - object
+          - 'null'
+          properties:
+            method:
+              type: string
+              minLength: 1
+              maxLength: 128
+              enum:
+              - PUT
+            url:
+              type: string
+              minLength: 1
+              maxLength: 8192
+            requiredHeaders:
+              type: object
+              additionalProperties:
+                type: string
+            expiresAt:
+              type: string
+              minLength: 1
+              maxLength: 64
+              format: date-time
+          required:
+          - method
+          - url
+          - requiredHeaders
+          - expiresAt
+          additionalProperties: false
+      required:
+      - attachmentUid
+      - status
+      - upload
+      additionalProperties: false
+    AgentWorkspaceThreadCreateRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - workspace
+      required:
+      - clientRequestUid
+      - scope
+      additionalProperties: false
+    AgentAttachmentInitRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        fileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 104857600
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        declaredContentType:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - clientRequestUid
+      - fileName
+      - sizeBytes
+      - sha256
+      additionalProperties: false
+    AgentMemoryItem:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        memoryUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        fact:
+          $ref: '#/components/schemas/AgentMemoryFact'
+        observedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - schemaVersion
+      - memoryUid
+      - fact
+      - observedAt
+      additionalProperties: false
+    AgentTurnStatusConflict:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - AGENT_TURN_STATUS_CONFLICT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        turn:
+          $ref: '#/components/schemas/AgentTurnCancelResponse'
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - turn
+      additionalProperties: false
+    AgentApprovalProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        toolCallUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending
+          - approved
+          - rejected
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        toolLabel:
+          type: string
+          minLength: 1
+          maxLength: 255
+        riskLevel:
+          type: string
+          minLength: 1
+          maxLength: 64
+        expiresAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        reasonCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - schemaVersion
+      - toolCallUid
+      - status
+      - statusRevision
+      - toolLabel
+      - riskLevel
+      - expiresAt
+      - reasonCode
+      additionalProperties: false
+    AgentTurnCreateRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        message:
+          $ref: '#/components/schemas/AgentTurnMessageRequest'
+        clientContext:
+          type: object
+          properties:
+            timeZoneHint:
+              type: string
+              minLength: 1
+              maxLength: 64
+          required: []
+          additionalProperties: false
+        surface:
+          $ref: '#/components/schemas/AgentTurnSurfaceRequest'
+      required:
+      - clientRequestUid
+      - message
+      additionalProperties: false
+    AgentClientCancelRequest:
+      type: object
+      properties:
+        clientInstanceUid:
+          type: string
+          format: uuid
+      required:
+      - clientInstanceUid
+      additionalProperties: false
+    AgentThreadStatusConflict:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - AGENT_THREAD_STATUS_CONFLICT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - thread
+      additionalProperties: false
+    AgentAttachmentResponse:
+      type: object
+      properties:
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        category:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - image
+          - pdf
+          - mesh
+          - cad
+        originalFileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 1
+        detectedContentType:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        rejectionCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - unsupported_media_type
+          - checksum_mismatch
+          - malware_detected
+          - encrypted_pdf
+          - active_pdf_content
+          - malformed_file
+          - resource_limit_exceeded
+          - processor_timeout
+          - processing_failed
+        expiresAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        updatedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        derivatives:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentAttachmentDerivative'
+          minItems: 0
+          maxItems: 102
+      required:
+      - attachmentUid
+      - status
+      - statusRevision
+      - category
+      - originalFileName
+      - sizeBytes
+      - detectedContentType
+      - sha256
+      - rejectionCode
+      - expiresAt
+      - createdAt
+      - updatedAt
+      - derivatives
+      additionalProperties: false
+    AgentTurnCreateResponse:
+      type: object
+      properties:
+        turnUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        eventsUrl:
+          type: string
+          minLength: 1
+          maxLength: 255
+        lastSequence:
+          type: integer
+          minimum: 0
+      required:
+      - turnUid
+      - threadUid
+      - eventsUrl
+      - lastSequence
+      additionalProperties: false
+    AgentClientToolProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        toolCallUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 128
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - requested
+          - waiting_for_approval
+          - executing
+          - succeeded
+          - failed
+          - cancelled
+        statusRevision:
+          type: integer
+          minimum: 1
+        activityLabel:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+      required:
+      - schemaVersion
+      - toolCallUid
+      - name
+      - status
+      - statusRevision
+      - activityLabel
+      additionalProperties: false
+    AgentThreadScopeConflict:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - AGENT_THREAD_SCOPE_CONFLICT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - thread
+      additionalProperties: false
+    AgentMessageContentBlock:
+      oneOf:
+      - $ref: '#/components/schemas/TextContentBlock'
+      - $ref: '#/components/schemas/RedactedContentBlock'
+      - $ref: '#/components/schemas/AttachmentContentBlock'
+      discriminator:
+        propertyName: kind
+        mapping:
+          text: '#/components/schemas/TextContentBlock'
+          content_redacted: '#/components/schemas/RedactedContentBlock'
+          attachment: '#/components/schemas/AttachmentContentBlock'
+    AgentThreadListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentThreadProjection'
+          minItems: 0
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 8192
+      required:
+      - items
+      - nextCursor
+      additionalProperties: false
+    AgentConversationProjection:
+      type: object
+      properties:
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+        activeTurn:
+          allOf:
+          - $ref: '#/components/schemas/AgentTurnProjection'
+        messages:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentMessageProjection'
+              minItems: 0
+            historyCursor:
+              type:
+              - string
+              - 'null'
+              minLength: 1
+              maxLength: 8192
+          required:
+          - items
+          - historyCursor
+          additionalProperties: false
+        pendingActions:
+          type: object
+          properties:
+            approvals:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentApprovalProjection'
+              minItems: 0
+            clientTools:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentClientToolProjection'
+              minItems: 0
+          required:
+          - approvals
+          - clientTools
+          additionalProperties: false
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentAttachmentProjection'
+          minItems: 0
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentArtifactProjection'
+          minItems: 0
+        workspace:
+          allOf:
+          - $ref: '#/components/schemas/AgentWorkspaceProjection'
+        throughSequence:
+          type: integer
+          minimum: 0
+      required:
+      - thread
+      - activeTurn
+      - messages
+      - pendingActions
+      - attachments
+      - artifacts
+      - workspace
+      - throughSequence
+      additionalProperties: false
+    AgentMemoryResponse:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentMemoryItem'
+          minItems: 0
+          maxItems: 8
+      required:
+      - schemaVersion
+      - threadUid
+      - items
+      additionalProperties: false
+    AgentClientClaimRequest:
+      type: object
+      properties:
+        clientInstanceUid:
+          type: string
+          format: uuid
+        expectedToolCallStatusRevision:
+          type: integer
+          minimum: 1
+      required:
+      - clientInstanceUid
+      - expectedToolCallStatusRevision
+      additionalProperties: false
+    AgentThreadNavigationProjectNode:
+      type: object
+      properties:
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        title:
+          type:
+          - string
+          - 'null'
+          minLength: 0
+          maxLength: 255
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - open
+          - closed
+        activityState:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - idle
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+        needsApproval:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentThreadProjection'
+          minItems: 0
+          maxItems: 20
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 8192
+      required:
+      - projectUid
+      - title
+      - status
+      - activityState
+      - needsApproval
+      - items
+      - nextCursor
+      additionalProperties: false
+    AgentThreadCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
+      - $ref: '#/components/schemas/AgentProjectThreadCreateRequest'
+      discriminator:
+        propertyName: scope
+        mapping:
+          workspace: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
+          project: '#/components/schemas/AgentProjectThreadCreateRequest'
+    AgentAttachmentProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        mediaFamily:
+          type: string
+          minLength: 1
+          maxLength: 64
+        declaredSize:
+          type: integer
+          minimum: 0
+        errorCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - schemaVersion
+      - attachmentUid
+      - status
+      - statusRevision
+      - mediaFamily
+      - declaredSize
+      - errorCode
+      additionalProperties: false
+    AgentThreadProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - workspace
+          - project
+        projectUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        projectStatus:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - open
+          - closed
+        parentThreadUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        title:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - active
+          - archived
+        statusRevision:
+          type: integer
+          minimum: 1
+        scopeRevision:
+          type: integer
+          enum:
+          - 0
+          - 1
+        permissionMode:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - ask_for_approval
+          - auto_review
+          - full_access
+        permissionModeRevision:
+          type: integer
+          minimum: 1
+        activityState:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - idle
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+        activeTurnUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        lastActiveAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        updatedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - schemaVersion
+      - threadUid
+      - scope
+      - projectUid
+      - projectStatus
+      - parentThreadUid
+      - title
+      - status
+      - statusRevision
+      - scopeRevision
+      - permissionMode
+      - permissionModeRevision
+      - activityState
+      - activeTurnUid
+      - lastActiveAt
+      - createdAt
+      - updatedAt
+      additionalProperties: false
+    AgentClientResultResponse:
+      type: object
+      properties:
+        toolCallUid:
+          type: string
+          format: uuid
+        clientAttemptUid:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+      required:
+      - toolCallUid
+      - clientAttemptUid
+      - status
+      additionalProperties: false
+    AgentAttachmentDerivative:
+      type: object
+      properties:
+        derivativeUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - normalized_image
+          - pdf_text
+          - pdf_page_preview
+          - geometry_manifest
+          - geometry_preview
+        mediaType:
+          type: string
+          minLength: 1
+          maxLength: 128
+        sizeBytes:
+          type: integer
+          minimum: 1
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+      - derivativeUid
+      - kind
+      - mediaType
+      - sizeBytes
+      - metadata
+      additionalProperties: false
+    RedactedContentBlock:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - content_redacted
+        reasonCode:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - PROJECT_PURGED
+          - THREAD_PURGED
+          - USER_DELETED
+      required:
+      - schemaVersion
+      - kind
+      - reasonCode
+      additionalProperties: false
+    AgentClientClaimResponse:
+      type: object
+      properties:
+        clientAttemptUid:
+          type: string
+          format: uuid
+        clientActionNonce:
+          type: string
+          pattern: ^[A-Za-z0-9_-]{43}$
+        expiresAt:
+          type: string
+          format: date-time
+        tool:
+          oneOf:
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.navigate
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  page:
+                    type: string
+                    enum:
+                    - home
+                    - projects
+                required:
+                - page
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.set_project_query
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  q:
+                    type: string
+                    maxLength: 2048
+                required:
+                - q
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_project
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  projectUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - projectUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_assets
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  view:
+                    type: string
+                    enum:
+                    - explore
+                    - team
+                required:
+                - view
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_asset_registration
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  jobUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - jobUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_asset
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  assetUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - assetUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_paper_plane
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties: {}
+                required: []
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.read_paper_plane
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties: {}
+                required: []
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+      required:
+      - clientAttemptUid
+      - clientActionNonce
+      - expiresAt
+      - tool
+      additionalProperties: false
+    AgentProjectThreadCreateRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - project
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        parentThreadUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+      required:
+      - clientRequestUid
+      - scope
+      - projectUid
+      additionalProperties: false
+    AgentThreadResponse:
+      type: object
+      properties:
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+      required:
+      - thread
+      additionalProperties: false
+    AgentThreadStatusRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        expectedStatusRevision:
+          type: integer
+          minimum: 1
+      required:
+      - clientRequestUid
+      - expectedStatusRevision
+      additionalProperties: false
+    AgentAttachmentCapabilities:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        maxFiles:
+          type: integer
+          enum:
+          - 10
+        maxBytes:
+          type: integer
+          enum:
+          - 104857600
+        maxImageBytes:
+          type: integer
+          enum:
+          - 20971520
+        extensions:
+          type: array
+          minItems: 7
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+            enum:
+            - png
+            - jpg
+            - jpeg
+            - webp
+            - stl
+            - step
+            - stp
+      required:
+      - enabled
+      - maxFiles
+      - maxBytes
+      - maxImageBytes
+      - extensions
+      additionalProperties: false
+    AgentMessageProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        messageUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        turnUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        role:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - user
+          - assistant
+        contentBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentMessageContentBlock'
+          minItems: 1
+          maxItems: 256
+        completedSequence:
+          type: integer
+          minimum: 1
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - schemaVersion
+      - messageUid
+      - turnUid
+      - role
+      - contentBlocks
+      - completedSequence
+      - createdAt
+      additionalProperties: false
+    AgentThreadBindRequest:
+      type: object
+      properties:
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        expectedScopeRevision:
+          type: integer
+          enum:
+          - 0
+          - 1
+      required:
+      - projectUid
+      - expectedScopeRevision
+      additionalProperties: false
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,19 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Health API
+  version: 1.0.0
+tags:
+- name: Health
+paths:
+  /health/:
+    get:
+      operationId: health_retrieve
+      tags:
+      - Health
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Health retrieve
+      x-summary-source: derived

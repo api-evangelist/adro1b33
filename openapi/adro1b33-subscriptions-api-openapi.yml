@@ -40,3 +40,9 @@ paths:
       responses:
         '200':
           description: No response body
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

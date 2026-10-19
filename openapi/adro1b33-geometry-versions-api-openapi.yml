@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Geometry Versions API
+  version: 1.0.0
+tags:
+- name: geometry-versions
+paths:
+  /geometry-versions/{version_id}/:
+    get:
+      operationId: geometry_versions_retrieve
+      parameters:
+      - in: path
+        name: version_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - geometry-versions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeometryVersionDetail'
+          description: ''
+      summary: Geometry versions retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    GeometrySnapshot:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+        projectUid:
+          type: string
+        patches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeometryVersionPatchSnapshot'
+      required:
+      - patches
+      - projectUid
+      - schemaVersion
+    GeometryVersionPatchSnapshot:
+      type: object
+      properties:
+        patchIdSnapshot:
+          type:
+          - integer
+          - 'null'
+        patchUid:
+          type: string
+        patchType:
+          type: string
+        label:
+          type: string
+        category:
+          type: string
+        sourcePatchUid:
+          type:
+          - string
+          - 'null'
+        mergedIntoPatchUid:
+          type:
+          - string
+          - 'null'
+        isMergeOutput:
+          type: boolean
+        mergedSourcePatchUids:
+          type: array
+          items:
+            type: string
+        geometry:
+          type: object
+          additionalProperties: {}
+        constraints:
+          type: object
+          additionalProperties: {}
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeometryVersionArtifactSnapshot'
+      required:
+      - artifacts
+      - category
+      - constraints
+      - geometry
+      - isMergeOutput
+      - label
+      - mergedIntoPatchUid
+      - mergedSourcePatchUids
+      - patchIdSnapshot
+      - patchType
+      - patchUid
+      - sourcePatchUid
+    GeometryVersionDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          readOnly: true
+        projectId:
+          type: integer
+          readOnly: true
+        versionNumber:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        name:
+          type: string
+          maxLength: 255
+        createdByUserId:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        snapshotSha256:
+          type: string
+          maxLength: 64
+        snapshot:
+          allOf:
+          - $ref: '#/components/schemas/GeometrySnapshot'
+          readOnly: true
+        artifactAccess:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeometryArtifactAccess'
+          readOnly: true
+      required:
+      - artifactAccess
+      - createdAt
+      - createdByUserId
+      - id
+      - name
+      - projectId
+      - snapshot
+      - snapshotSha256
+      - uid
+      - versionNumber
+    GeometryVersionArtifactSnapshot:
+      type: object
+      properties:
+        artifactUid:
+          type:
+          - string
+          - 'null'
+        role:
+          type: string
+        storageProvider:
+          type: string
+        s3Bucket:
+          type: string
+        s3Key:
+          type: string
+        sizeBytes:
+          type: integer
+        checksumSha256:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+      required:
+      - artifactUid
+      - checksumSha256
+      - metadata
+      - role
+      - s3Bucket
+      - s3Key
+      - sizeBytes
+      - storageProvider
+    GeometryArtifactAccess:
+      type: object
+      properties:
+        referenceId:
+          type: integer
+        patchUid:
+          type: string
+        role:
+          type: string
+        downloadUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        expiresAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - downloadUrl
+      - expiresAt
+      - patchUid
+      - referenceId
+      - role
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

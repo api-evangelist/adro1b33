@@ -1,0 +1,37 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Board API
+  version: 1.0.0
+tags:
+- name: Board
+paths:
+  /board/:
+    get:
+      operationId: board_retrieve
+      tags:
+      - Board
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Board retrieve
+      x-summary-source: derived
+  /board/{id}/:
+    get:
+      operationId: board_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Board
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Board retrieve 2
+      x-summary-source: derived

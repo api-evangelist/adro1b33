@@ -1,0 +1,17 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Error Feedback API
+  version: 1.0.0
+tags:
+- name: error-feedback
+paths:
+  /error-feedback/:
+    post:
+      operationId: error_feedback_create
+      tags:
+      - error-feedback
+      responses:
+        '200':
+          description: No response body
+      summary: Error feedback create
+      x-summary-source: derived

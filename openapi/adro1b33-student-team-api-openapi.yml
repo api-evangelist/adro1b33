@@ -1,0 +1,106 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Student Team API
+  version: 1.0.0
+tags:
+- name: student_team
+paths:
+  /student-team-applications/:
+    post:
+      operationId: student_team_applications_create
+      summary: 학생팀 신청
+      tags:
+      - student_team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentTeamApplicationCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentTeamApplicationCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentTeamApplicationCreate'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentTeamApplicationCreate'
+          description: ''
+components:
+  schemas:
+    StudentTeamApplicationCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teamType:
+          enum:
+          - Student team
+          - Other team
+          - Individual student
+          - FSAE team
+          type: string
+          description: '* `Student team` - Student team
+
+            * `Other team` - Other team
+
+            * `Individual student` - Individual student
+
+            * `FSAE team` - FSAE team'
+          x-spec-enum-id: 0fac175769b043f3
+        contactName:
+          type: string
+          maxLength: 100
+        contactEmail:
+          type: string
+          format: email
+          maxLength: 254
+        contactPhone:
+          type: string
+          maxLength: 50
+        contactRole:
+          enum:
+          - Student
+          - Professor / faculty advisor
+          - Other
+          type: string
+          description: '* `Student` - Student
+
+            * `Professor / faculty advisor` - Professor / faculty advisor
+
+            * `Other` - Other'
+          x-spec-enum-id: 1b52c13d0d9c4c1c
+        universityName:
+          type: string
+          maxLength: 150
+        teamName:
+          type: string
+          maxLength: 150
+        country:
+          type: string
+          maxLength: 100
+        privacyConsent:
+          type: boolean
+        marketingConsent:
+          type: boolean
+      required:
+      - contactEmail
+      - contactName
+      - contactRole
+      - country
+      - id
+      - privacyConsent
+      - teamType
+      - universityName
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

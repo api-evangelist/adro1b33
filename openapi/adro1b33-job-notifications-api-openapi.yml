@@ -41,3 +41,9 @@ paths:
           description: No response body
       summary: Job notifications read all create
       x-summary-source: derived
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

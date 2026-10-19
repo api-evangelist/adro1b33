@@ -128,3 +128,8 @@ components:
       - resourceUid
       - scheduledFor
       - status
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

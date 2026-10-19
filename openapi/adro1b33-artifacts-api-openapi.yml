@@ -32,31 +32,6 @@ paths:
           description: ''
       summary: Artifacts list
       x-summary-source: derived
-    post:
-      operationId: artifacts_create
-      tags:
-      - Artifacts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ArtifactCreate'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ArtifactCreate'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/ArtifactCreate'
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArtifactCreate'
-          description: ''
-      summary: Artifacts create
-      x-summary-source: derived
   /artifacts/{artifact_id}/download/:
     get:
       operationId: artifacts_download_retrieve
@@ -94,89 +69,16 @@ paths:
           description: ''
       summary: Artifacts retrieve
       x-summary-source: derived
-    put:
-      operationId: artifacts_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 아티팩트을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Artifacts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Artifact'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Artifact'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Artifact'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Artifact'
-          description: ''
-      summary: Artifacts update
-      x-summary-source: derived
-    patch:
-      operationId: artifacts_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 아티팩트을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Artifacts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedArtifact'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedArtifact'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedArtifact'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Artifact'
-          description: ''
-      summary: Artifacts partial update
-      x-summary-source: derived
-    delete:
-      operationId: artifacts_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: 아티팩트을 식별하는 고유한 정수 값.
-        required: true
-      tags:
-      - Artifacts
-      responses:
-        '204':
-          description: No response body
-      summary: Artifacts destroy
-      x-summary-source: derived
   /artifacts/{id}/copy/:
     post:
       operationId: artifacts_copy_create
       parameters:
+      - in: header
+        name: Idempotency-Key
+        schema:
+          type: string
+          format: uuid
+        required: true
       - in: path
         name: id
         schema:
@@ -189,20 +91,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Artifact'
+              $ref: '#/components/schemas/ArtifactCopyRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Artifact'
+              $ref: '#/components/schemas/ArtifactCopyRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Artifact'
+              $ref: '#/components/schemas/ArtifactCopyRequest'
         required: true
       responses:
-        '200':
+        '201':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artifact'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtifactCopyPendingResponse'
           description: ''
       summary: Artifacts copy create
       x-summary-source: derived
@@ -272,6 +180,7 @@ components:
           - S2_REPLAY_FRAMES
           - RACING_BASELINE_GLB
           - RACING_OPTIMIZED_GLB
+          - CWT_RESULT
           - USER_PROFILE_IMAGE
           type: string
           description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
@@ -338,8 +247,10 @@ components:
 
             * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
 
+            * `CWT_RESULT` - Cornering Wind Tunnel Result
+
             * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
+          x-spec-enum-id: ffcff9a4293b8568
         storageProvider:
           enum:
           - S3
@@ -419,162 +330,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArtifactList'
-    PatchedArtifact:
+    ArtifactCopyRequest:
       type: object
       properties:
-        id:
+        projectId:
           type: integer
-          readOnly: true
-        uid:
+          minimum: 1
+      required:
+      - projectId
+    ArtifactCopyPendingResponse:
+      type: object
+      properties:
+        operationId:
           type: string
-          readOnly: true
-        artifactRole:
-          enum:
-          - PROJECT_THUMBNAIL_IMAGE
-          - PROJECT_SOURCE_STL
-          - OPTIMIZED_STL
-          - G2_SUMMARY_IMAGE
-          - G2_SHAPE_REPORT_IMAGE
-          - G2_FIGS_ZIP
-          - G1_INPUT_STL
-          - G1_SUMMARY_GIF
-          - G1_FIGS_ZIP
-          - G1_NORMAL_DISPLACEMENT_VTP
-          - RESULT_MESH
-          - RESULT_HISTORY
-          - RESULT_SUMMARY_JSON
-          - RESULT_FLOW_VOLUME
-          - RESULT_GEOMETRY_SCALE
-          - RESULT_PREVIEW_POINTS
-          - RESULT_PROXY_MESH
-          - RESULT_PROXY_LAYOUT
-          - RESULT_PROXY_ATLAS
-          - STREAMLINES_BIN
-          - FLOWFIELD_BIN
-          - G4_SUMMARY_IMAGE
-          - G4_FIGS_ZIP
-          - STEP_EXPORT_ASSEMBLY
-          - STEP_EXPORT_PART_STEP
-          - STEP_EXPORT_PART_STL
-          - ASSET_FLOW_VISUALIZATION_IMAGE
-          - ASSET_RENDERED_IMAGE
-          - S2_FINAL_FIELD_IMAGE
-          - S2_REPLAY_FRAMES
-          - RACING_BASELINE_GLB
-          - RACING_OPTIMIZED_GLB
-          - USER_PROFILE_IMAGE
+          format: uuid
+        status:
           type: string
-          description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
-
-            * `PROJECT_SOURCE_STL` - Project Source STL
-
-            * `OPTIMIZED_STL` - Optimized STL
-
-            * `G2_SUMMARY_IMAGE` - G2 Summary Image
-
-            * `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image
-
-            * `G2_FIGS_ZIP` - G2 Figs ZIP
-
-            * `G1_INPUT_STL` - G1 Input STL
-
-            * `G1_SUMMARY_GIF` - G1 Summary GIF
-
-            * `G1_FIGS_ZIP` - G1 Figs ZIP
-
-            * `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP
-
-            * `RESULT_MESH` - Result Mesh
-
-            * `RESULT_HISTORY` - Result History
-
-            * `RESULT_SUMMARY_JSON` - Result Summary JSON
-
-            * `RESULT_FLOW_VOLUME` - Result Flow Volume
-
-            * `RESULT_GEOMETRY_SCALE` - Result Geometry Scale
-
-            * `RESULT_PREVIEW_POINTS` - Result Preview Points
-
-            * `RESULT_PROXY_MESH` - Result Proxy Mesh
-
-            * `RESULT_PROXY_LAYOUT` - Result Proxy Layout
-
-            * `RESULT_PROXY_ATLAS` - Result Proxy Atlas
-
-            * `STREAMLINES_BIN` - Streamlines Binary
-
-            * `FLOWFIELD_BIN` - Flow Field Binary
-
-            * `G4_SUMMARY_IMAGE` - G4 Summary Image
-
-            * `G4_FIGS_ZIP` - G4 Figs ZIP
-
-            * `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly
-
-            * `STEP_EXPORT_PART_STEP` - STEP Export Part STEP
-
-            * `STEP_EXPORT_PART_STL` - STEP Export Part STL
-
-            * `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image
-
-            * `ASSET_RENDERED_IMAGE` - Asset Rendered Image
-
-            * `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image
-
-            * `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames
-
-            * `RACING_BASELINE_GLB` - Racing Baseline GLB
-
-            * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
-
-            * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
-        storageProvider:
-          enum:
-          - S3
-          - GCS
-          - AZURE
-          type: string
-          description: '* `S3` - Amazon S3
-
-            * `GCS` - Google Cloud Storage
-
-            * `AZURE` - Azure Blob Storage'
-          x-spec-enum-id: 3e1757d60d74052a
-        s3Bucket:
-          type: string
-          maxLength: 255
-        s3Key:
-          type: string
-          maxLength: 1024
-        s3Url:
-          type: string
-          readOnly: true
-        fileName:
-          type: string
-          readOnly: true
-        contentType:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        sizeBytes:
-          type:
-          - integer
-          - 'null'
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        checksumSha256:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
+        retryAfterSeconds:
+          type: integer
+          minimum: 1
+      required:
+      - operationId
+      - retryAfterSeconds
+      - status
     ArtifactList:
       type: object
       properties:
@@ -621,6 +399,7 @@ components:
           - S2_REPLAY_FRAMES
           - RACING_BASELINE_GLB
           - RACING_OPTIMIZED_GLB
+          - CWT_RESULT
           - USER_PROFILE_IMAGE
           type: string
           description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
@@ -687,8 +466,10 @@ components:
 
             * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
 
+            * `CWT_RESULT` - Cornering Wind Tunnel Result
+
             * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
+          x-spec-enum-id: ffcff9a4293b8568
           readOnly: true
         contentType:
           type:
@@ -712,147 +493,8 @@ components:
       - id
       - sizeBytes
       - uid
-    ArtifactCreate:
-      type: object
-      properties:
-        storageProvider:
-          enum:
-          - S3
-          - GCS
-          - AZURE
-          type: string
-          description: '* `S3` - Amazon S3
-
-            * `GCS` - Google Cloud Storage
-
-            * `AZURE` - Azure Blob Storage'
-          x-spec-enum-id: 3e1757d60d74052a
-        s3Bucket:
-          type: string
-          maxLength: 255
-        s3Key:
-          type: string
-          maxLength: 1024
-        artifactRole:
-          enum:
-          - PROJECT_THUMBNAIL_IMAGE
-          - PROJECT_SOURCE_STL
-          - OPTIMIZED_STL
-          - G2_SUMMARY_IMAGE
-          - G2_SHAPE_REPORT_IMAGE
-          - G2_FIGS_ZIP
-          - G1_INPUT_STL
-          - G1_SUMMARY_GIF
-          - G1_FIGS_ZIP
-          - G1_NORMAL_DISPLACEMENT_VTP
-          - RESULT_MESH
-          - RESULT_HISTORY
-          - RESULT_SUMMARY_JSON
-          - RESULT_FLOW_VOLUME
-          - RESULT_GEOMETRY_SCALE
-          - RESULT_PREVIEW_POINTS
-          - RESULT_PROXY_MESH
-          - RESULT_PROXY_LAYOUT
-          - RESULT_PROXY_ATLAS
-          - STREAMLINES_BIN
-          - FLOWFIELD_BIN
-          - G4_SUMMARY_IMAGE
-          - G4_FIGS_ZIP
-          - STEP_EXPORT_ASSEMBLY
-          - STEP_EXPORT_PART_STEP
-          - STEP_EXPORT_PART_STL
-          - ASSET_FLOW_VISUALIZATION_IMAGE
-          - ASSET_RENDERED_IMAGE
-          - S2_FINAL_FIELD_IMAGE
-          - S2_REPLAY_FRAMES
-          - RACING_BASELINE_GLB
-          - RACING_OPTIMIZED_GLB
-          - USER_PROFILE_IMAGE
-          type: string
-          description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
-
-            * `PROJECT_SOURCE_STL` - Project Source STL
-
-            * `OPTIMIZED_STL` - Optimized STL
-
-            * `G2_SUMMARY_IMAGE` - G2 Summary Image
-
-            * `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image
-
-            * `G2_FIGS_ZIP` - G2 Figs ZIP
-
-            * `G1_INPUT_STL` - G1 Input STL
-
-            * `G1_SUMMARY_GIF` - G1 Summary GIF
-
-            * `G1_FIGS_ZIP` - G1 Figs ZIP
-
-            * `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP
-
-            * `RESULT_MESH` - Result Mesh
-
-            * `RESULT_HISTORY` - Result History
-
-            * `RESULT_SUMMARY_JSON` - Result Summary JSON
-
-            * `RESULT_FLOW_VOLUME` - Result Flow Volume
-
-            * `RESULT_GEOMETRY_SCALE` - Result Geometry Scale
-
-            * `RESULT_PREVIEW_POINTS` - Result Preview Points
-
-            * `RESULT_PROXY_MESH` - Result Proxy Mesh
-
-            * `RESULT_PROXY_LAYOUT` - Result Proxy Layout
-
-            * `RESULT_PROXY_ATLAS` - Result Proxy Atlas
-
-            * `STREAMLINES_BIN` - Streamlines Binary
-
-            * `FLOWFIELD_BIN` - Flow Field Binary
-
-            * `G4_SUMMARY_IMAGE` - G4 Summary Image
-
-            * `G4_FIGS_ZIP` - G4 Figs ZIP
-
-            * `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly
-
-            * `STEP_EXPORT_PART_STEP` - STEP Export Part STEP
-
-            * `STEP_EXPORT_PART_STL` - STEP Export Part STL
-
-            * `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image
-
-            * `ASSET_RENDERED_IMAGE` - Asset Rendered Image
-
-            * `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image
-
-            * `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames
-
-            * `RACING_BASELINE_GLB` - Racing Baseline GLB
-
-            * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
-
-            * `USER_PROFILE_IMAGE` - User Profile Image'
-          x-spec-enum-id: ef52df4c3b39155d
-        contentType:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        sizeBytes:
-          type:
-          - integer
-          - 'null'
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          format: int64
-        checksumSha256:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-      required:
-      - artifactRole
-      - s3Bucket
-      - s3Key
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

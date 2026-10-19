@@ -1,0 +1,1965 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Cwt API
+  version: 1.0.0
+tags:
+- name: cwt
+paths:
+  /cwt/capabilities/:
+    get:
+      operationId: cwt_capabilities_retrieve
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtCapabilities'
+          description: ''
+      summary: Cwt capabilities retrieve
+      x-summary-source: derived
+  /cwt/input-sessions/:
+    post:
+      operationId: cwt_input_sessions_create
+      tags:
+      - cwt
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtInputSession'
+          description: ''
+      summary: Cwt input sessions create
+      x-summary-source: derived
+  /cwt/input-sessions/{inputSessionUid}/:
+    get:
+      operationId: cwt_input_sessions_retrieve
+      parameters:
+      - in: path
+        name: inputSessionUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtInputSession'
+          description: ''
+      summary: Cwt input sessions retrieve
+      x-summary-source: derived
+  /cwt/runs/:
+    get:
+      operationId: cwt_runs_list
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+          maxLength: 2048
+          minLength: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+      - in: query
+        name: project
+        schema:
+          type: string
+          default: ''
+          maxLength: 36
+      - in: query
+        name: q
+        schema:
+          type: string
+          default: ''
+          maxLength: 128
+      - in: query
+        name: status
+        schema:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - aborted
+          - ''
+          type: string
+          x-spec-enum-id: 6b8a9060f1dec637
+          default: ''
+        description: '* `queued` - Queued
+
+          * `running` - Running
+
+          * `cancelling` - Cancelling
+
+          * `cancellation_failed` - Cancellation failed
+
+          * `succeeded` - Succeeded
+
+          * `failed` - Failed
+
+          * `cancelled` - Cancelled
+
+          * `aborted` - Aborted'
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtRunPage'
+          description: ''
+      summary: Cwt runs list
+      x-summary-source: derived
+    post:
+      operationId: cwt_runs_create
+      tags:
+      - cwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwtRunCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CwtRunCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CwtRunCreate'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtRunCreateAccepted'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs create
+      x-summary-source: derived
+  /cwt/runs/{runUid}/:
+    get:
+      operationId: cwt_runs_retrieve
+      parameters:
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtRunDetail'
+          description: ''
+      summary: Cwt runs retrieve
+      x-summary-source: derived
+  /cwt/runs/{runUid}/artifacts/:
+    get:
+      operationId: cwt_runs_artifacts_retrieve
+      parameters:
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtResultArtifactPage'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs artifacts retrieve
+      x-summary-source: derived
+  /cwt/runs/{runUid}/artifacts/{artifactUid}/download/:
+    get:
+      operationId: cwt_runs_artifact_download_retrieve
+      parameters:
+      - in: path
+        name: artifactUid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '302':
+          description: No response body
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs artifact download retrieve
+      x-summary-source: derived
+  /cwt/runs/{runUid}/cancel/:
+    post:
+      operationId: cwt_runs_cancel_create
+      parameters:
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtRunCancelResponse'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtRunCancelResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs cancel create
+      x-summary-source: derived
+  /cwt/runs/{runUid}/logs/:
+    get:
+      operationId: cwt_runs_logs_retrieve
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+          maxLength: 2048
+          minLength: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtLogPage'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs logs retrieve
+      x-summary-source: derived
+  /cwt/runs/{runUid}/viewer/:
+    get:
+      operationId: cwt_runs_viewer_retrieve
+      parameters:
+      - in: path
+        name: runUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtViewer'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtError'
+          description: ''
+      summary: Cwt runs viewer retrieve
+      x-summary-source: derived
+  /cwt/uploads/{uploadUid}/:
+    get:
+      operationId: cwt_uploads_retrieve
+      parameters:
+      - in: path
+        name: uploadUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadSummary'
+          description: ''
+      summary: Cwt uploads retrieve
+      x-summary-source: derived
+  /cwt/uploads/{uploadUid}/abort/:
+    post:
+      operationId: cwt_uploads_abort
+      parameters:
+      - in: path
+        name: uploadUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadSummary'
+          description: ''
+      summary: Cwt uploads abort
+      x-summary-source: derived
+  /cwt/uploads/{uploadUid}/complete/:
+    post:
+      operationId: cwt_uploads_complete
+      parameters:
+      - in: path
+        name: uploadUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwtUploadComplete'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CwtUploadComplete'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CwtUploadComplete'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadSummary'
+          description: ''
+      summary: Cwt uploads complete
+      x-summary-source: derived
+  /cwt/uploads/{uploadUid}/parts/:
+    get:
+      operationId: cwt_uploads_parts_list
+      parameters:
+      - in: path
+        name: uploadUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadPartsResponse'
+          description: ''
+      summary: Cwt uploads parts list
+      x-summary-source: derived
+  /cwt/uploads/{uploadUid}/parts/urls/:
+    post:
+      operationId: cwt_uploads_parts_urls_create
+      parameters:
+      - in: path
+        name: uploadUid
+        schema:
+          type: string
+        required: true
+      tags:
+      - cwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwtUploadPartUrls'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CwtUploadPartUrls'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CwtUploadPartUrls'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadPartUrlsResponse'
+          description: ''
+      summary: Cwt uploads parts urls create
+      x-summary-source: derived
+  /cwt/uploads/init/:
+    post:
+      operationId: cwt_uploads_init
+      tags:
+      - cwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwtUploadInit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CwtUploadInit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CwtUploadInit'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwtUploadInitResponse'
+          description: ''
+      summary: Cwt uploads init
+      x-summary-source: derived
+components:
+  schemas:
+    CwtRunMeshCreate:
+      type: object
+      properties:
+        profile:
+          enum:
+          - teaching
+          - low
+          - balanced
+          - fine
+          type: string
+          description: '* `teaching` - teaching
+
+            * `low` - low
+
+            * `balanced` - balanced
+
+            * `fine` - fine'
+          x-spec-enum-id: 69a6c932900c1ea3
+        layers:
+          type: boolean
+      required:
+      - layers
+      - profile
+    CwtRunExecutionCreate:
+      type: object
+      properties:
+        mode:
+          enum:
+          - mesh_only
+          - full
+          type: string
+          description: '* `mesh_only` - mesh_only
+
+            * `full` - full'
+          x-spec-enum-id: 4907d27a6ee408c3
+      required:
+      - mode
+    CwtUploadPartUrl:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+      required:
+      - partNumber
+      - url
+    CwtConditions:
+      type: object
+      properties:
+        radiusM:
+          type: number
+          format: double
+          readOnly: true
+        speedMps:
+          type: number
+          format: double
+          readOnly: true
+        turbulenceIntensity:
+          type: number
+          format: double
+          readOnly: true
+        turbulenceLengthScaleM:
+          type: number
+          format: double
+          readOnly: true
+        autoSteer:
+          enum:
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `on` - on
+
+            * `off` - off'
+          x-spec-enum-id: 3bd1fea2f14d31ac
+          readOnly: true
+      required:
+      - autoSteer
+      - radiusM
+      - speedMps
+      - turbulenceIntensity
+      - turbulenceLengthScaleM
+    CwtUploadPartUrlsResponse:
+      type: object
+      properties:
+        uploadUid:
+          type: string
+          readOnly: true
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtUploadPartUrl'
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - expiresAt
+      - parts
+      - uploadUid
+    CwtNumericRange:
+      type: object
+      properties:
+        minimum:
+          type: number
+          format: double
+          readOnly: true
+        maximum:
+          type: number
+          format: double
+          readOnly: true
+      required:
+      - maximum
+      - minimum
+    CwtRunDetail:
+      type: object
+      properties:
+        runUid:
+          type: string
+          readOnly: true
+        jobUid:
+          type: string
+          readOnly: true
+        projectUid:
+          type: string
+          readOnly: true
+        inputSessionUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - aborted
+          type: string
+          description: '* `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled
+
+            * `aborted` - Aborted'
+          x-spec-enum-id: 6b8a9060f1dec637
+          readOnly: true
+        progress:
+          type: number
+          format: double
+          readOnly: true
+        stage:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        vehicle:
+          allOf:
+          - $ref: '#/components/schemas/CwtVehicle'
+          readOnly: true
+        inputFiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtRunInputFile'
+          readOnly: true
+        conditions:
+          allOf:
+          - $ref: '#/components/schemas/CwtConditions'
+          readOnly: true
+        mesh:
+          allOf:
+          - $ref: '#/components/schemas/CwtMesh'
+          readOnly: true
+        solver:
+          allOf:
+          - $ref: '#/components/schemas/CwtSolver'
+          readOnly: true
+        execution:
+          allOf:
+          - $ref: '#/components/schemas/CwtExecution'
+          readOnly: true
+        resultSummary:
+          readOnly: true
+        error:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - conditions
+      - createdAt
+      - error
+      - execution
+      - finishedAt
+      - inputFiles
+      - inputSessionUid
+      - jobUid
+      - mesh
+      - name
+      - progress
+      - projectUid
+      - resultSummary
+      - runUid
+      - solver
+      - stage
+      - startedAt
+      - status
+      - vehicle
+    CwtSolverFileLocation:
+      type: object
+      properties:
+        bucket:
+          type: string
+          readOnly: true
+        key:
+          type: string
+          readOnly: true
+        state:
+          enum:
+          - pending
+          - ready
+          - failed
+          - unknown
+          type: string
+          description: '* `pending` - pending
+
+            * `ready` - ready
+
+            * `failed` - failed
+
+            * `unknown` - unknown'
+          x-spec-enum-id: d04195be439947de
+          readOnly: true
+      required:
+      - bucket
+      - key
+      - state
+    CwtError:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+        errors:
+          readOnly: true
+      required:
+      - code
+      - detail
+      - errors
+    CwtCapabilityDefaults:
+      type: object
+      properties:
+        autoSteer:
+          enum:
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `on` - on
+
+            * `off` - off'
+          x-spec-enum-id: 3bd1fea2f14d31ac
+          readOnly: true
+        meshProfile:
+          type: string
+          readOnly: true
+        layers:
+          type: boolean
+          readOnly: true
+        turbulenceIntensity:
+          type: number
+          format: double
+          readOnly: true
+        turbulenceLengthScaleM:
+          type: number
+          format: double
+          readOnly: true
+        maxIterations:
+          type: integer
+          readOnly: true
+        fieldWriteInterval:
+          type: integer
+          readOnly: true
+        resourceProfile:
+          type: string
+          readOnly: true
+      required:
+      - autoSteer
+      - fieldWriteInterval
+      - layers
+      - maxIterations
+      - meshProfile
+      - resourceProfile
+      - turbulenceIntensity
+      - turbulenceLengthScaleM
+    CwtSolver:
+      type: object
+      properties:
+        maxIterations:
+          type: integer
+          readOnly: true
+        fieldWriteInterval:
+          type: integer
+          readOnly: true
+      required:
+      - fieldWriteInterval
+      - maxIterations
+    CwtRunConditionsCreate:
+      type: object
+      properties:
+        autoSteer:
+          enum:
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `on` - on
+
+            * `off` - off'
+          x-spec-enum-id: 3bd1fea2f14d31ac
+          default: 'off'
+        radiusM:
+          type: number
+          format: double
+          maximum: 2000.0
+          minimum: 0.001
+        speedMps:
+          type: number
+          format: double
+          maximum: 100.0
+          minimum: 1.0
+        turbulenceIntensity:
+          type: number
+          format: double
+          maximum: 0.1
+          minimum: 0.001
+          default: 0.008
+        turbulenceLengthScaleM:
+          type: number
+          format: double
+          maximum: 5.0
+          minimum: 0.01
+          default: 0.503
+      required:
+      - radiusM
+      - speedMps
+    CwtCapabilityRanges:
+      type: object
+      properties:
+        radiusM:
+          allOf:
+          - $ref: '#/components/schemas/CwtRadiusRange'
+          readOnly: true
+        speedMps:
+          allOf:
+          - $ref: '#/components/schemas/CwtNumericRange'
+          readOnly: true
+        turbulenceIntensity:
+          allOf:
+          - $ref: '#/components/schemas/CwtNumericRange'
+          readOnly: true
+        turbulenceLengthScaleM:
+          allOf:
+          - $ref: '#/components/schemas/CwtNumericRange'
+          readOnly: true
+        maxIterations:
+          allOf:
+          - $ref: '#/components/schemas/CwtNumericRange'
+          readOnly: true
+        fieldWriteInterval:
+          allOf:
+          - $ref: '#/components/schemas/CwtNumericRange'
+          readOnly: true
+      required:
+      - fieldWriteInterval
+      - maxIterations
+      - radiusM
+      - speedMps
+      - turbulenceIntensity
+      - turbulenceLengthScaleM
+    CwtViewerFile:
+      type: object
+      properties:
+        role:
+          enum:
+          - manifest
+          - referenceVehicle
+          - vehicle
+          - tunnel
+          - flow
+          type: string
+          description: '* `manifest` - manifest
+
+            * `referenceVehicle` - referenceVehicle
+
+            * `vehicle` - vehicle
+
+            * `tunnel` - tunnel
+
+            * `flow` - flow'
+          x-spec-enum-id: 9a324b47009036f2
+          readOnly: true
+        artifactUid:
+          type: string
+          readOnly: true
+        contentType:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+      required:
+      - artifactUid
+      - contentType
+      - role
+      - sizeBytes
+      - url
+    CwtRunCreateAccepted:
+      type: object
+      properties:
+        runUid:
+          type: string
+          readOnly: true
+        jobUid:
+          type: string
+          readOnly: true
+        projectUid:
+          type: string
+          readOnly: true
+        inputSessionUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - aborted
+          type: string
+          description: '* `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled
+
+            * `aborted` - Aborted'
+          x-spec-enum-id: 6b8a9060f1dec637
+          readOnly: true
+        progress:
+          type: number
+          format: double
+          readOnly: true
+        stage:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - finishedAt
+      - inputSessionUid
+      - jobUid
+      - name
+      - progress
+      - projectUid
+      - runUid
+      - stage
+      - startedAt
+      - status
+    CwtVehicle:
+      type: object
+      properties:
+        displayName:
+          type: string
+          readOnly: true
+        frontDirection:
+          type: string
+          readOnly: true
+        sourceUnits:
+          type: string
+          readOnly: true
+        rearWheelMode:
+          enum:
+          - combined
+          - split
+          type: string
+          description: '* `combined` - combined
+
+            * `split` - split'
+          x-spec-enum-id: fb5cc94bbc68e884
+          readOnly: true
+      required:
+      - displayName
+      - frontDirection
+      - rearWheelMode
+      - sourceUnits
+    CwtLogEvent:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+        stage:
+          type: string
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        progress:
+          type: number
+          format: double
+          readOnly: true
+        iteration:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        maxIterations:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+      required:
+      - code
+      - iteration
+      - maxIterations
+      - message
+      - progress
+      - sequence
+      - stage
+      - timestamp
+    CwtResultArtifactPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtResultArtifact'
+          readOnly: true
+      required:
+      - results
+    CwtRunCreate:
+      type: object
+      properties:
+        inputSessionUid:
+          type: string
+          maxLength: 36
+        projectUid:
+          type: string
+          maxLength: 36
+        name:
+          type: string
+          default: ''
+          maxLength: 128
+        vehicle:
+          $ref: '#/components/schemas/CwtRunVehicleCreate'
+        conditions:
+          $ref: '#/components/schemas/CwtRunConditionsCreate'
+        mesh:
+          $ref: '#/components/schemas/CwtRunMeshCreate'
+        solver:
+          $ref: '#/components/schemas/CwtRunSolverCreate'
+        execution:
+          $ref: '#/components/schemas/CwtRunExecutionCreate'
+      required:
+      - conditions
+      - execution
+      - inputSessionUid
+      - mesh
+      - projectUid
+      - solver
+      - vehicle
+    CwtOriginalFileLocation:
+      type: object
+      properties:
+        bucket:
+          type: string
+          readOnly: true
+        key:
+          type: string
+          readOnly: true
+        state:
+          enum:
+          - recorded
+          - deleted
+          - unknown
+          type: string
+          description: '* `recorded` - recorded
+
+            * `deleted` - deleted
+
+            * `unknown` - unknown'
+          x-spec-enum-id: f8b917a5493eda0d
+          readOnly: true
+      required:
+      - bucket
+      - key
+      - state
+    CwtLogPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtLogEvent'
+          readOnly: true
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - nextCursor
+      - results
+    CwtViewer:
+      type: object
+      properties:
+        runUid:
+          type: string
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtViewerFile'
+          readOnly: true
+      required:
+      - expiresAt
+      - files
+      - runUid
+    CwtUploadPartsResponse:
+      type: object
+      properties:
+        uploadUid:
+          type: string
+          readOnly: true
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtUploadPart'
+          readOnly: true
+      required:
+      - parts
+      - uploadUid
+    CwtCompletedPart:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+          minimum: 1
+        etag:
+          type: string
+          maxLength: 255
+      required:
+      - etag
+      - partNumber
+    CwtUploadInitResponse:
+      type: object
+      properties:
+        uploadUid:
+          type: string
+          readOnly: true
+        partSizeBytes:
+          type: integer
+          readOnly: true
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtUploadPartUrl'
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - expiresAt
+      - partSizeBytes
+      - parts
+      - uploadUid
+    CwtExecution:
+      type: object
+      properties:
+        mode:
+          type: string
+          readOnly: true
+        resourceProfile:
+          type: string
+          readOnly: true
+      required:
+      - mode
+      - resourceProfile
+    CwtUploadPart:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+          readOnly: true
+        etag:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+      required:
+      - etag
+      - partNumber
+      - sizeBytes
+    CwtRunAeroPartCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 64
+          pattern: ^[A-Za-z][A-Za-z0-9_]{0,63}$
+        uploadUid:
+          type: string
+          maxLength: 36
+      required:
+      - name
+      - uploadUid
+    CwtMesh:
+      type: object
+      properties:
+        profile:
+          type: string
+          readOnly: true
+        layers:
+          type: boolean
+          readOnly: true
+      required:
+      - layers
+      - profile
+    CwtCapabilities:
+      type: object
+      properties:
+        executionEnabled:
+          type: boolean
+          readOnly: true
+        meshProfiles:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        executionModes:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        defaults:
+          allOf:
+          - $ref: '#/components/schemas/CwtCapabilityDefaults'
+          readOnly: true
+        ranges:
+          allOf:
+          - $ref: '#/components/schemas/CwtCapabilityRanges'
+          readOnly: true
+      required:
+      - defaults
+      - executionEnabled
+      - executionModes
+      - meshProfiles
+      - ranges
+    CwtRunPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtRunList'
+          readOnly: true
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - nextCursor
+      - results
+    CwtRunList:
+      type: object
+      properties:
+        runUid:
+          type: string
+          readOnly: true
+        jobUid:
+          type: string
+          readOnly: true
+        projectUid:
+          type: string
+          readOnly: true
+        inputSessionUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - aborted
+          type: string
+          description: '* `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled
+
+            * `aborted` - Aborted'
+          x-spec-enum-id: 6b8a9060f1dec637
+          readOnly: true
+        progress:
+          type: number
+          format: double
+          readOnly: true
+        stage:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - finishedAt
+      - inputSessionUid
+      - jobUid
+      - name
+      - progress
+      - projectUid
+      - runUid
+      - stage
+      - startedAt
+      - status
+    CwtRunVehicleCreate:
+      type: object
+      properties:
+        frontDirection:
+          enum:
+          - -x
+          - +x
+          - -y
+          - +y
+          type: string
+          description: '* `-x` - -x
+
+            * `+x` - +x
+
+            * `-y` - -y
+
+            * `+y` - +y'
+          x-spec-enum-id: 3690b455433c9410
+        sourceUnits:
+          enum:
+          - auto
+          - m
+          - cm
+          - mm
+          type: string
+          description: '* `auto` - auto
+
+            * `m` - m
+
+            * `cm` - cm
+
+            * `mm` - mm'
+          x-spec-enum-id: 6dbaf62d7b50de72
+        bodyUploadUid:
+          type: string
+          maxLength: 36
+        frontWheelLeftUploadUid:
+          type: string
+          maxLength: 36
+        frontWheelRightUploadUid:
+          type: string
+          maxLength: 36
+        rearWheelUploadUid:
+          type: string
+          maxLength: 36
+        rearWheelLeftUploadUid:
+          type: string
+          maxLength: 36
+        rearWheelRightUploadUid:
+          type: string
+          maxLength: 36
+        rearWheelMode:
+          enum:
+          - combined
+          - split
+          type: string
+          description: '* `combined` - combined
+
+            * `split` - split'
+          x-spec-enum-id: fb5cc94bbc68e884
+        aeroParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtRunAeroPartCreate'
+      required:
+      - bodyUploadUid
+      - frontDirection
+      - frontWheelLeftUploadUid
+      - frontWheelRightUploadUid
+      - sourceUnits
+    CwtUploadInit:
+      type: object
+      properties:
+        inputSessionUid:
+          type: string
+          maxLength: 36
+        role:
+          enum:
+          - sourceStl
+          - bodyStl
+          - frontWheelLeftStl
+          - frontWheelRightStl
+          - rearWheelStl
+          - rearWheelLeftStl
+          - rearWheelRightStl
+          - aeroPart
+          type: string
+          description: '* `sourceStl` - Unclassified source STL
+
+            * `bodyStl` - Body STL
+
+            * `frontWheelLeftStl` - Front wheel left STL
+
+            * `frontWheelRightStl` - Front wheel right STL
+
+            * `rearWheelStl` - Rear wheel STL
+
+            * `rearWheelLeftStl` - Rear wheel left STL
+
+            * `rearWheelRightStl` - Rear wheel right STL
+
+            * `aeroPart` - Aero part'
+          x-spec-enum-id: f28ed5ac6109a980
+        name:
+          type: string
+          default: ''
+          maxLength: 128
+        fileName:
+          type: string
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 1
+        checksumSha256:
+          type: string
+          pattern: ^[0-9a-fA-F]{64}$
+      required:
+      - checksumSha256
+      - fileName
+      - inputSessionUid
+      - role
+      - sizeBytes
+    CwtRadiusRange:
+      type: object
+      properties:
+        maximum:
+          type: number
+          format: double
+          readOnly: true
+        minimumVehicleWidthMultiplier:
+          type: number
+          format: double
+          readOnly: true
+      required:
+      - maximum
+      - minimumVehicleWidthMultiplier
+    CwtInputSession:
+      type: object
+      properties:
+        inputSessionUid:
+          type: string
+          readOnly: true
+        projectUid:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - open
+          - ready
+          - consumed
+          - aborted
+          - expired
+          type: string
+          description: '* `open` - Open
+
+            * `ready` - Ready
+
+            * `consumed` - Consumed
+
+            * `aborted` - Aborted
+
+            * `expired` - Expired'
+          x-spec-enum-id: 4200bc9602e51130
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        uploads:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtUploadSummary'
+          readOnly: true
+      required:
+      - createdAt
+      - expiresAt
+      - inputSessionUid
+      - projectUid
+      - status
+      - uploads
+    CwtResultArtifact:
+      type: object
+      properties:
+        artifactUid:
+          type: string
+          readOnly: true
+        type:
+          enum:
+          - summary
+          - table
+          - image
+          - viewer
+          type: string
+          description: '* `summary` - summary
+
+            * `table` - table
+
+            * `image` - image
+
+            * `viewer` - viewer'
+          x-spec-enum-id: 4b1848031e132de8
+          readOnly: true
+        relativePath:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+        contentType:
+          type: string
+          readOnly: true
+        ready:
+          type: boolean
+          readOnly: true
+      required:
+      - artifactUid
+      - contentType
+      - ready
+      - relativePath
+      - sizeBytes
+      - type
+    CwtRunInputFile:
+      type: object
+      properties:
+        uploadUid:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        role:
+          enum:
+          - bodyStl
+          - frontWheelLeftStl
+          - frontWheelRightStl
+          - rearWheelStl
+          - rearWheelLeftStl
+          - rearWheelRightStl
+          - aeroPart
+          type: string
+          description: '* `bodyStl` - Body STL
+
+            * `frontWheelLeftStl` - Front wheel left STL
+
+            * `frontWheelRightStl` - Front wheel right STL
+
+            * `rearWheelStl` - Rear wheel STL
+
+            * `rearWheelLeftStl` - Rear wheel left STL
+
+            * `rearWheelRightStl` - Rear wheel right STL
+
+            * `aeroPart` - Aero part'
+          x-spec-enum-id: 3c17c81d189efc4d
+          readOnly: true
+        partName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        originalFileName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        sizeBytes:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        sha256:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        preparationStatus:
+          enum:
+          - pending
+          - ready
+          - failed
+          - unknown
+          type: string
+          description: '* `pending` - pending
+
+            * `ready` - ready
+
+            * `failed` - failed
+
+            * `unknown` - unknown'
+          x-spec-enum-id: d04195be439947de
+          readOnly: true
+        originalLocation:
+          allOf:
+          - $ref: '#/components/schemas/CwtOriginalFileLocation'
+          readOnly: true
+        solverLocation:
+          allOf:
+          - $ref: '#/components/schemas/CwtSolverFileLocation'
+          readOnly: true
+      required:
+      - originalFileName
+      - originalLocation
+      - partName
+      - preparationStatus
+      - role
+      - sha256
+      - sizeBytes
+      - solverLocation
+      - uploadUid
+    CwtRunSolverCreate:
+      type: object
+      properties:
+        maxIterations:
+          type: integer
+          maximum: 3000
+          minimum: 100
+        fieldWriteInterval:
+          type: integer
+          maximum: 500
+          minimum: 10
+      required:
+      - fieldWriteInterval
+      - maxIterations
+    CwtUploadPartUrls:
+      type: object
+      properties:
+        partNumbers:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          maxItems: 10000
+      required:
+      - partNumbers
+    CwtUploadSummary:
+      type: object
+      properties:
+        uploadUid:
+          type: string
+          readOnly: true
+        inputSessionUid:
+          type: string
+          readOnly: true
+        role:
+          enum:
+          - sourceStl
+          - bodyStl
+          - frontWheelLeftStl
+          - frontWheelRightStl
+          - rearWheelStl
+          - rearWheelLeftStl
+          - rearWheelRightStl
+          - aeroPart
+          type: string
+          description: '* `sourceStl` - Unclassified source STL
+
+            * `bodyStl` - Body STL
+
+            * `frontWheelLeftStl` - Front wheel left STL
+
+            * `frontWheelRightStl` - Front wheel right STL
+
+            * `rearWheelStl` - Rear wheel STL
+
+            * `rearWheelLeftStl` - Rear wheel left STL
+
+            * `rearWheelRightStl` - Rear wheel right STL
+
+            * `aeroPart` - Aero part'
+          x-spec-enum-id: f28ed5ac6109a980
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        fileName:
+          type: string
+          readOnly: true
+        sizeBytes:
+          type: integer
+          readOnly: true
+        status:
+          enum:
+          - pending
+          - uploading
+          - verifying
+          - ready
+          - failed
+          - aborted
+          type: string
+          description: '* `pending` - Pending
+
+            * `uploading` - Uploading
+
+            * `verifying` - Verifying
+
+            * `ready` - Ready
+
+            * `failed` - Failed
+
+            * `aborted` - Aborted'
+          x-spec-enum-id: 4b83d33cf96dcd8f
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        verifiedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        error:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - createdAt
+      - error
+      - fileName
+      - inputSessionUid
+      - name
+      - role
+      - sizeBytes
+      - status
+      - uploadUid
+      - verifiedAt
+    CwtRunCancelResponse:
+      type: object
+      properties:
+        runUid:
+          type: string
+          readOnly: true
+        jobUid:
+          type: string
+          readOnly: true
+        status:
+          enum:
+          - queued
+          - running
+          - cancelling
+          - cancellation_failed
+          - succeeded
+          - failed
+          - cancelled
+          - aborted
+          type: string
+          description: '* `queued` - Queued
+
+            * `running` - Running
+
+            * `cancelling` - Cancelling
+
+            * `cancellation_failed` - Cancellation failed
+
+            * `succeeded` - Succeeded
+
+            * `failed` - Failed
+
+            * `cancelled` - Cancelled
+
+            * `aborted` - Aborted'
+          x-spec-enum-id: 6b8a9060f1dec637
+          readOnly: true
+      required:
+      - jobUid
+      - runUid
+      - status
+    CwtUploadComplete:
+      type: object
+      properties:
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CwtCompletedPart'
+      required:
+      - completedParts
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -35,3 +35,27 @@ paths:
           description: No response body
       summary: Board retrieve 2
       x-summary-source: derived
+  /board/attachments/{id}/download/:
+    get:
+      operationId: board_attachments_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Board
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Board attachments download retrieve
+      x-summary-source: derived
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

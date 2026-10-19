@@ -1,0 +1,78 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Sample Stls API
+  version: 1.0.0
+tags:
+- name: sample-stls
+paths:
+  /sample-stls/:
+    get:
+      operationId: sample_stls_list
+      description: 현재 테넌트에서 노출 처리된 Sample STL 목록을 반환합니다.
+      summary: Sample STL 목록 조회
+      tags:
+      - sample-stls
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SampleStl'
+          description: ''
+  /sample-stls/{sample_id}/download/:
+    get:
+      operationId: sample_stls_download_retrieve
+      description: Sample STL id로 현재 테넌트의 노출된 샘플을 조회한 뒤 presigned GET URL을 발급합니다.
+      summary: Sample STL 다운로드 URL 발급
+      parameters:
+      - in: path
+        name: sample_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - sample-stls
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleStlDownload'
+          description: ''
+components:
+  schemas:
+    SampleStl:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        unit:
+          type: string
+          readOnly: true
+        s3Key:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - label
+      - s3Key
+      - unit
+    SampleStlDownload:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        expiresIn:
+          type: integer
+          readOnly: true
+      required:
+      - expiresIn
+      - url

@@ -105,6 +105,20 @@ paths:
           description: No response body
       summary: Les autoconfig upload init create
       x-summary-source: derived
+  /les/capabilities/:
+    get:
+      operationId: les_capabilities_retrieve
+      tags:
+      - les
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesCapabilities'
+          description: ''
+      summary: Les capabilities retrieve
+      x-summary-source: derived
   /les/runs/:
     get:
       operationId: les_runs_retrieve
@@ -112,16 +126,36 @@ paths:
       - les
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesRunListResponse'
+          description: ''
       summary: Les runs retrieve
       x-summary-source: derived
     post:
       operationId: les_runs_create
       tags:
       - les
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LesRunSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LesRunSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LesRunSubmission'
+        required: true
       responses:
-        '200':
-          description: No response body
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesRun'
+          description: ''
       summary: Les runs create
       x-summary-source: derived
   /les/runs/{uid}/:
@@ -137,7 +171,11 @@ paths:
       - les
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LesRun'
+          description: ''
       summary: Les runs retrieve 2
       x-summary-source: derived
   /les/runs/{uid}/cancel/:
@@ -407,6 +445,23 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    LesInputUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId
     LesInputUpload:
       type: object
       properties:
@@ -442,6 +497,125 @@ components:
       - status
       - stlFilename
       - uid
+    LesRunListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LesRunList'
+      required:
+      - results
+    LesRunSubmission:
+      type: object
+      description: Schema for the transport handles resolved before input validation.
+      properties:
+        wheels:
+          enum:
+          - unknown
+          - open_spokes
+          - sealed
+          type: string
+          description: '* `unknown` - Unknown
+
+            * `open_spokes` - Open spokes
+
+            * `sealed` - Sealed in uploaded geometry'
+          x-spec-enum-id: 82934dcead1a8ccf
+          default: unknown
+        name:
+          type: string
+          maxLength: 128
+        speedKmh:
+          type: number
+          format: double
+          maximum: 400.0
+          minimum: 1.0
+          default: 120.0
+        groundClearanceMm:
+          type: number
+          format: double
+          maximum: 500.0
+          minimum: 0.0
+          default: 30.0
+        yawDeg:
+          type: number
+          format: double
+          maximum: 30.0
+          minimum: -30.0
+          default: 0.0
+        grade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+          default: precision
+        placement:
+          enum:
+          - auto
+          - ground
+          - free
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `ground` - Ground (road vehicle)
+
+            * `free` - Free flight'
+          x-spec-enum-id: 0b78f8fee8b999b7
+          default: auto
+        movieFrames:
+          type: integer
+          maximum: 3000
+          minimum: 0
+          default: 480
+        sealWheels:
+          enum:
+          - auto
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `on` - On
+
+            * `off` - Off'
+          x-spec-enum-id: 53e18c43bb418670
+          default: auto
+        spinWheels:
+          enum:
+          - auto
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `on` - On
+
+            * `off` - Off'
+          x-spec-enum-id: 53e18c43bb418670
+          default: auto
+        intent:
+          type: string
+          default: ''
+          maxLength: 2000
+        stagedInputUid:
+          type: string
+          maxLength: 36
+        autoconfigUid:
+          type: string
+          maxLength: 36
+        stl:
+          type: string
+          format: uri
+      required:
+      - name
     LesAutoconfig:
       type: object
       properties:
@@ -490,23 +664,365 @@ components:
       - status
       - stlFilename
       - uid
-    LesInputUploadComplete:
+    LesRun:
       type: object
       properties:
-        uploadId:
+        uid:
           type: string
-          maxLength: 512
-        completedParts:
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        speedKmh:
+          type: number
+          format: double
+          readOnly: true
+        groundClearanceMm:
+          type: number
+          format: double
+          readOnly: true
+        yawDeg:
+          type: number
+          format: double
+          readOnly: true
+        grade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+          readOnly: true
+        placement:
+          enum:
+          - auto
+          - ground
+          - free
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `ground` - Ground (road vehicle)
+
+            * `free` - Free flight'
+          x-spec-enum-id: 0b78f8fee8b999b7
+          readOnly: true
+        wheels:
+          enum:
+          - unknown
+          - open_spokes
+          - sealed
+          type: string
+          description: '* `unknown` - Unknown
+
+            * `open_spokes` - Open spokes
+
+            * `sealed` - Sealed in uploaded geometry'
+          x-spec-enum-id: 82934dcead1a8ccf
+          readOnly: true
+        sealWheels:
+          enum:
+          - auto
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `on` - On
+
+            * `off` - Off'
+          x-spec-enum-id: 53e18c43bb418670
+          readOnly: true
+        spinWheels:
+          enum:
+          - auto
+          - 'on'
+          - 'off'
+          type: string
+          description: '* `auto` - Auto (runner decides)
+
+            * `on` - On
+
+            * `off` - Off'
+          x-spec-enum-id: 53e18c43bb418670
+          readOnly: true
+        movieFrames:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        intent:
+          type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        progress:
+          readOnly: true
+        result:
+          readOnly: true
+        error:
+          type: string
+          readOnly: true
+        diagnosis:
+          readOnly: true
+        caseSetup:
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        deletion:
+          readOnly: true
+        figureArtifacts:
           type: array
           items:
-            $ref: '#/components/schemas/_CompletedPart'
-        reservationId:
-          type: string
-          format: uuid
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        downloadQuota:
+          readOnly: true
+        resultSummary:
+          readOnly: true
+        mediaArtifacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        lesContractVersion:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        executionProfile:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        scheduling:
+          readOnly: true
       required:
-      - completedParts
-      - reservationId
-      - uploadId
+      - caseSetup
+      - createdAt
+      - deletion
+      - diagnosis
+      - downloadQuota
+      - error
+      - executionProfile
+      - figureArtifacts
+      - finishedAt
+      - grade
+      - groundClearanceMm
+      - intent
+      - lesContractVersion
+      - mediaArtifacts
+      - movieFrames
+      - name
+      - placement
+      - progress
+      - result
+      - resultSummary
+      - scheduling
+      - sealWheels
+      - speedKmh
+      - spinWheels
+      - startedAt
+      - status
+      - stlFilename
+      - uid
+      - wheels
+      - yawDeg
+    LesRunList:
+      type: object
+      description: 'Compact LES run representation used by the run list.
+
+
+        Keep remote artifacts such as the failure diagnosis out of this serializer.
+
+        Fetching those artifacts belongs to the run detail endpoint.'
+      properties:
+        uid:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        grade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        result:
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        deletion:
+          readOnly: true
+        figureArtifacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        downloadQuota:
+          readOnly: true
+        resultSummary:
+          readOnly: true
+        mediaArtifacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        lesContractVersion:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        executionProfile:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        scheduling:
+          readOnly: true
+      required:
+      - createdAt
+      - deletion
+      - downloadQuota
+      - executionProfile
+      - figureArtifacts
+      - finishedAt
+      - grade
+      - lesContractVersion
+      - mediaArtifacts
+      - name
+      - result
+      - resultSummary
+      - scheduling
+      - startedAt
+      - status
+      - stlFilename
+      - uid
+    LesCapabilities:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        contractVersion:
+          type:
+          - integer
+          - 'null'
+        defaultGrade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+        groundClearanceMin:
+          type: number
+          format: double
+        groundClearanceMax:
+          type: number
+          format: double
+        wheelTreatmentSupported:
+          type: boolean
+        publicationProtocol:
+          enum:
+          - legacy
+          - native
+          - manifest
+          type: string
+          description: '* `legacy` - legacy
+
+            * `native` - native
+
+            * `manifest` - manifest'
+          x-spec-enum-id: 11cc3e4f02bde017
+        geometryContractSupported:
+          type: boolean
+        grades:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: {}
+      required:
+      - contractVersion
+      - defaultGrade
+      - enabled
+      - geometryContractSupported
+      - grades
+      - groundClearanceMax
+      - groundClearanceMin
+      - publicationProtocol
+      - wheelTreatmentSupported
+    _CompletedPart:
+      type: object
+      properties:
+        etag:
+          type: string
+          maxLength: 255
+        partNumber:
+          type: integer
+          maximum: 10000
+          minimum: 1
+      required:
+      - etag
+      - partNumber
     LesAutoconfigUploadComplete:
       type: object
       properties:
@@ -524,16 +1040,8 @@ components:
       - completedParts
       - reservationId
       - uploadId
-    _CompletedPart:
-      type: object
-      properties:
-        etag:
-          type: string
-          maxLength: 255
-        partNumber:
-          type: integer
-          maximum: 10000
-          minimum: 1
-      required:
-      - etag
-      - partNumber
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

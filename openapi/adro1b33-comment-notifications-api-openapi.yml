@@ -1,0 +1,152 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Comment Notifications API
+  version: 1.0.0
+tags:
+- name: comment-notifications
+paths:
+  /comment-notifications/:
+    get:
+      operationId: comment_notifications_retrieve
+      parameters:
+      - in: query
+        name: cursor
+        schema:
+          type: string
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+      - in: query
+        name: projectId
+        schema:
+          type: integer
+      - in: query
+        name: unread
+        schema:
+          type: boolean
+      tags:
+      - comment-notifications
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentNotificationPage'
+          description: ''
+      summary: Comment notifications retrieve
+      x-summary-source: derived
+  /comment-notifications/read/:
+    post:
+      operationId: comment_notifications_read_create
+      tags:
+      - comment-notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentNotificationRead'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentNotificationRead'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentNotificationRead'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentNotificationReadResponse'
+          description: ''
+      summary: Comment notifications read create
+      x-summary-source: derived
+components:
+  schemas:
+    CommentNotificationReadResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+      required:
+      - ok
+    CommentNotificationPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentNotification'
+        next:
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - results
+    CommentNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        projectId:
+          type: integer
+          readOnly: true
+        threadId:
+          type: integer
+          readOnly: true
+        commentId:
+          type: integer
+          readOnly: true
+        reason:
+          enum:
+          - direct_mention
+          - thread_activity
+          type: string
+          description: '* `direct_mention` - Direct mention
+
+            * `thread_activity` - Thread activity'
+          x-spec-enum-id: 385bc0b40d524e1d
+          readOnly: true
+        readAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        lastTriggeredAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - commentId
+      - createdAt
+      - id
+      - lastTriggeredAt
+      - projectId
+      - readAt
+      - reason
+      - threadId
+    CommentNotificationRead:
+      type: object
+      properties:
+        notificationIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          maxItems: 100
+          minItems: 1
+      required:
+      - notificationIds
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

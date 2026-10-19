@@ -1,0 +1,25 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Internal API
+  version: 1.0.0
+tags:
+- name: Internal
+paths:
+  /internal/racing/map-releases/:
+    post:
+      operationId: internal_racing_map_releases_create
+      tags:
+      - Internal
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+      summary: Internal racing map releases create
+      x-summary-source: derived
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,164 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Assets API
+  version: 1.0.0
+tags:
+- name: Assets
+paths:
+  /assets/:
+    get:
+      operationId: assets_retrieve
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets retrieve
+      x-summary-source: derived
+  /assets/{asset_uid}/:
+    get:
+      operationId: assets_retrieve_2
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets retrieve 2
+      x-summary-source: derived
+  /assets/{asset_uid}/acquire/:
+    post:
+      operationId: assets_acquire_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets acquire create
+      x-summary-source: derived
+  /assets/{asset_uid}/approval/:
+    post:
+      operationId: assets_approval_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets approval create
+      x-summary-source: derived
+  /assets/{asset_uid}/projects/:
+    post:
+      operationId: assets_projects_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets projects create
+      x-summary-source: derived
+  /assets/{asset_uid}/retry-copy/:
+    post:
+      operationId: assets_retry_copy_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets retry copy create
+      x-summary-source: derived
+  /assets/{asset_uid}/save/:
+    post:
+      operationId: assets_save_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets save create
+      x-summary-source: derived
+    delete:
+      operationId: assets_save_destroy
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '204':
+          description: No response body
+      summary: Assets save destroy
+      x-summary-source: derived
+  /assets/{asset_uid}/stop-sale/:
+    post:
+      operationId: assets_stop_sale_create
+      parameters:
+      - in: path
+        name: asset_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets stop sale create
+      x-summary-source: derived
+  /assets/mine/:
+    get:
+      operationId: assets_mine_retrieve
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets mine retrieve
+      x-summary-source: derived
+  /assets/transactions/:
+    get:
+      operationId: assets_transactions_retrieve
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: No response body
+      summary: Assets transactions retrieve
+      x-summary-source: derived

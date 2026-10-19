@@ -1,0 +1,202 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Presigned URL API
+  version: 1.0.0
+tags:
+- name: presigned_url
+paths:
+  /presigned_url/:
+    post:
+      operationId: presigned_url_create
+      description: '프로젝트 thumbnail 및 사용자 profile image 업로드용 presigned URL을 발급합니다.
+
+        프로젝트 source 파일은 `/projects/{project_id}/source-uploads/init/` multipart API를 사용해야 합니다.
+
+
+        ```json
+
+        { "field_choice": "app.Model.field", "file_name": "image.png", "is_download": false }
+
+        ```
+
+        응답: `{ url, fields }`'
+      summary: 미리 서명된 URL 발급
+      tags:
+      - presigned_url
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Presigned'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Presigned'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Presigned'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Presigned'
+          description: ''
+  /presigned_url/download/:
+    get:
+      operationId: presigned_url_download_retrieve
+      description: S3에 저장된 파일의 다운로드용 presigned GET URL을 발급합니다.
+      summary: 다운로드용 미리 서명된 URL 발급
+      parameters:
+      - in: query
+        name: s3_key
+        schema:
+          type: string
+        description: S3 파일 경로
+        required: true
+      tags:
+      - presigned_url
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    Presigned:
+      type: object
+      properties:
+        fieldChoice:
+          enum:
+          - PROJECT_THUMBNAIL_IMAGE
+          - PROJECT_SOURCE_STL
+          - OPTIMIZED_STL
+          - G2_SUMMARY_IMAGE
+          - G2_SHAPE_REPORT_IMAGE
+          - G2_FIGS_ZIP
+          - G1_INPUT_STL
+          - G1_SUMMARY_GIF
+          - G1_FIGS_ZIP
+          - G1_NORMAL_DISPLACEMENT_VTP
+          - RESULT_MESH
+          - RESULT_HISTORY
+          - RESULT_SUMMARY_JSON
+          - RESULT_FLOW_VOLUME
+          - RESULT_GEOMETRY_SCALE
+          - RESULT_PREVIEW_POINTS
+          - RESULT_PROXY_MESH
+          - RESULT_PROXY_LAYOUT
+          - RESULT_PROXY_ATLAS
+          - STREAMLINES_BIN
+          - FLOWFIELD_BIN
+          - G4_SUMMARY_IMAGE
+          - G4_FIGS_ZIP
+          - STEP_EXPORT_ASSEMBLY
+          - STEP_EXPORT_PART_STEP
+          - STEP_EXPORT_PART_STL
+          - ASSET_FLOW_VISUALIZATION_IMAGE
+          - ASSET_RENDERED_IMAGE
+          - S2_FINAL_FIELD_IMAGE
+          - S2_REPLAY_FRAMES
+          - RACING_BASELINE_GLB
+          - RACING_OPTIMIZED_GLB
+          - USER_PROFILE_IMAGE
+          type: string
+          description: '* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image
+
+            * `PROJECT_SOURCE_STL` - Project Source STL
+
+            * `OPTIMIZED_STL` - Optimized STL
+
+            * `G2_SUMMARY_IMAGE` - G2 Summary Image
+
+            * `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image
+
+            * `G2_FIGS_ZIP` - G2 Figs ZIP
+
+            * `G1_INPUT_STL` - G1 Input STL
+
+            * `G1_SUMMARY_GIF` - G1 Summary GIF
+
+            * `G1_FIGS_ZIP` - G1 Figs ZIP
+
+            * `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP
+
+            * `RESULT_MESH` - Result Mesh
+
+            * `RESULT_HISTORY` - Result History
+
+            * `RESULT_SUMMARY_JSON` - Result Summary JSON
+
+            * `RESULT_FLOW_VOLUME` - Result Flow Volume
+
+            * `RESULT_GEOMETRY_SCALE` - Result Geometry Scale
+
+            * `RESULT_PREVIEW_POINTS` - Result Preview Points
+
+            * `RESULT_PROXY_MESH` - Result Proxy Mesh
+
+            * `RESULT_PROXY_LAYOUT` - Result Proxy Layout
+
+            * `RESULT_PROXY_ATLAS` - Result Proxy Atlas
+
+            * `STREAMLINES_BIN` - Streamlines Binary
+
+            * `FLOWFIELD_BIN` - Flow Field Binary
+
+            * `G4_SUMMARY_IMAGE` - G4 Summary Image
+
+            * `G4_FIGS_ZIP` - G4 Figs ZIP
+
+            * `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly
+
+            * `STEP_EXPORT_PART_STEP` - STEP Export Part STEP
+
+            * `STEP_EXPORT_PART_STL` - STEP Export Part STL
+
+            * `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image
+
+            * `ASSET_RENDERED_IMAGE` - Asset Rendered Image
+
+            * `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image
+
+            * `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames
+
+            * `RACING_BASELINE_GLB` - Racing Baseline GLB
+
+            * `RACING_OPTIMIZED_GLB` - Racing Optimized GLB
+
+            * `USER_PROFILE_IMAGE` - User Profile Image'
+          x-spec-enum-id: ef52df4c3b39155d
+          writeOnly: true
+          default: PROJECT_SOURCE_STL
+        fileName:
+          type: string
+          writeOnly: true
+        isDownload:
+          type: boolean
+          writeOnly: true
+          default: false
+        contentType:
+          type: string
+          default: ''
+        projectId:
+          type: integer
+          writeOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        fields:
+          readOnly: true
+        s3Bucket:
+          type: string
+          readOnly: true
+        expiresIn:
+          type: integer
+          readOnly: true
+      required:
+      - expiresIn
+      - fields
+      - fileName
+      - projectId
+      - s3Bucket
+      - url

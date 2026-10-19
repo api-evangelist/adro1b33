@@ -5,6 +5,30 @@ info:
 tags:
 - name: racing
 paths:
+  /racing/drag/jobs/:
+    get:
+      operationId: racing_drag_jobs_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceJobListResponse'
+          description: ''
+      summary: Racing drag jobs retrieve
+      x-summary-source: derived
+  /racing/drag/prepare/:
+    post:
+      operationId: racing_drag_prepare_create
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing drag prepare create
+      x-summary-source: derived
   /racing/executions/{execution_uid}/:
     post:
       operationId: racing_executions_create
@@ -22,6 +46,44 @@ paths:
           description: No response body
       summary: Racing executions create
       x-summary-source: derived
+  /racing/free-drive/profile/:
+    get:
+      operationId: racing_free_drive_profile_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing free drive profile retrieve
+      x-summary-source: derived
+    put:
+      operationId: racing_free_drive_profile_update
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing free drive profile update
+      x-summary-source: derived
+  /racing/free-drive/records/:
+    get:
+      operationId: racing_free_drive_records_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing free drive records retrieve
+      x-summary-source: derived
+    post:
+      operationId: racing_free_drive_records_create
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing free drive records create
+      x-summary-source: derived
   /racing/jobs/:
     get:
       operationId: racing_jobs_retrieve
@@ -35,6 +97,85 @@ paths:
                 $ref: '#/components/schemas/RaceJobListResponse'
           description: ''
       summary: Racing jobs retrieve
+      x-summary-source: derived
+  /racing/jobs/{job_uid}/direction/:
+    get:
+      operationId: racing_jobs_direction_retrieve
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing jobs direction retrieve
+      x-summary-source: derived
+    put:
+      operationId: racing_jobs_direction_update
+      parameters:
+      - in: path
+        name: job_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing jobs direction update
+      x-summary-source: derived
+  /racing/offroad/map-context/:
+    get:
+      operationId: racing_offroad_map_context_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing offroad map context retrieve
+      x-summary-source: derived
+  /racing/paper-plane/profile/:
+    get:
+      operationId: racing_paper_plane_profile_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing paper plane profile retrieve
+      x-summary-source: derived
+    put:
+      operationId: racing_paper_plane_profile_update
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing paper plane profile update
+      x-summary-source: derived
+  /racing/paper-plane/records/:
+    get:
+      operationId: racing_paper_plane_records_retrieve
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing paper plane records retrieve
+      x-summary-source: derived
+    post:
+      operationId: racing_paper_plane_records_create
+      tags:
+      - racing
+      responses:
+        '200':
+          description: No response body
+      summary: Racing paper plane records create
       x-summary-source: derived
   /racing/sessions/:
     post:
@@ -162,84 +303,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    RaceSessionCreate:
-      type: object
-      properties:
-        jobUid:
-          type: string
-          maxLength: 36
-        gameBuildId:
-          type: string
-          maxLength: 64
-        vehiclePresetId:
-          enum:
-          - gt-validation-v1
-          - formula-student-validation-v1
-          type: string
-          description: '* `gt-validation-v1` - gt-validation-v1
-
-            * `formula-student-validation-v1` - formula-student-validation-v1'
-          x-spec-enum-id: c9fb85c158588aaa
-          default: gt-validation-v1
-      required:
-      - gameBuildId
-      - jobUid
-    RaceJobResponse:
-      type: object
-      properties:
-        uid:
-          type: string
-        projectUid:
-          type: string
-        projectName:
-          type:
-          - string
-          - 'null'
-        solver:
-          type: string
-        finishedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        availability:
-          type: string
-        reasonCode:
-          type:
-          - string
-          - 'null'
-        reason:
-          type:
-          - string
-          - 'null'
-        primaryMetric:
-          type: string
-        aerodynamics:
-          type: object
-          additionalProperties: {}
-      required:
-      - availability
-      - finishedAt
-      - projectName
-      - projectUid
-      - solver
-      - uid
-    RaceFeedback:
-      type: object
-      properties:
-        differenceFelt:
-          type: integer
-          maximum: 5
-          minimum: 1
-        wouldOptimizeAgain:
-          type: boolean
-        comment:
-          type: string
-          default: ''
-          maxLength: 2000
-      required:
-      - differenceFelt
-      - wouldOptimizeAgain
     RaceLapCreate:
       type: object
       properties:
@@ -292,6 +355,66 @@ components:
       - clientLapUid
       - isValid
       - variant
+    RaceFeedback:
+      type: object
+      properties:
+        differenceFelt:
+          type: integer
+          maximum: 5
+          minimum: 1
+        wouldOptimizeAgain:
+          type: boolean
+        comment:
+          type: string
+          default: ''
+          maxLength: 2000
+      required:
+      - differenceFelt
+      - wouldOptimizeAgain
+    RaceSessionCreate:
+      type: object
+      properties:
+        geometryTransport:
+          enum:
+          - bundled-glb
+          - proxy-parts-v1
+          type: string
+          description: '* `bundled-glb` - bundled-glb
+
+            * `proxy-parts-v1` - proxy-parts-v1'
+          x-spec-enum-id: a79c18e17a6f5829
+          default: bundled-glb
+        jobUid:
+          type: string
+          maxLength: 36
+        gameBuildId:
+          type: string
+          maxLength: 64
+        vehiclePresetId:
+          enum:
+          - gt-validation-v1
+          - formula-student-validation-v1
+          type: string
+          description: '* `gt-validation-v1` - gt-validation-v1
+
+            * `formula-student-validation-v1` - formula-student-validation-v1'
+          x-spec-enum-id: c9fb85c158588aaa
+          default: gt-validation-v1
+      required:
+      - gameBuildId
+      - jobUid
+    RaceJobListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaceJobResponse'
+      required:
+      - count
+      - results
     RaceSessionResponse:
       type: object
       properties:
@@ -323,15 +446,52 @@ components:
       - readOnly
       - status
       - uid
-    RaceJobListResponse:
+    RaceJobResponse:
       type: object
       properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/RaceJobResponse'
+        displayName:
+          type:
+          - string
+          - 'null'
+        uid:
+          type: string
+        projectUid:
+          type: string
+        projectName:
+          type:
+          - string
+          - 'null'
+        solver:
+          type: string
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        availability:
+          type: string
+        reasonCode:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        primaryMetric:
+          type: string
+        aerodynamics:
+          type: object
+          additionalProperties: {}
       required:
-      - count
-      - results
+      - availability
+      - finishedAt
+      - projectName
+      - projectUid
+      - solver
+      - uid
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

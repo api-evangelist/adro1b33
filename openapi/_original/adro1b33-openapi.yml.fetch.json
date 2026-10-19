@@ -1,0 +1,12 @@
+{
+ "url": "https://api.aoxlabs.com/schema/",
+ "final": "https://api.aoxlabs.com/schema/",
+ "status": 200,
+ "content_type": "application/yaml; charset=utf-8",
+ "bytes": 594946,
+ "sha256": "5f6ebebcbdd2ddc8a845d29ab67ee949f0bfd12d90fe7ac8b86e908cdec6f46c",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

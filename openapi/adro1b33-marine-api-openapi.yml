@@ -1,0 +1,61 @@
+openapi: 3.2.0
+info:
+  title: aox-django-backend Marine API
+  version: 1.0.0
+tags:
+- name: marine
+paths:
+  /marine/jobs/:
+    post:
+      operationId: marine_jobs_create
+      tags:
+      - marine
+      responses:
+        '200':
+          description: No response body
+      summary: Marine jobs create
+      x-summary-source: derived
+  /marine/jobs/{job_id}/artifacts/{kind}/:
+    post:
+      operationId: marine_jobs_artifacts_create
+      parameters:
+      - in: path
+        name: job_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: kind
+        schema:
+          type: string
+        required: true
+      tags:
+      - marine
+      responses:
+        '200':
+          description: No response body
+      summary: Marine jobs artifacts create
+      x-summary-source: derived
+  /marine/projects/{project_uid}/jobs/:
+    post:
+      operationId: marine_projects_jobs_create
+      parameters:
+      - in: path
+        name: project_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - marine
+      responses:
+        '200':
+          description: No response body
+      summary: Marine projects jobs create
+      x-summary-source: derived
+components:
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

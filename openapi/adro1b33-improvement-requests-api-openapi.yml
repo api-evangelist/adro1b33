@@ -105,6 +105,9 @@ components:
           type: string
           format: email
           readOnly: true
+        assignee:
+          type: string
+          readOnly: true
         createdAt:
           type: string
           format: date-time
@@ -115,6 +118,7 @@ components:
           readOnly: true
       required:
       - adminNote
+      - assignee
       - category
       - categoryLabel
       - content
@@ -160,3 +164,8 @@ components:
       - category
       - content
       - title
+  securitySchemes:
+    agentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

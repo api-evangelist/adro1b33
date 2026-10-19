@@ -51,13 +51,13 @@ maintainers:
   email: info@apis.io
 apis:
 - name: ADRO US Store Agent Commerce (UCP / MCP)
-  description: ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that
-    publishes an agent-facing surface on ADRO's own domain — an llms.txt of agent instructions, a UCP
-    merchant profile at /.well-known/ucp, and a live Universal Commerce Protocol MCP endpoint at POST
-    /api/ucp/mcp whose anonymous tools/list returns thirteen tools with full JSON Schema inputs for catalog
-    search and lookup, product retrieval, cart, checkout and order. The runtime is Shopify's platform-provided
-    UCP implementation rather than ADRO-authored code; the endpoint, merchant profile and catalog are
-    ADRO's.
+  description: >-
+    ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that publishes an
+    agent-facing surface on ADRO's own domain — an llms.txt of agent instructions, a UCP merchant profile
+    at /.well-known/ucp, and a live Universal Commerce Protocol MCP endpoint at POST /api/ucp/mcp whose
+    anonymous tools/list returns thirteen tools with full JSON Schema inputs for catalog search and lookup,
+    product retrieval, cart, checkout and order. The runtime is Shopify's platform-provided UCP implementation
+    rather than ADRO-authored code; the endpoint, merchant profile and catalog are ADRO's.
   humanURL: https://adro.com/llms.txt
   image: https://adro.com/cdn/shop/files/adro_logo_klaviyo.png?v=1785437102
   tags:
@@ -748,6 +748,136 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+- aid: adro1b33:adro1b33-agent-api
+  name: ADRO Agent API
+  description: The Agent API from ADRO — 20 operation(s) for agent.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - Agent
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-agent-api-openapi.yml
+- aid: adro1b33:adro1b33-comment-notifications-api
+  name: ADRO Comment Notifications API
+  description: The comment-notifications API from ADRO — 2 operation(s) for comment-notifications.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - comment-notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-comment-notifications-api-openapi.yml
+- aid: adro1b33:adro1b33-comment-threads-api
+  name: ADRO Comment Threads API
+  description: The comment-threads API from ADRO — 2 operation(s) for comment-threads.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - comment-threads
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-comment-threads-api-openapi.yml
+- aid: adro1b33:adro1b33-comments-api
+  name: ADRO Comments API
+  description: The comments API from ADRO — 1 operation(s) for comments.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - comments
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-comments-api-openapi.yml
+- aid: adro1b33:adro1b33-cwt-api
+  name: ADRO Cwt API
+  description: The cwt API from ADRO — 16 operation(s) for cwt.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - cwt
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-cwt-api-openapi.yml
+- aid: adro1b33:adro1b33-geometry-cleaning-api
+  name: ADRO Geometry Cleaning API
+  description: The geometry-cleaning API from ADRO — 20 operation(s) for geometry-cleaning.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - geometry-cleaning
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-geometry-cleaning-api-openapi.yml
+- aid: adro1b33:adro1b33-geometry-versions-api
+  name: ADRO Geometry Versions API
+  description: The geometry-versions API from ADRO — 1 operation(s) for geometry-versions.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - geometry-versions
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-geometry-versions-api-openapi.yml
+- aid: adro1b33:adro1b33-internal-api
+  name: ADRO Internal API
+  description: The internal API from ADRO — 1 operation(s) for internal.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - internal
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-internal-api-openapi.yml
+- aid: adro1b33:adro1b33-landing-announcements-api
+  name: ADRO Landing Announcements API
+  description: The landing-announcements API from ADRO — 1 operation(s) for landing-announcements.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - landing-announcements
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-landing-announcements-api-openapi.yml
+- aid: adro1b33:adro1b33-marine-api
+  name: ADRO Marine API
+  description: The marine API from ADRO — 3 operation(s) for marine.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - marine
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-marine-api-openapi.yml
+- aid: adro1b33:adro1b33-notifications-api
+  name: ADRO Notifications API
+  description: The Notifications API from ADRO — 4 operation(s) for notifications.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - Notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-notifications-api-openapi.yml
+- aid: adro1b33:adro1b33-special-offer-api
+  name: ADRO Special Offer API
+  description: The special_offer API from ADRO — 1 operation(s) for special_offer.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - special_offer
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-special-offer-api-openapi.yml
+- aid: adro1b33:adro1b33-student-team-api
+  name: ADRO Student Team API
+  description: The student_team API from ADRO — 1 operation(s) for student_team.
+  humanURL: https://adro.com/llms.txt
+  baseURL: https://api.aoxlabs.com
+  tags:
+  - student_team
+  properties:
+  - type: OpenAPI
+    url: openapi/adro1b33-student-team-api-openapi.yml
 common:
 - type: CapabilityMap
   url: capabilities/adro1b33-capability-edges.yml
