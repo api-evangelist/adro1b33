@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-upgrade-response-schema.json",
+  "title": "UpgradeResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-plans-api-openapi.yml#/components/schemas/UpgradeResponse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "plan": {
+      "type": "integer"
+    },
+    "planCode": {
+      "type": "string",
+      "readOnly": true
+    },
+    "planName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "billingKey": {
+      "type": "string",
+      "readOnly": true
+    },
+    "source": {
+      "enum": [
+        "SELF_SERVE",
+        "ADMIN_ASSIGNED"
+      ],
+      "type": "string",
+      "description": "* `SELF_SERVE` - 자가 결제\n* `ADMIN_ASSIGNED` - 관리자 할당",
+      "x-spec-enum-id": "daef43a6d8659a7a"
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "PAST_DUE",
+        "CANCELLED",
+        "EXPIRED",
+        "SCHEDULED"
+      ],
+      "type": "string",
+      "description": "* `ACTIVE` - 활성\n* `PAST_DUE` - 재결제 실패 대기\n* `CANCELLED` - 해지 예약(사이클 종료 시 EXPIRED)\n* `EXPIRED` - 만료\n* `SCHEDULED` - 다음 사이클 적용 예약(다운그레이드)",
+      "x-spec-enum-id": "44ba4537fdae9638"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "anchorDay": {
+      "type": "integer",
+      "maximum": 32767,
+      "minimum": 0
+    },
+    "currentCycleStartedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "currentCycleEndsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nextBillingAttemptAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nextBilling": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/NextBilling"
+        }
+      ],
+      "readOnly": true
+    },
+    "cancelAtPeriodEnd": {
+      "type": "boolean"
+    },
+    "failedAttemptCount": {
+      "type": "integer",
+      "maximum": 32767,
+      "minimum": 0
+    },
+    "lastFailedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expiredAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "upgradeQuote": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/UpgradeQuote"
+        }
+      ]
+    }
+  },
+  "required": [
+    "anchorDay",
+    "billingKey",
+    "createdAt",
+    "currentCycleEndsAt",
+    "currentCycleStartedAt",
+    "id",
+    "nextBilling",
+    "nextBillingAttemptAt",
+    "plan",
+    "planCode",
+    "planName",
+    "startedAt",
+    "teamId",
+    "teamName",
+    "updatedAt"
+  ],
+  "$defs": {
+    "NextBilling": {
+      "type": "object",
+      "description": "다음 사이클에 청구될 플랜 + 금액. `price` 는 플랜 리스트의 가격 객체와 동일 구조.",
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/NextBillingPlan"
+        },
+        "price": {
+          "$ref": "#/$defs/PriceEntry"
+        }
+      },
+      "required": [
+        "plan",
+        "price"
+      ]
+    },
+    "NextBillingPlan": {
+      "type": "object",
+      "description": "다음 결제될 플랜 식별 정보.",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "id",
+        "name"
+      ]
+    },
+    "PriceDisplay": {
+      "type": "object",
+      "properties": {
+        "supplyAmount": {
+          "type": "string"
+        },
+        "taxAmount": {
+          "type": "string"
+        },
+        "totalAmount": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "string"
+        },
+        "discountRate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "supplyAmount",
+        "taxAmount",
+        "totalAmount"
+      ]
+    },
+    "PriceEntry": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "supplyAmountMinor": {
+          "type": "integer"
+        },
+        "taxAmountMinor": {
+          "type": "integer"
+        },
+        "totalAmountMinor": {
+          "type": "integer"
+        },
+        "display": {
+          "$ref": "#/$defs/PriceDisplay"
+        }
+      },
+      "required": [
+        "currency",
+        "display",
+        "supplyAmountMinor",
+        "taxAmountMinor",
+        "totalAmountMinor"
+      ]
+    },
+    "UpgradeQuote": {
+      "type": "object",
+      "description": "업그레이드 견적 — 결제에 사용되는 백엔드 계산 결과를 그대로 노출.",
+      "properties": {
+        "quotedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currentPlan": {
+          "$ref": "#/$defs/UpgradeQuotePlan"
+        },
+        "newPlan": {
+          "$ref": "#/$defs/UpgradeQuotePlan"
+        },
+        "currentPlanPrice": {
+          "$ref": "#/$defs/PriceEntry"
+        },
+        "newPlanPrice": {
+          "$ref": "#/$defs/PriceEntry"
+        },
+        "differenceSupplyAmountMinor": {
+          "type": "integer"
+        },
+        "differenceTaxAmountMinor": {
+          "type": "integer"
+        },
+        "differenceTotalAmountMinor": {
+          "type": "integer"
+        },
+        "cycleStartedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cycleEndsAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "usedDays": {
+          "type": "integer"
+        },
+        "remainingDays": {
+          "type": "integer"
+        },
+        "totalDays": {
+          "type": "integer"
+        },
+        "prorationRatio": {
+          "type": "string"
+        },
+        "subtotalAmountMinor": {
+          "type": "integer"
+        },
+        "vatAmountMinor": {
+          "type": "integer"
+        },
+        "totalChargedAmountMinor": {
+          "type": "integer"
+        },
+        "display": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "monthlyCreditDifference": {
+          "type": "integer"
+        },
+        "proratedCredits": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "currentPlan",
+        "currentPlanPrice",
+        "cycleEndsAt",
+        "cycleStartedAt",
+        "differenceSupplyAmountMinor",
+        "differenceTaxAmountMinor",
+        "differenceTotalAmountMinor",
+        "display",
+        "monthlyCreditDifference",
+        "newPlan",
+        "newPlanPrice",
+        "proratedCredits",
+        "prorationRatio",
+        "quotedAt",
+        "remainingDays",
+        "subtotalAmountMinor",
+        "totalChargedAmountMinor",
+        "totalDays",
+        "usedDays",
+        "vatAmountMinor"
+      ]
+    },
+    "UpgradeQuotePlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "id",
+        "name"
+      ]
+    }
+  }
+}

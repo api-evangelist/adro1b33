@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-credit-bucket-schema.json",
+  "title": "CreditBucket",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-credits-api-openapi.yml#/components/schemas/CreditBucket",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "source": {
+      "enum": [
+        "SUBSCRIPTION",
+        "BONUS",
+        "PROMO",
+        "PAYG_BUNDLE"
+      ],
+      "type": "string",
+      "description": "* `SUBSCRIPTION` - 구독 포함\n* `BONUS` - 보상\n* `PROMO` - 프로모션\n* `PAYG_BUNDLE` - 추가구매 번들",
+      "x-spec-enum-id": "2aa13f9f58745ba9"
+    },
+    "grantedAmount": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "remainingAmount": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "grantedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "referenceType": {
+      "enum": [
+        "PAYMENT",
+        "SUBSCRIPTION_CYCLE",
+        "ADMIN",
+        "PROMO_CAMPAIGN",
+        "EXECUTION",
+        "ASSET_SALE",
+        ""
+      ],
+      "type": "string",
+      "description": "* `PAYMENT` - 결제\n* `SUBSCRIPTION_CYCLE` - 구독 결제주기\n* `ADMIN` - 관리자\n* `PROMO_CAMPAIGN` - 프로모션\n* `EXECUTION` - 실행\n* `ASSET_SALE` - 에셋 판매",
+      "x-spec-enum-id": "167958143e14f3a0"
+    },
+    "referenceId": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "isActive": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "expiresAt",
+    "grantedAmount",
+    "id",
+    "isActive",
+    "remainingAmount",
+    "source"
+  ]
+}

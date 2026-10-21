@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-attachment-init-response-schema.json",
+  "title": "AgentAttachmentInitResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentInitResponse",
+  "type": "object",
+  "properties": {
+    "attachmentUid": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 36,
+      "format": "uuid"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "enum": [
+        "pending_upload",
+        "uploaded",
+        "scanning",
+        "processing",
+        "ready",
+        "rejected",
+        "expired"
+      ]
+    },
+    "upload": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "PUT"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "requiredHeaders": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "expiresAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "method",
+        "url",
+        "requiredHeaders",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "attachmentUid",
+    "status",
+    "upload"
+  ],
+  "additionalProperties": false
+}

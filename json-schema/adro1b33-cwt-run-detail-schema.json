@@ -1,0 +1,443 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cwt-run-detail-schema.json",
+  "title": "CwtRunDetail",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-cwt-api-openapi.yml#/components/schemas/CwtRunDetail",
+  "type": "object",
+  "properties": {
+    "runUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "jobUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "projectUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "inputSessionUid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "running",
+        "cancelling",
+        "cancellation_failed",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "aborted"
+      ],
+      "type": "string",
+      "description": "* `queued` - Queued\n* `running` - Running\n* `cancelling` - Cancelling\n* `cancellation_failed` - Cancellation failed\n* `succeeded` - Succeeded\n* `failed` - Failed\n* `cancelled` - Cancelled\n* `aborted` - Aborted",
+      "x-spec-enum-id": "6b8a9060f1dec637",
+      "readOnly": true
+    },
+    "progress": {
+      "type": "number",
+      "format": "double",
+      "readOnly": true
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "finishedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "vehicle": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CwtVehicle"
+        }
+      ],
+      "readOnly": true
+    },
+    "inputFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CwtRunInputFile"
+      },
+      "readOnly": true
+    },
+    "conditions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CwtConditions"
+        }
+      ],
+      "readOnly": true
+    },
+    "mesh": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CwtMesh"
+        }
+      ],
+      "readOnly": true
+    },
+    "solver": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CwtSolver"
+        }
+      ],
+      "readOnly": true
+    },
+    "execution": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CwtExecution"
+        }
+      ],
+      "readOnly": true
+    },
+    "resultSummary": {
+      "readOnly": true
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "conditions",
+    "createdAt",
+    "error",
+    "execution",
+    "finishedAt",
+    "inputFiles",
+    "inputSessionUid",
+    "jobUid",
+    "mesh",
+    "name",
+    "progress",
+    "projectUid",
+    "resultSummary",
+    "runUid",
+    "solver",
+    "stage",
+    "startedAt",
+    "status",
+    "vehicle"
+  ],
+  "$defs": {
+    "CwtConditions": {
+      "type": "object",
+      "properties": {
+        "radiusM": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        },
+        "speedMps": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        },
+        "turbulenceIntensity": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        },
+        "turbulenceLengthScaleM": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        },
+        "autoSteer": {
+          "enum": [
+            "on",
+            "off"
+          ],
+          "type": "string",
+          "description": "* `on` - on\n* `off` - off",
+          "x-spec-enum-id": "3bd1fea2f14d31ac",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "autoSteer",
+        "radiusM",
+        "speedMps",
+        "turbulenceIntensity",
+        "turbulenceLengthScaleM"
+      ]
+    },
+    "CwtExecution": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "resourceProfile": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "mode",
+        "resourceProfile"
+      ]
+    },
+    "CwtMesh": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "readOnly": true
+        },
+        "layers": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "layers",
+        "profile"
+      ]
+    },
+    "CwtOriginalFileLocation": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "type": "string",
+          "readOnly": true
+        },
+        "key": {
+          "type": "string",
+          "readOnly": true
+        },
+        "state": {
+          "enum": [
+            "recorded",
+            "deleted",
+            "unknown"
+          ],
+          "type": "string",
+          "description": "* `recorded` - recorded\n* `deleted` - deleted\n* `unknown` - unknown",
+          "x-spec-enum-id": "f8b917a5493eda0d",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "bucket",
+        "key",
+        "state"
+      ]
+    },
+    "CwtRunInputFile": {
+      "type": "object",
+      "properties": {
+        "uploadUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "role": {
+          "enum": [
+            "bodyStl",
+            "frontWheelLeftStl",
+            "frontWheelRightStl",
+            "rearWheelStl",
+            "rearWheelLeftStl",
+            "rearWheelRightStl",
+            "aeroPart"
+          ],
+          "type": "string",
+          "description": "* `bodyStl` - Body STL\n* `frontWheelLeftStl` - Front wheel left STL\n* `frontWheelRightStl` - Front wheel right STL\n* `rearWheelStl` - Rear wheel STL\n* `rearWheelLeftStl` - Rear wheel left STL\n* `rearWheelRightStl` - Rear wheel right STL\n* `aeroPart` - Aero part",
+          "x-spec-enum-id": "3c17c81d189efc4d",
+          "readOnly": true
+        },
+        "partName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "originalFileName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "sizeBytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "preparationStatus": {
+          "enum": [
+            "pending",
+            "ready",
+            "failed",
+            "unknown"
+          ],
+          "type": "string",
+          "description": "* `pending` - pending\n* `ready` - ready\n* `failed` - failed\n* `unknown` - unknown",
+          "x-spec-enum-id": "d04195be439947de",
+          "readOnly": true
+        },
+        "originalLocation": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CwtOriginalFileLocation"
+            }
+          ],
+          "readOnly": true
+        },
+        "solverLocation": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CwtSolverFileLocation"
+            }
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "originalFileName",
+        "originalLocation",
+        "partName",
+        "preparationStatus",
+        "role",
+        "sha256",
+        "sizeBytes",
+        "solverLocation",
+        "uploadUid"
+      ]
+    },
+    "CwtSolver": {
+      "type": "object",
+      "properties": {
+        "maxIterations": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "fieldWriteInterval": {
+          "type": "integer",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "fieldWriteInterval",
+        "maxIterations"
+      ]
+    },
+    "CwtSolverFileLocation": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "type": "string",
+          "readOnly": true
+        },
+        "key": {
+          "type": "string",
+          "readOnly": true
+        },
+        "state": {
+          "enum": [
+            "pending",
+            "ready",
+            "failed",
+            "unknown"
+          ],
+          "type": "string",
+          "description": "* `pending` - pending\n* `ready` - ready\n* `failed` - failed\n* `unknown` - unknown",
+          "x-spec-enum-id": "d04195be439947de",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "bucket",
+        "key",
+        "state"
+      ]
+    },
+    "CwtVehicle": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "frontDirection": {
+          "type": "string",
+          "readOnly": true
+        },
+        "sourceUnits": {
+          "type": "string",
+          "readOnly": true
+        },
+        "rearWheelMode": {
+          "enum": [
+            "combined",
+            "split"
+          ],
+          "type": "string",
+          "description": "* `combined` - combined\n* `split` - split",
+          "x-spec-enum-id": "fb5cc94bbc68e884",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "displayName",
+        "frontDirection",
+        "rearWheelMode",
+        "sourceUnits"
+      ]
+    }
+  }
+}

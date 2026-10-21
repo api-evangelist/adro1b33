@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-billing-method-swap-schema.json",
+  "title": "BillingMethodSwap",
+  "description": "결제수단 변경(swap) 결과. 새 빌링키 + 후속(환불/폐기) 결과 플래그.\n\nrefund_failed / old_delete_failed 가 true 면 발급은 성공했으나 후속이 일부 실패한\n것 (status=COMPLETED_WITH_WARNINGS) — note 에 사유. CS/재시도 대상 식별용.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-payments-api-openapi.yml#/components/schemas/BillingMethodSwap",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "provider": {
+      "enum": [
+        "payletter",
+        "paypal",
+        "galaxia"
+      ],
+      "type": "string",
+      "description": "* `payletter` - PayLetter\n* `paypal` - PayPal\n* `galaxia` - Galaxia",
+      "x-spec-enum-id": "57f6d0e06595d82e"
+    },
+    "newBillingKey": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BillingKey"
+        }
+      ],
+      "readOnly": true
+    },
+    "oldBillingKey": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "microPaymentId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "createdByUserId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "status": {
+      "enum": [
+        "COMPLETED",
+        "COMPLETED_WITH_WARNINGS"
+      ],
+      "type": "string",
+      "description": "* `COMPLETED` - 완료 (발급+환불+기존폐기 모두 성공)\n* `COMPLETED_WITH_WARNINGS` - 발급 성공 + 후속(환불/폐기) 일부 실패",
+      "x-spec-enum-id": "9713d5910cb6bc4a"
+    },
+    "refundFailed": {
+      "type": "boolean"
+    },
+    "oldDeleteFailed": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "createdByUserId",
+    "id",
+    "microPaymentId",
+    "newBillingKey",
+    "oldBillingKey",
+    "provider",
+    "teamId"
+  ],
+  "$defs": {
+    "BillingKey": {
+      "type": "object",
+      "properties": {
+        "billingKey": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "teamId": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "teamName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "createdByUserId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "provider": {
+          "enum": [
+            "payletter",
+            "paypal",
+            "galaxia"
+          ],
+          "type": "string",
+          "description": "* `payletter` - PayLetter\n* `paypal` - PayPal\n* `galaxia` - Galaxia",
+          "x-spec-enum-id": "57f6d0e06595d82e"
+        },
+        "channelKey": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "method": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "cardIssuer": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "cardBrand": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "cardName": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "cardBin": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "cardNumberMasked": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "easyPayProvider": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "status": {
+          "enum": [
+            "ISSUED",
+            "DELETED"
+          ],
+          "type": "string",
+          "description": "* `ISSUED` - 발급 완료\n* `DELETED` - 삭제됨",
+          "x-spec-enum-id": "d80d5ed15cf00039"
+        },
+        "issuedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "billingKey",
+        "channelKey",
+        "createdByUserId",
+        "teamId",
+        "teamName"
+      ]
+    }
+  }
+}

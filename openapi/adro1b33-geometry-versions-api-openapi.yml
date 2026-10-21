@@ -27,21 +27,37 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GeometrySnapshot:
+    GeometryVersionArtifactSnapshot:
       type: object
       properties:
-        schemaVersion:
-          type: integer
-        projectUid:
+        artifactUid:
+          type:
+          - string
+          - 'null'
+        role:
           type: string
-        patches:
-          type: array
-          items:
-            $ref: '#/components/schemas/GeometryVersionPatchSnapshot'
+        storageProvider:
+          type: string
+        s3Bucket:
+          type: string
+        s3Key:
+          type: string
+        sizeBytes:
+          type: integer
+        checksumSha256:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
       required:
-      - patches
-      - projectUid
-      - schemaVersion
+      - artifactUid
+      - checksumSha256
+      - metadata
+      - role
+      - s3Bucket
+      - s3Key
+      - sizeBytes
+      - storageProvider
     GeometryVersionPatchSnapshot:
       type: object
       properties:
@@ -94,6 +110,46 @@ components:
       - patchType
       - patchUid
       - sourcePatchUid
+    GeometryArtifactAccess:
+      type: object
+      properties:
+        referenceId:
+          type: integer
+        patchUid:
+          type: string
+        role:
+          type: string
+        downloadUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        expiresAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - downloadUrl
+      - expiresAt
+      - patchUid
+      - referenceId
+      - role
+    GeometrySnapshot:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+        projectUid:
+          type: string
+        patches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeometryVersionPatchSnapshot'
+      required:
+      - patches
+      - projectUid
+      - schemaVersion
     GeometryVersionDetail:
       type: object
       properties:
@@ -145,62 +201,6 @@ components:
       - snapshotSha256
       - uid
       - versionNumber
-    GeometryVersionArtifactSnapshot:
-      type: object
-      properties:
-        artifactUid:
-          type:
-          - string
-          - 'null'
-        role:
-          type: string
-        storageProvider:
-          type: string
-        s3Bucket:
-          type: string
-        s3Key:
-          type: string
-        sizeBytes:
-          type: integer
-        checksumSha256:
-          type: string
-        metadata:
-          type: object
-          additionalProperties: {}
-      required:
-      - artifactUid
-      - checksumSha256
-      - metadata
-      - role
-      - s3Bucket
-      - s3Key
-      - sizeBytes
-      - storageProvider
-    GeometryArtifactAccess:
-      type: object
-      properties:
-        referenceId:
-          type: integer
-        patchUid:
-          type: string
-        role:
-          type: string
-        downloadUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-        expiresAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      required:
-      - downloadUrl
-      - expiresAt
-      - patchUid
-      - referenceId
-      - role
   securitySchemes:
     agentBearerAuth:
       type: http

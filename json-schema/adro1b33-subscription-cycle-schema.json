@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-subscription-cycle-schema.json",
+  "title": "SubscriptionCycle",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-plans-api-openapi.yml#/components/schemas/SubscriptionCycle",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "subscription": {
+      "type": "integer"
+    },
+    "planSnapshotCode": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "planSnapshotMonthlyCredits": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "cycleStartedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cycleEndsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "PENDING",
+        "PAID",
+        "FAILED",
+        "PRORATED"
+      ],
+      "type": "string",
+      "description": "* `PENDING` - 결제 시도 중\n* `PAID` - 결제 성공\n* `FAILED` - 결제 실패\n* `PRORATED` - 업그레이드 일할 지급",
+      "x-spec-enum-id": "4bf9b922a073ba54",
+      "default": "PENDING"
+    },
+    "paymentId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "creditBucketId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "creditBucketId",
+    "cycleEndsAt",
+    "cycleStartedAt",
+    "id",
+    "paymentId",
+    "planSnapshotCode",
+    "subscription"
+  ]
+}

@@ -11,7 +11,7 @@ method: generated
 source: >-
   Grounded in the verbatim tools/list response probed from https://adro.com/api/ucp/mcp (HTTP 200,
   anonymous) and the agent rules ADRO's own https://adro.com/llms.txt publishes.
-operations:
+mcp_tools:
   - search_catalog
   - lookup_catalog
   - get_product

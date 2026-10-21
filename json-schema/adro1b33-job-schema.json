@@ -1,0 +1,1662 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-job-schema.json",
+  "title": "Job",
+  "description": "Job 상세 시리얼라이저.\n\n응답 형태:\n- artifacts: {role: artifact_payload} 딕셔너리 (리스트가 아님)\n- canceled_at: 미국식 철자 (모델 필드는 cancelled_at — 영국식)\n- executions / events: 중첩 리스트\n\n비즈니스 로직:\n- perform_cancel(): Job 취소 + AWS Batch 종료 + 상태 이벤트 기록",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-job-api-openapi.yml#/components/schemas/Job",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Runtime job name submitted to the execution backend.",
+      "maxLength": 128
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-friendly run label (e.g. 'Run 3'); user-editable. Distinct from the batch runtime name.",
+      "maxLength": 128
+    },
+    "project": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SimpleProject"
+        }
+      ],
+      "readOnly": true
+    },
+    "executionBackend": {
+      "enum": [
+        "SHARED_HPC",
+        "AWS_BATCH",
+        "LOCAL",
+        "SSH_REMOTE"
+      ],
+      "type": "string",
+      "description": "* `SHARED_HPC` - Shared HPC\n* `AWS_BATCH` - AWS Batch\n* `LOCAL` - Local\n* `SSH_REMOTE` - Remote SSH",
+      "x-spec-enum-id": "14feee6ab64a0c6e"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "waiting_for_input",
+        "running",
+        "cancelling",
+        "cancellation_failed",
+        "failed",
+        "aborted",
+        "cancelled",
+        "succeeded"
+      ],
+      "type": "string",
+      "x-spec-enum-id": "b6768940d5514021",
+      "description": "(1:1일 때 프로젝트) 1:N일 때 Job에 대한 상태값 / 상세페이지용 X\n\n* `queued` - Queued\n* `waiting_for_input` - Waiting for input\n* `running` - Running\n* `cancelling` - Cancelling\n* `cancellation_failed` - Cancellation failed\n* `failed` - Failed\n* `aborted` - Aborted\n* `cancelled` - Cancelled\n* `succeeded` - Succeeded"
+    },
+    "stage": {
+      "enum": [
+        "ffd_setup",
+        "grid_setup",
+        "meshing",
+        "simulating",
+        "optimizing",
+        "postprocessing",
+        "",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "x-spec-enum-id": "e13d93bda64d2665",
+      "description": "Latest canonical active_stage snapshot from monitoring_log.json\n\n* `ffd_setup` - FFD Setup\n* `grid_setup` - Grid Setup\n* `meshing` - Meshing\n* `simulating` - Simulating\n* `optimizing` - Optimizing\n* `postprocessing` - Postprocessing"
+    },
+    "progress": {
+      "type": "number",
+      "format": "double",
+      "description": "Latest execution progress, normalized to 0.0 through 1.0."
+    },
+    "runConfig": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/JobRunConfigEnvelope"
+        }
+      ],
+      "readOnly": true
+    },
+    "resultSummary": {
+      "description": "Job execution results"
+    },
+    "result": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "description": "Compact result-viewer metadata for successful job detail views.",
+      "readOnly": true
+    },
+    "errorSummary": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "errorDetail": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "description": "Canonical error object; code-specific wording resolved at read time.",
+      "readOnly": true
+    },
+    "payload": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "description": "Job payload plus compact result-viewer metadata under result.",
+      "readOnly": true
+    },
+    "operationMode": {
+      "enum": [
+        "BASIC",
+        "PRO"
+      ],
+      "type": "string",
+      "description": "* `BASIC` - Basic\n* `PRO` - Pro",
+      "x-spec-enum-id": "8ac5c73d7e96b3a3"
+    },
+    "solverEngine": {
+      "enum": [
+        "MAR",
+        "G1",
+        "G2",
+        "G4",
+        "LES",
+        "CWT",
+        "S2",
+        "SX",
+        "GEO"
+      ],
+      "type": "string",
+      "x-spec-enum-id": "a9b4c0f7b114f86e",
+      "readOnly": true,
+      "description": "Immutable solver engine snapshot captured when the Job is created.\n\n* `MAR` - Marine FSI\n* `G1` - G1\n* `G2` - G2\n* `G4` - G4\n* `LES` - LES Fluid Simulation\n* `CWT` - Cornering Wind Tunnel\n* `S2` - Sketch 2D\n* `SX` - Sketch to 3D\n* `GEO` - Geometry Cleaning"
+    },
+    "kind": {
+      "enum": [
+        "marine_fsi",
+        "geometry_cleanup",
+        "cfd_analysis",
+        "shape_optimization",
+        "sketch_generation",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "x-spec-enum-id": "71e25c80c3c637df",
+      "readOnly": true,
+      "description": "User-facing job classification. NULL is retained for legacy/unknown jobs.\n\n* `marine_fsi` - Marine sloshing FSI\n* `geometry_cleanup` - Geometry Cleanup\n* `cfd_analysis` - CFD Analysis\n* `shape_optimization` - Shape Optimization\n* `sketch_generation` - Sketch to 3D generation"
+    },
+    "geometryVersionId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "geometryVersionUid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "geometryVersionNumber": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "restartFromJob": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true,
+      "description": "원본 Job. 단계 재시작(restart)으로 생성된 Job 이면 설정됨."
+    },
+    "restartFromJobUid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "restartStage": {
+      "type": "string",
+      "readOnly": true,
+      "description": "재시작 진입 단계: scratch/mesh/cfd/opt. 일반 신규 제출이면 빈 값."
+    },
+    "queuedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "finishedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "cancelledAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "inputSnapshotPatches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Patch"
+      },
+      "readOnly": true
+    },
+    "summaryFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {}
+      },
+      "readOnly": true
+    },
+    "summaryGifs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {}
+      },
+      "readOnly": true
+    },
+    "figsZipUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "G1/G2/G4 figs.zip presigned S3 URL (succeeded job only)",
+      "readOnly": true
+    },
+    "g2FfdBoxes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "description": "Result viewer bounding boxes from the job input manifest.",
+      "readOnly": true
+    },
+    "executions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JobExecution"
+      },
+      "readOnly": true
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JobStatusEvent"
+      },
+      "readOnly": true
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능)."
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true,
+      "description": "소프트 삭제된 시각."
+    },
+    "purgeAfter": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true,
+      "description": "삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각."
+    },
+    "canRestore": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "deletion": {
+      "readOnly": true
+    },
+    "downloadQuota": {
+      "readOnly": true
+    }
+  },
+  "required": [
+    "canRestore",
+    "cancelledAt",
+    "createdAt",
+    "deletedAt",
+    "deletion",
+    "downloadQuota",
+    "errorDetail",
+    "errorSummary",
+    "events",
+    "executionBackend",
+    "executions",
+    "figsZipUrl",
+    "g2FfdBoxes",
+    "geometryVersionId",
+    "geometryVersionNumber",
+    "geometryVersionUid",
+    "id",
+    "inputSnapshotPatches",
+    "isDeleted",
+    "kind",
+    "operationMode",
+    "payload",
+    "project",
+    "purgeAfter",
+    "restartFromJob",
+    "restartFromJobUid",
+    "restartStage",
+    "result",
+    "runConfig",
+    "solverEngine",
+    "summaryFiles",
+    "summaryGifs",
+    "uid"
+  ],
+  "$defs": {
+    "BatchCompute": {
+      "type": "object",
+      "properties": {
+        "np": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "npCfd": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "npAdj": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ompThreadsMesh": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "queue": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "jobDefinition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "vcpus": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "memoryMb": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "gpu": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "grid": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {}
+        },
+        "timeoutSeconds": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "CanonicalJobSpec": {
+      "type": "object",
+      "description": "Validates the ADAPTER-INPUT canonical submission dict (in-flight only).\n\nNOT applied to the Job.run_config envelope. The adapter pops operationMode\n-> Job column and stores the flattened result at run_config.native_config.",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "default": "1.0"
+        },
+        "engine": {
+          "enum": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "type": "string",
+          "description": "* `G1` - G1\n* `G2` - G2\n* `G4` - G4",
+          "x-spec-enum-id": "d5df67bc8a34864a"
+        },
+        "operationMode": {
+          "enum": [
+            "BASIC",
+            "PRO"
+          ],
+          "type": "string",
+          "description": "* `BASIC` - BASIC\n* `PRO` - PRO",
+          "x-spec-enum-id": "7fea7e3fb58f4701",
+          "default": "BASIC"
+        },
+        "geometry": {
+          "$ref": "#/$defs/GeometrySpec"
+        },
+        "objective": {
+          "$ref": "#/$defs/ObjectiveSpec"
+        },
+        "constraints": {
+          "$ref": "#/$defs/ConstraintsSpec"
+        },
+        "optimization": {
+          "$ref": "#/$defs/OptimizationSpec"
+        },
+        "flow": {
+          "$ref": "#/$defs/FlowSpec"
+        },
+        "domain": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DomainSpec"
+            }
+          ]
+        },
+        "compute": {
+          "$ref": "#/$defs/ComputeSpec"
+        },
+        "parameterization": {
+          "$ref": "#/$defs/ParameterizationSpec"
+        },
+        "engineExtras": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "compute",
+        "engine",
+        "flow",
+        "geometry",
+        "objective",
+        "optimization",
+        "parameterization"
+      ]
+    },
+    "ComputeSpec": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "enum": [
+            "SHARED_HPC",
+            "AWS_BATCH",
+            "LOCAL",
+            "K8S"
+          ],
+          "type": "string",
+          "description": "* `SHARED_HPC` - SHARED_HPC\n* `AWS_BATCH` - AWS_BATCH\n* `LOCAL` - LOCAL\n* `K8S` - K8S",
+          "x-spec-enum-id": "e6a90292d1b74a30"
+        },
+        "hpc": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/HpcCompute"
+            }
+          ]
+        },
+        "batch": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/BatchCompute"
+            }
+          ]
+        }
+      },
+      "required": [
+        "backend"
+      ]
+    },
+    "ConstraintsSpec": {
+      "type": "object",
+      "properties": {
+        "maxOutwardDisplacement": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "maxInwardDisplacement": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "maxInitChange": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "regularizationRadius": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "planeConstraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PlaneConstraint"
+          }
+        },
+        "boundingSurfaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "wheelDistance": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {}
+        },
+        "freeze": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      }
+    },
+    "DomainGrid": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "z": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ]
+    },
+    "DomainSpec": {
+      "type": "object",
+      "properties": {
+        "grid": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DomainGrid"
+            }
+          ]
+        }
+      }
+    },
+    "FlowSpec": {
+      "type": "object",
+      "properties": {
+        "freestreamVelocityMps": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "latticeVelocity": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "velocity": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "mach": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "aoa": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "reynolds": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "reynoldsLength": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "flowDirection": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxItems": 3,
+          "minItems": 3
+        },
+        "turbIntensity": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "turb2lamViscRatio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "smagorinsky": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "precision": {
+          "enum": [
+            "DP",
+            "SPDP"
+          ],
+          "type": "string",
+          "description": "* `DP` - DP\n* `SPDP` - SPDP",
+          "x-spec-enum-id": "9f9c00f0c36bcc5e",
+          "default": "DP"
+        },
+        "mesh": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      }
+    },
+    "GeometrySpec": {
+      "type": "object",
+      "properties": {
+        "movingPatches": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "constantPatches": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "objectivePatches": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "frontWheelPatch": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "rearWheelPatch": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "scale": {
+          "type": "boolean",
+          "default": true
+        },
+        "translate": {
+          "type": "boolean",
+          "default": true
+        },
+        "symmetry": {
+          "enum": [
+            "none",
+            "x",
+            "y",
+            "z"
+          ],
+          "type": "string",
+          "description": "* `none` - none\n* `x` - x\n* `y` - y\n* `z` - z",
+          "x-spec-enum-id": "da516b8716586636",
+          "default": "none"
+        },
+        "isHalfGeometry": {
+          "type": "boolean"
+        },
+        "useSymmetryPlane": {
+          "type": "boolean"
+        },
+        "normalizeLength": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "maxStlTriangles": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "groundClearance": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "groundClearanceM": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "transform": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GeometryTransformSpec"
+            }
+          ]
+        }
+      },
+      "required": [
+        "movingPatches"
+      ]
+    },
+    "GeometryTransformSpec": {
+      "type": "object",
+      "description": "Workbench scene rotation, expressed with the Three.js XYZ convention.",
+      "properties": {
+        "rotationEulerDeg": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxItems": 3,
+          "minItems": 3
+        },
+        "rotationOrder": {
+          "enum": [
+            "XYZ"
+          ],
+          "type": "string",
+          "description": "* `XYZ` - XYZ",
+          "x-spec-enum-id": "d4e52030c47c5f9f",
+          "default": "XYZ"
+        }
+      }
+    },
+    "HpcCompute": {
+      "type": "object",
+      "properties": {
+        "nProcs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "nProcsMesh": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nodes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "coresPerNode": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "walltimeMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "poolKey": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "paths": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "nProcs"
+      ]
+    },
+    "JobExecution": {
+      "type": "object",
+      "description": "Job 상세 응답의 executions[] 블록을 구성하는 실행 상세 정보.",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "backendType": {
+          "enum": [
+            "SHARED_HPC",
+            "AWS_BATCH",
+            "LOCAL",
+            "K8S",
+            "SKETCH_GPU",
+            "SSH_REMOTE"
+          ],
+          "type": "string",
+          "description": "* `SHARED_HPC` - Shared HPC\n* `AWS_BATCH` - AWS Batch\n* `LOCAL` - Local\n* `K8S` - Kubernetes\n* `SKETCH_GPU` - Sketch GPU\n* `SSH_REMOTE` - Remote SSH",
+          "x-spec-enum-id": "2af077c591bf1be8"
+        },
+        "attemptNo": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "batchJobId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "batchQueueName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        },
+        "batchJobDefinition": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        },
+        "computeRegion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "status": {
+          "enum": [
+            "submitted",
+            "pending",
+            "runnable",
+            "running",
+            "cancelling",
+            "cancellation_failed",
+            "succeeded",
+            "failed",
+            "cancelled",
+            "timeout"
+          ],
+          "type": "string",
+          "description": "* `submitted` - Submitted\n* `pending` - Pending\n* `runnable` - Runnable\n* `running` - Running\n* `cancelling` - Cancelling\n* `cancellation_failed` - Cancellation failed\n* `succeeded` - Succeeded\n* `failed` - Failed\n* `cancelled` - Cancelled\n* `timeout` - Timeout",
+          "x-spec-enum-id": "0ef3d8c1f80fe2d3"
+        },
+        "statusReason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "progress": {
+          "type": "number",
+          "format": "double"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "duration": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "backendType",
+        "duration",
+        "id",
+        "status",
+        "uid"
+      ]
+    },
+    "JobRunConfigEnvelope": {
+      "type": "object",
+      "properties": {
+        "unifiedConfig": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CanonicalJobSpec"
+            }
+          ],
+          "readOnly": true
+        },
+        "nativeConfig": {
+          "type": "object",
+          "additionalProperties": {},
+          "readOnly": true
+        }
+      },
+      "required": [
+        "nativeConfig",
+        "unifiedConfig"
+      ]
+    },
+    "JobStatusEvent": {
+      "type": "object",
+      "description": "Job 상세 응답의 events[] 블록을 구성하는 상태 이벤트.",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "source": {
+          "enum": [
+            "API",
+            "ADMIN",
+            "WORKER",
+            "SCHEDULER",
+            "EXTERNAL",
+            "USER"
+          ],
+          "type": "string",
+          "description": "* `API` - API\n* `ADMIN` - Admin\n* `WORKER` - Worker\n* `SCHEDULER` - Scheduler\n* `EXTERNAL` - External System\n* `USER` - User",
+          "x-spec-enum-id": "15fa1de5d5d7f5f1"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "progressPercent": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "metadata": {},
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "status"
+      ]
+    },
+    "MergedSourcePatch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "label": {
+          "type": "string",
+          "readOnly": true
+        },
+        "boundingBox": {
+          "readOnly": true
+        },
+        "inputPreviewPoints": {
+          "readOnly": true
+        }
+      },
+      "required": [
+        "boundingBox",
+        "id",
+        "inputPreviewPoints",
+        "label"
+      ]
+    },
+    "ObjectiveSpec": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "enum": [
+            "drag",
+            "lift",
+            "liftBalance",
+            "efficiency",
+            "downforce",
+            "multi"
+          ],
+          "type": "string",
+          "description": "* `drag` - drag\n* `lift` - lift\n* `liftBalance` - liftBalance\n* `efficiency` - efficiency\n* `downforce` - downforce\n* `multi` - multi",
+          "x-spec-enum-id": "1a92fab45dc97f84",
+          "default": "drag"
+        },
+        "monitoringQuantities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "liftWeight": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "autoClConstraint": {
+          "type": "boolean",
+          "default": true
+        },
+        "clTolerance": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "clPenalty": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        }
+      }
+    },
+    "OptimizationSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "cycles": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5
+        },
+        "deformLimit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "method": {
+          "enum": [
+            "adjoint",
+            "slsqp",
+            "sqp",
+            "steepest",
+            "adam",
+            "sgd",
+            ""
+          ],
+          "type": "string",
+          "description": "* `adjoint` - adjoint\n* `slsqp` - slsqp\n* `sqp` - sqp\n* `steepest` - steepest\n* `adam` - adam\n* `sgd` - sgd",
+          "x-spec-enum-id": "e92402542252bd8e",
+          "default": ""
+        },
+        "gradientMethod": {
+          "enum": [
+            "adjoint",
+            "fd"
+          ],
+          "type": "string",
+          "description": "* `adjoint` - adjoint\n* `fd` - fd",
+          "x-spec-enum-id": "46d5636d932d27b2",
+          "default": "adjoint"
+        },
+        "learningRate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "step": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "nWarmup": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nAdjoint": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nPrimal": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "convergence": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      }
+    },
+    "ParameterizationSpec": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "morph",
+            "ffd",
+            "rbf",
+            "sdf"
+          ],
+          "type": "string",
+          "description": "* `morph` - morph\n* `ffd` - ffd\n* `rbf` - rbf\n* `sdf` - sdf",
+          "x-spec-enum-id": "ae3ce64c24db245b"
+        },
+        "engine": {
+          "enum": [
+            "G1",
+            "G2",
+            "G4"
+          ],
+          "type": "string",
+          "description": "* `G1` - G1\n* `G2` - G2\n* `G4` - G4",
+          "x-spec-enum-id": "d5df67bc8a34864a"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "engine",
+        "mode"
+      ]
+    },
+    "Patch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "patchType": {
+          "enum": [
+            "source",
+            "ref"
+          ],
+          "type": "string",
+          "description": "* `source` - Source\n* `ref` - Ref",
+          "x-spec-enum-id": "946c46f06a235611",
+          "readOnly": true
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "category": {
+          "enum": [
+            "optimization",
+            "constant",
+            "wing",
+            "wheel_front",
+            "wheel_rear",
+            "optimization_target",
+            "constant_target",
+            "front_wheel",
+            "rear_wheel"
+          ],
+          "type": "string",
+          "description": "* `optimization` - Optimization\n* `constant` - Constant\n* `wing` - Wing\n* `wheel_front` - Wheel Front\n* `wheel_rear` - Wheel Rear\n* `optimization_target` - Optimization Target\n* `constant_target` - Constant Target\n* `front_wheel` - Front Wheel\n* `rear_wheel` - Rear Wheel",
+          "x-spec-enum-id": "5dd1d70043ac53a5"
+        },
+        "artifactId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Associated artifact for source patch",
+          "readOnly": true
+        },
+        "triangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "source patch original STL triangle count"
+        },
+        "surfaceArea": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "source/ref patch surface area"
+        },
+        "selectedProxyTriangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "ref patch only"
+        },
+        "boundingBox": {
+          "description": "source/ref 공용 bbox payload {min:[x,y,z], max:[x,y,z], ffd_degree?:[i,j,k]}"
+        },
+        "ffdDegree": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer"
+          },
+          "writeOnly": true
+        },
+        "proxyMaskSizeBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "writeOnly": true
+        },
+        "normalDisplacementInward": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) normal displacement inward"
+        },
+        "normalDisplacementOutward": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) normal displacement outward"
+        },
+        "planeLimitXMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit x min"
+        },
+        "planeLimitXMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit x max"
+        },
+        "planeLimitYMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit y min"
+        },
+        "planeLimitYMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit y max"
+        },
+        "planeLimitZMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit z min"
+        },
+        "planeLimitZMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit z max"
+        },
+        "inputPreviewPointsKey": {
+          "type": "string",
+          "description": "source patch point preview only",
+          "maxLength": 1024
+        },
+        "inputPreviewPoints": {
+          "description": "source patch point preview metadata"
+        },
+        "inputPreviewVoxelsKey": {
+          "type": "string",
+          "description": "source patch voxel preview only",
+          "maxLength": 1024
+        },
+        "inputPreviewVoxels": {
+          "description": "source patch voxel preview metadata"
+        },
+        "proxyCacheKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 255
+        },
+        "proxyMeshKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "proxyLayoutKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "atlasKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "proxyWorkerRevision": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 64
+        },
+        "proxyArtifactSignature": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 128
+        },
+        "proxyTriangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "source patch only"
+        },
+        "hasRefs": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isMergeOutput": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isMergePending": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "mergedSourcePatches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MergedSourcePatch"
+          },
+          "readOnly": true
+        },
+        "isInitialSourceUpload": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "source patch only - uploaded while project was draft"
+        },
+        "sourcePatchId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "mergedIntoPatchId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "proxyMeshMaskKey": {
+          "type": "string",
+          "description": "ref patch only",
+          "maxLength": 1024
+        },
+        "sourceProxyArtifactSignature": {
+          "type": "string",
+          "description": "ref patch only — 부모 source patch proxy signature 스냅샷",
+          "maxLength": 128
+        },
+        "proxyMaskSignature": {
+          "type": "string",
+          "description": "ref patch only",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "artifactId",
+        "createdAt",
+        "hasRefs",
+        "id",
+        "isInitialSourceUpload",
+        "isMergeOutput",
+        "isMergePending",
+        "mergedIntoPatchId",
+        "mergedSourcePatches",
+        "patchType",
+        "sourcePatchId",
+        "uid",
+        "updatedAt"
+      ]
+    },
+    "PlaneConstraint": {
+      "type": "object",
+      "properties": {
+        "axis": {
+          "enum": [
+            "x",
+            "y",
+            "z"
+          ],
+          "type": "string",
+          "description": "* `x` - x\n* `y` - y\n* `z` - z",
+          "x-spec-enum-id": "27a7e2bcc96b78e8"
+        },
+        "min": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "max": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "minOffset": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "maxOffset": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        }
+      },
+      "required": [
+        "axis"
+      ]
+    },
+    "SimpleProject": {
+      "type": "object",
+      "description": "Job 응답에 포함될 간단한 Project 정보.",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "mode": {
+          "enum": [
+            "MARINE",
+            "G1",
+            "G2",
+            "G3",
+            "G4",
+            "S2",
+            "SX"
+          ],
+          "type": "string",
+          "description": "* `MARINE` - Marine\n* `G1` - G1\n* `G2` - G2\n* `G3` - G3\n* `G4` - G4\n* `S2` - Sketch 2D\n* `SX` - Sketch to 3D",
+          "x-spec-enum-id": "2726f65caad83ecc"
+        }
+      },
+      "required": [
+        "id",
+        "uid"
+      ]
+    }
+  }
+}

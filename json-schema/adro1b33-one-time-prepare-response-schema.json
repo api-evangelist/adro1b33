@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-one-time-prepare-response-schema.json",
+  "title": "OneTimePrepareResponse",
+  "description": "단건결제 준비 응답. PaymentSerializer 의 모든 필드 + bypass.\n\nbypass: PG 별로 프론트 SDK 호출에 필요한 추가 페이로드 (예: Galaxia ITEM_CODE).\n        Galaxia/PayLetter/PayPal 각각 백엔드가 채워 보내므로 프론트는 그대로\n        `PortOne.requestPayment({..., bypass})` 의 `bypass` 인자에 전달.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-credits-api-openapi.yml#/components/schemas/OneTimePrepareResponse",
+  "type": "object",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedByUserId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "type": {
+      "enum": [
+        "ONE_TIME",
+        "BILLING"
+      ],
+      "type": "string",
+      "description": "* `ONE_TIME` - 단건결제\n* `BILLING` - 빌링키결제",
+      "x-spec-enum-id": "1bec82349f1a053f"
+    },
+    "provider": {
+      "enum": [
+        "payletter",
+        "paypal",
+        "galaxia"
+      ],
+      "type": "string",
+      "description": "* `payletter` - PayLetter\n* `paypal` - PayPal\n* `galaxia` - Galaxia",
+      "x-spec-enum-id": "57f6d0e06595d82e"
+    },
+    "status": {
+      "enum": [
+        "READY",
+        "PAID",
+        "VIRTUAL_ACCOUNT_ISSUED",
+        "PAY_PENDING",
+        "PARTIAL_CANCELLED",
+        "CANCELLED",
+        "FAILED"
+      ],
+      "type": "string",
+      "description": "* `READY` - 결제 대기 (paymentId 채번 직후)\n* `PAID` - 결제 완료\n* `VIRTUAL_ACCOUNT_ISSUED` - 가상계좌 발급 완료\n* `PAY_PENDING` - 결제 승인 대기\n* `PARTIAL_CANCELLED` - 부분 취소\n* `CANCELLED` - 전체 취소\n* `FAILED` - 결제 실패",
+      "x-spec-enum-id": "f6b6565c3eca53e9"
+    },
+    "billingKey": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "channelKey": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "orderName": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "amountMinor": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "currency": {
+      "type": "string",
+      "maxLength": 8
+    },
+    "paidAmountMinor": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "cancelledAmountMinor": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "refundAvailableAmountMinor": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": {},
+      "readOnly": true
+    },
+    "pgProvider": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "pgTxId": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "methodType": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "failureCode": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "failureMessage": {
+      "type": "string"
+    },
+    "requestedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "paidAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "failedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "cancelledAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "cancellations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PaymentCancellation"
+      },
+      "readOnly": true
+    },
+    "bypass": {
+      "type": "object",
+      "additionalProperties": {},
+      "readOnly": true,
+      "description": "PG 별 SDK 호출 추가 페이로드. Galaxia 는 {'galaxia': {'ITEM_CODE': '...'}}."
+    }
+  },
+  "required": [
+    "amountMinor",
+    "billingKey",
+    "bypass",
+    "cancellations",
+    "cancelledAmountMinor",
+    "display",
+    "orderName",
+    "paidAmountMinor",
+    "paymentId",
+    "refundAvailableAmountMinor",
+    "requestedAt",
+    "requestedByUserId",
+    "teamId",
+    "teamName",
+    "type"
+  ],
+  "$defs": {
+    "PaymentCancellation": {
+      "type": "object",
+      "properties": {
+        "cancellationId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "amount": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "requestedByUserId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "cancelledAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "amount",
+        "cancellationId",
+        "requestedByUserId"
+      ]
+    }
+  }
+}

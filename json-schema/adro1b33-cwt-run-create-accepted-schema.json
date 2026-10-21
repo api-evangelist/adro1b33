@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cwt-run-create-accepted-schema.json",
+  "title": "CwtRunCreateAccepted",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-cwt-api-openapi.yml#/components/schemas/CwtRunCreateAccepted",
+  "type": "object",
+  "properties": {
+    "runUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "jobUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "projectUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "inputSessionUid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "running",
+        "cancelling",
+        "cancellation_failed",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "aborted"
+      ],
+      "type": "string",
+      "description": "* `queued` - Queued\n* `running` - Running\n* `cancelling` - Cancelling\n* `cancellation_failed` - Cancellation failed\n* `succeeded` - Succeeded\n* `failed` - Failed\n* `cancelled` - Cancelled\n* `aborted` - Aborted",
+      "x-spec-enum-id": "6b8a9060f1dec637",
+      "readOnly": true
+    },
+    "progress": {
+      "type": "number",
+      "format": "double",
+      "readOnly": true
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "finishedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "finishedAt",
+    "inputSessionUid",
+    "jobUid",
+    "name",
+    "progress",
+    "projectUid",
+    "runUid",
+    "stage",
+    "startedAt",
+    "status"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-les-run-submission-schema.json",
+  "title": "LesRunSubmission",
+  "description": "Schema for the transport handles resolved before input validation.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-les-api-openapi.yml#/components/schemas/LesRunSubmission",
+  "type": "object",
+  "properties": {
+    "wheels": {
+      "enum": [
+        "unknown",
+        "open_spokes",
+        "sealed"
+      ],
+      "type": "string",
+      "description": "* `unknown` - Unknown\n* `open_spokes` - Open spokes\n* `sealed` - Sealed in uploaded geometry",
+      "x-spec-enum-id": "82934dcead1a8ccf",
+      "default": "unknown"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "speedKmh": {
+      "type": "number",
+      "format": "double",
+      "maximum": 400.0,
+      "minimum": 1.0,
+      "default": 120.0
+    },
+    "groundClearanceMm": {
+      "type": "number",
+      "format": "double",
+      "maximum": 500.0,
+      "minimum": 0.0,
+      "default": 30.0
+    },
+    "yawDeg": {
+      "type": "number",
+      "format": "double",
+      "maximum": 30.0,
+      "minimum": -30.0,
+      "default": 0.0
+    },
+    "grade": {
+      "enum": [
+        "smoke",
+        "standard",
+        "precision"
+      ],
+      "type": "string",
+      "description": "* `smoke` - Smoke (wiring test)\n* `standard` - Standard (3-level)\n* `precision` - Precision (versioned profile)",
+      "x-spec-enum-id": "da381bb7cd0f6163",
+      "default": "precision"
+    },
+    "placement": {
+      "enum": [
+        "auto",
+        "ground",
+        "free"
+      ],
+      "type": "string",
+      "description": "* `auto` - Auto (runner decides)\n* `ground` - Ground (road vehicle)\n* `free` - Free flight",
+      "x-spec-enum-id": "0b78f8fee8b999b7",
+      "default": "auto"
+    },
+    "movieFrames": {
+      "type": "integer",
+      "maximum": 3000,
+      "minimum": 0,
+      "default": 480
+    },
+    "sealWheels": {
+      "enum": [
+        "auto",
+        "on",
+        "off"
+      ],
+      "type": "string",
+      "description": "* `auto` - Auto (runner decides)\n* `on` - On\n* `off` - Off",
+      "x-spec-enum-id": "53e18c43bb418670",
+      "default": "auto"
+    },
+    "spinWheels": {
+      "enum": [
+        "auto",
+        "on",
+        "off"
+      ],
+      "type": "string",
+      "description": "* `auto` - Auto (runner decides)\n* `on` - On\n* `off` - Off",
+      "x-spec-enum-id": "53e18c43bb418670",
+      "default": "auto"
+    },
+    "intent": {
+      "type": "string",
+      "default": "",
+      "maxLength": 2000
+    },
+    "stagedInputUid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "autoconfigUid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "stl": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

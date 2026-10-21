@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-me-response-schema.json",
+  "title": "MeResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/MeResponse",
+  "type": "object",
+  "properties": {
+    "timeZone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "userType": {
+      "type": "string"
+    },
+    "isPlatformAdmin": {
+      "type": "boolean"
+    },
+    "role": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isSuperAdmin": {
+      "type": "boolean"
+    },
+    "canViewPlatform": {
+      "type": "boolean"
+    },
+    "canManagePlatform": {
+      "type": "boolean"
+    },
+    "mustChangePassword": {
+      "type": "boolean"
+    },
+    "defaultTeamId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "socialKind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hasPassword": {
+      "type": "boolean"
+    },
+    "tenantFeatureAccess": {
+      "$ref": "#/$defs/TenantFeatureAccess"
+    },
+    "featurePolicyVersion": {
+      "type": "integer"
+    },
+    "billingMode": {
+      "enum": [
+        "TEAM",
+        "TENANT"
+      ],
+      "type": "string",
+      "description": "* `TEAM` - TEAM\n* `TENANT` - TENANT",
+      "x-spec-enum-id": "b4a3018a77249123"
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MeTeam"
+      }
+    }
+  },
+  "required": [
+    "billingMode",
+    "canManagePlatform",
+    "canViewPlatform",
+    "defaultTeamId",
+    "displayName",
+    "email",
+    "featurePolicyVersion",
+    "hasPassword",
+    "id",
+    "isPlatformAdmin",
+    "isSuperAdmin",
+    "mustChangePassword",
+    "teams",
+    "tenantFeatureAccess",
+    "timeZone",
+    "userType"
+  ],
+  "$defs": {
+    "MeTeam": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "role": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "displayNameOverride": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tenantId": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "tenantSchemaName": {
+          "type": "string"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/TeamCapabilities"
+        },
+        "featureAccess": {
+          "$ref": "#/$defs/TenantFeatureAccess"
+        },
+        "featurePolicyRevision": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "featureAccess",
+        "featurePolicyRevision",
+        "id",
+        "name"
+      ]
+    },
+    "TeamCapabilities": {
+      "type": "object",
+      "description": "role→액션 매핑으로 계산한 capability boolean 10종.\n\n`app.teams.permissions.get_team_capabilities` 반환 dict 스키마와 1:1 대응한다\n(설계 문서 §3.6). 필드명은 스네이크로 두되 camel-case 렌더러가 응답에서\ncanManageTeamSettings 형태로 직렬화한다.",
+      "properties": {
+        "canManageTeamSettings": {
+          "type": "boolean"
+        },
+        "canManageTeamMembers": {
+          "type": "boolean"
+        },
+        "canManageJobRuns": {
+          "type": "boolean"
+        },
+        "canCreateProjects": {
+          "type": "boolean"
+        },
+        "canManageProjects": {
+          "type": "boolean"
+        },
+        "canPurgeStorage": {
+          "type": "boolean"
+        },
+        "canUpdateProjectWorkflow": {
+          "type": "boolean"
+        },
+        "canCommentOnProjects": {
+          "type": "boolean"
+        },
+        "canManageBilling": {
+          "type": "boolean"
+        },
+        "canAccessPreviewFeatures": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "canAccessPreviewFeatures",
+        "canCommentOnProjects",
+        "canCreateProjects",
+        "canManageBilling",
+        "canManageJobRuns",
+        "canManageProjects",
+        "canManageTeamMembers",
+        "canManageTeamSettings",
+        "canPurgeStorage",
+        "canUpdateProjectWorkflow"
+      ]
+    },
+    "TenantFeatureAccess": {
+      "type": "object",
+      "properties": {
+        "disabledDisplay": {
+          "enum": [
+            "hidden",
+            "locked"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `locked` - Locked",
+          "x-spec-enum-id": "3d11569cf3b7dd03"
+        },
+        "disabledDisplayOverrides": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TenantFeatureDisabledDisplayOverride"
+          }
+        },
+        "projects": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "validationDes": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "manualOptimization": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "market": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "racingDiv": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "g3": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "laboratory": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "marine": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "stl2stp": {
+          "enum": [
+            "hidden",
+            "disabled",
+            "active"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `disabled` - Disabled\n* `active` - Active",
+          "x-spec-enum-id": "718a9c513d88ba39"
+        },
+        "submenus": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "disabledDisplay",
+        "disabledDisplayOverrides",
+        "g3",
+        "laboratory",
+        "manualOptimization",
+        "marine",
+        "market",
+        "projects",
+        "racingDiv",
+        "stl2stp",
+        "submenus",
+        "validationDes"
+      ]
+    },
+    "TenantFeatureDisabledDisplayOverride": {
+      "type": "object",
+      "properties": {
+        "feature": {
+          "enum": [
+            "projects",
+            "validation_des",
+            "manual_optimization",
+            "market",
+            "racing_div",
+            "g3",
+            "laboratory",
+            "marine",
+            "stl2stp"
+          ],
+          "type": "string",
+          "description": "* `projects` - projects\n* `validation_des` - validation_des\n* `manual_optimization` - manual_optimization\n* `market` - market\n* `racing_div` - racing_div\n* `g3` - g3\n* `laboratory` - laboratory\n* `marine` - marine\n* `stl2stp` - stl2stp",
+          "x-spec-enum-id": "e04b89eb1b630f26"
+        },
+        "submenu": {
+          "type": "string"
+        },
+        "display": {
+          "enum": [
+            "hidden",
+            "locked"
+          ],
+          "type": "string",
+          "description": "* `hidden` - Hidden\n* `locked` - Locked",
+          "x-spec-enum-id": "3d11569cf3b7dd03"
+        }
+      },
+      "required": [
+        "display",
+        "feature"
+      ]
+    }
+  }
+}

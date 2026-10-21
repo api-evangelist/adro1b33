@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-g2-job-restart-schema.json",
+  "title": "G2JobRestart",
+  "description": "G2 Job 단계 재시작(restart) 시리얼라이저.\n\n원본 Job 의 mesh/CFD 체크포인트를 재사용해 특정 단계부터 재실행한다.\n원본 geometry/STL/patch 를 그대로 재사용하므로 입력은 단계 + 일부 run_config\noverride 만 받는다 (예: opt 단계의 opt_iter/opt_step).\n\nsource_job 은 뷰에서 URL pk 로 해석해 컨텍스트로 주입한다.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-jobs-api-openapi.yml#/components/schemas/G2JobRestart",
+  "type": "object",
+  "properties": {
+    "restartStage": {
+      "enum": [
+        "scratch",
+        "mesh",
+        "cfd",
+        "opt"
+      ],
+      "type": "string",
+      "description": "* `scratch` - scratch\n* `mesh` - mesh\n* `cfd` - cfd\n* `opt` - opt",
+      "x-spec-enum-id": "8b4e6fcc5d65a612"
+    },
+    "runConfig": {
+      "type": "object",
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "restartStage"
+  ]
+}

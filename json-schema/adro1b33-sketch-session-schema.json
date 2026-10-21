@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-sketch-session-schema.json",
+  "title": "SketchSession",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-sketch-api-openapi.yml#/components/schemas/SketchSession",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "projectUid": {
+      "type": "string"
+    },
+    "jobUid": {
+      "type": "string"
+    },
+    "restartFromJobUid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "restartStage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "executionUid": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "generation": {
+      "type": "integer"
+    },
+    "queuePosition": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "eventsPath": {
+      "type": "string"
+    },
+    "canControl": {
+      "type": "boolean"
+    },
+    "canCancel": {
+      "type": "boolean"
+    },
+    "input": {},
+    "streamMetadata": {},
+    "resultSummary": {},
+    "finalArtifact": {}
+  },
+  "required": [
+    "canCancel",
+    "canControl",
+    "createdAt",
+    "displayName",
+    "eventsPath",
+    "executionUid",
+    "finalArtifact",
+    "generation",
+    "input",
+    "jobUid",
+    "phase",
+    "projectUid",
+    "queuePosition",
+    "restartFromJobUid",
+    "restartStage",
+    "resultSummary",
+    "status",
+    "streamMetadata"
+  ]
+}

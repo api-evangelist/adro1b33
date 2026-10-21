@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-sketch-project-state-schema.json",
+  "title": "SketchProjectState",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-sketch-api-openapi.yml#/components/schemas/SketchProjectState",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "type": "integer"
+    },
+    "projectUid": {
+      "type": "string"
+    },
+    "projectStatus": {
+      "enum": [
+        "draft",
+        "open",
+        "closed"
+      ],
+      "type": "string",
+      "description": "* `draft` - draft\n* `open` - open\n* `closed` - closed",
+      "x-spec-enum-id": "906e3b46ea84ba5e"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "canEdit": {
+      "type": "boolean"
+    },
+    "state": {}
+  },
+  "required": [
+    "canEdit",
+    "projectId",
+    "projectStatus",
+    "projectUid",
+    "revision",
+    "state"
+  ]
+}

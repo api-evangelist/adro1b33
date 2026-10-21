@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-race-feedback-schema.json",
+  "title": "RaceFeedback",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-racing-api-openapi.yml#/components/schemas/RaceFeedback",
+  "type": "object",
+  "properties": {
+    "differenceFelt": {
+      "type": "integer",
+      "maximum": 5,
+      "minimum": 1
+    },
+    "wouldOptimizeAgain": {
+      "type": "boolean"
+    },
+    "comment": {
+      "type": "string",
+      "default": "",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "differenceFelt",
+    "wouldOptimizeAgain"
+  ]
+}

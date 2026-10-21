@@ -86,69 +86,20 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CommentContentRequestNode:
-      oneOf:
-      - $ref: '#/components/schemas/CommentTextRequestNode'
-      - $ref: '#/components/schemas/CommentMentionRequestNode'
-      discriminator:
-        propertyName: type
-        mapping:
-          text: '#/components/schemas/CommentTextRequestNode'
-          mention: '#/components/schemas/CommentMentionRequestNode'
-    CommentMentionRequestNode:
+    ProjectCommentPage:
       type: object
       properties:
-        type:
-          enum:
-          - mention
-          type: string
-          description: '* `mention` - mention'
-          x-spec-enum-id: 9b68383fda6100b7
-        userId:
-          type: integer
-          minimum: 1
-        displayText:
-          type: string
-      required:
-      - type
-      - userId
-    CommentMentionResponseNode:
-      type: object
-      properties:
-        type:
-          enum:
-          - mention
-          type: string
-          description: '* `mention` - mention'
-          x-spec-enum-id: 9b68383fda6100b7
-        userId:
-          type: integer
-          minimum: 1
-        displayText:
-          type:
-          - string
-          - 'null'
-        currentDisplayName:
-          type:
-          - string
-          - 'null'
-        isActiveTeamMember:
-          type: boolean
-      required:
-      - currentDisplayName
-      - displayText
-      - isActiveTeamMember
-      - type
-      - userId
-    CommentContentRequest:
-      type: object
-      properties:
-        content:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/CommentContentRequestNode'
+            $ref: '#/components/schemas/ProjectComment'
+        next:
+          type:
+          - string
+          - 'null'
       required:
-      - content
+      - next
+      - results
     ProjectCommentThread:
       type: object
       properties:
@@ -186,20 +137,24 @@ components:
       - projectId
       - uid
       - updatedAt
-    CommentTextResponseNode:
+    CommentContentRequest:
       type: object
       properties:
-        type:
-          enum:
-          - text
-          type: string
-          description: '* `text` - text'
-          x-spec-enum-id: db74f2b3b2995084
-        text:
-          type: string
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentContentRequestNode'
       required:
-      - text
-      - type
+      - content
+    CommentContentRequestNode:
+      oneOf:
+      - $ref: '#/components/schemas/CommentTextRequestNode'
+      - $ref: '#/components/schemas/CommentMentionRequestNode'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/CommentTextRequestNode'
+          mention: '#/components/schemas/CommentMentionRequestNode'
     CommentContentResponseNode:
       oneOf:
       - $ref: '#/components/schemas/CommentTextResponseNode'
@@ -209,34 +164,6 @@ components:
         mapping:
           text: '#/components/schemas/CommentTextResponseNode'
           mention: '#/components/schemas/CommentMentionResponseNode'
-    ProjectCommentPage:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectComment'
-        next:
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - results
-    CommentTextRequestNode:
-      type: object
-      properties:
-        type:
-          enum:
-          - text
-          type: string
-          description: '* `text` - text'
-          x-spec-enum-id: db74f2b3b2995084
-        text:
-          type: string
-      required:
-      - text
-      - type
     CommentAuthor:
       type: object
       properties:
@@ -254,6 +181,62 @@ components:
       - displayName
       - isActiveTeamMember
       - userId
+    CommentMentionResponseNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - mention
+          type: string
+          description: '* `mention` - mention'
+          x-spec-enum-id: 9b68383fda6100b7
+        userId:
+          type: integer
+          minimum: 1
+        displayText:
+          type:
+          - string
+          - 'null'
+        currentDisplayName:
+          type:
+          - string
+          - 'null'
+        isActiveTeamMember:
+          type: boolean
+      required:
+      - currentDisplayName
+      - displayText
+      - isActiveTeamMember
+      - type
+      - userId
+    CommentTextRequestNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - text
+          type: string
+          description: '* `text` - text'
+          x-spec-enum-id: db74f2b3b2995084
+        text:
+          type: string
+      required:
+      - text
+      - type
+    CommentTextResponseNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - text
+          type: string
+          description: '* `text` - text'
+          x-spec-enum-id: db74f2b3b2995084
+        text:
+          type: string
+      required:
+      - text
+      - type
     ProjectComment:
       type: object
       properties:
@@ -301,6 +284,23 @@ components:
       - threadId
       - uid
       - updatedAt
+    CommentMentionRequestNode:
+      type: object
+      properties:
+        type:
+          enum:
+          - mention
+          type: string
+          description: '* `mention` - mention'
+          x-spec-enum-id: 9b68383fda6100b7
+        userId:
+          type: integer
+          minimum: 1
+        displayText:
+          type: string
+      required:
+      - type
+      - userId
   securitySchemes:
     agentBearerAuth:
       type: http

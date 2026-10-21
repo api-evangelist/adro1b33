@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-race-lap-create-schema.json",
+  "title": "RaceLapCreate",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-racing-api-openapi.yml#/components/schemas/RaceLapCreate",
+  "type": "object",
+  "properties": {
+    "clientLapUid": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "variant": {
+      "enum": [
+        "baseline",
+        "optimized"
+      ],
+      "type": "string",
+      "description": "* `baseline` - baseline\n* `optimized` - optimized",
+      "x-spec-enum-id": "25d9810d1ad94602"
+    },
+    "isValid": {
+      "type": "boolean"
+    },
+    "lapTimeMs": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "sectorTimesMs": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "maxItems": 3
+    },
+    "maxSpeedKph": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "minimum": 0
+    },
+    "cornerSpeedsKph": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "format": "double",
+        "minimum": 0
+      }
+    },
+    "referenceResult": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "invalidReasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 64
+      }
+    }
+  },
+  "required": [
+    "clientLapUid",
+    "isValid",
+    "variant"
+  ]
+}

@@ -1,22 +1,19 @@
 aid: adro1b33
 name: ADRO
-description: ADRO, Inc. (에이드로) is a South Korean mobility aerotech company in Yongin-si, Gyeonggi-do that
-  designs and manufactures aerospace-grade carbon-fiber aerodynamic components for global automotive brands,
-  and that has extended into software with AOX (Aerodynamic Optimization eXperience) — a web-based, GPU-
-  and HPC-backed aerodynamic design and optimization platform operated at aoxlabs.com that takes a CAD
-  or STL geometry through meshing, CFD simulation, shape optimization and post-processing without requiring
-  CFD expertise. The AOX platform is backed by a public Django REST Framework contract at api.aoxlabs.com
-  serving a 231-operation OpenAPI 3.0.3 document covering projects, jobs, LES runs, sketch sessions, patches,
-  artifacts, assets, teams, credits, plans, subscriptions and payments. The company's US direct-to-consumer
-  parts storefront at adro.com is a Shopify store that serves an agent-facing llms.txt and a live Universal
-  Commerce Protocol (UCP) MCP endpoint.
+description: ADRO, Inc. (에이드로) is a South Korean mobility aerotech company in Yongin-si, Gyeonggi-do that designs and manufactures aerospace-grade
+  carbon-fiber aerodynamic components for global automotive brands, and that has extended into software with AOX (Aerodynamic Optimization eXperience)
+  — a web-based, GPU- and HPC-backed aerodynamic design and optimization platform operated at aoxlabs.com that takes a CAD or STL geometry through
+  meshing, CFD simulation, shape optimization and post-processing without requiring CFD expertise. The AOX platform is backed by a public Django
+  REST Framework contract at api.aoxlabs.com serving a 231-operation OpenAPI 3.0.3 document covering projects, jobs, LES runs, sketch sessions,
+  patches, artifacts, assets, teams, credits, plans, subscriptions and payments. The company's US direct-to-consumer parts storefront at adro.com
+  is a Shopify store that serves an agent-facing llms.txt and a live Universal Commerce Protocol (UCP) MCP endpoint.
 url: https://raw.githubusercontent.com/api-evangelist/adro1b33/refs/heads/main/apis.yml
 image: https://aoxlabs.com/logos/AOX_Main_dark.png
 x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-09-07'
-modified: '2026-09-16'
+modified: '2026-10-20'
 position: Producing
 tags:
 - Aerodynamics
@@ -49,15 +46,93 @@ maintainers:
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: AgenticAccess
+  url: agentic-access/adro1b33-agentic-access.yml
+- type: Spectral
+  url: rules/adro1b33-rules.yml
+- type: JSONLD
+  url: json-ld/adro1b33-context.jsonld
+- type: Vocabulary
+  url: vocabulary/adro1b33-vocabulary.yml
+- type: Idempotency
+  url: conventions/adro1b33-conventions.yml
+- type: Deprecation
+  url: lifecycle/adro1b33-lifecycle.yml
+- type: Hosts
+  url: hosts/adro1b33-hosts.yml
+- type: Vendors
+  url: vendors/adro1b33-vendors.yml
+- type: CapabilityMap
+  url: capabilities/adro1b33-capability-edges.yml
+  name: ADRO Business Capability Map
+- type: Website
+  url: https://adro.com/
+- type: Website
+  url: https://aoxlabs.com/
+- type: Documentation
+  url: https://aoxlabs.com/product
+- type: APIReference
+  url: https://api.aoxlabs.com/swagger/
+- type: Pricing
+  url: https://aoxlabs.com/pricing
+- type: SignUp
+  url: https://aoxlabs.com/login
+- type: Login
+  url: https://aoxlabs.com/login
+- type: Support
+  url: https://aoxlabs.com/contact
+- type: TermsOfService
+  url: https://aoxlabs.com/terms
+- type: PrivacyPolicy
+  url: https://aoxlabs.com/privacy
+- type: Blog
+  url: https://adro.com/blogs/news
+- type: ChangeLog
+  url: https://aoxlabs.com/board
+- type: MCPServer
+  url: mcp/adro1b33-mcp.yml
+- type: LLMsTxt
+  url: llms/adro1b33-llms.txt
+- type: WellKnown
+  url: well-known/adro1b33-well-known.yml
+- type: Authentication
+  url: authentication/adro1b33-authentication.yml
+- type: Conventions
+  url: conventions/adro1b33-conventions.yml
+- type: ErrorCatalog
+  url: errors/adro1b33-problem-types.yml
+- type: DataModel
+  url: data-model/adro1b33-data-model.yml
+- type: Conformance
+  url: conformance/adro1b33-conformance.yml
+- type: Compliance
+  url: conformance/adro1b33-conformance.yml
+- type: TrustCenter
+  url: security/adro1b33-trust-center.yml
+- type: Lifecycle
+  url: lifecycle/adro1b33-lifecycle.yml
+- type: ChangeLog
+  url: changelog/adro1b33-changelog.yml
+- type: Plans
+  url: plans/adro1b33-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/adro1b33-rate-limits.yml
+- type: Overlay
+  url: overlays/adro1b33-aox-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/adro1b33-domain-security.yml
+- type: OAuthScopes
+  url: scopes/adro1b33-scopes.yml
 apis:
 - name: ADRO US Store Agent Commerce (UCP / MCP)
-  description: >-
-    ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that publishes an
-    agent-facing surface on ADRO's own domain — an llms.txt of agent instructions, a UCP merchant profile
-    at /.well-known/ucp, and a live Universal Commerce Protocol MCP endpoint at POST /api/ucp/mcp whose
-    anonymous tools/list returns thirteen tools with full JSON Schema inputs for catalog search and lookup,
-    product retrieval, cart, checkout and order. The runtime is Shopify's platform-provided UCP implementation
-    rather than ADRO-authored code; the endpoint, merchant profile and catalog are ADRO's.
+  description: ADRO's US direct-to-consumer aero-parts storefront at adro.com is a Shopify store that publishes an agent-facing surface on ADRO's
+    own domain — an llms.txt of agent instructions, a UCP merchant profile at /.well-known/ucp, and a live Universal Commerce Protocol MCP endpoint
+    at POST /api/ucp/mcp whose anonymous tools/list returns thirteen tools with full JSON Schema inputs for catalog search and lookup, product
+    retrieval, cart, checkout and order. The runtime is Shopify's platform-provided UCP implementation rather than ADRO-authored code; the endpoint,
+    merchant profile and catalog are ADRO's.
   humanURL: https://adro.com/llms.txt
   image: https://adro.com/cdn/shop/files/adro_logo_klaviyo.png?v=1785437102
   tags:
@@ -82,6 +157,7 @@ apis:
   x-surface: platform-generated
   x-platform: shopify
   x-platform-surface: ucp
+  aid: adro1b33:adro-us-store-agent-commerce-ucp-mcp
 - aid: adro1b33:adro1b33-accounts-api
   name: ADRO Accounts API
   description: The accounts API from ADRO — 18 operation(s) for accounts.
@@ -104,6 +180,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-me-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-user-social-login-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-user-force-password-change-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-user-me-usage-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-signup-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-social-register-schema.json
 - aid: adro1b33:adro1b33-ai-api
   name: ADRO AI API
   description: The Ai API from ADRO — 4 operation(s) for ai.
@@ -126,6 +214,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-ai-chat-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-ai-chat-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-ai-recommendation-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-ai-diagnosis-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-diagnose-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-ai-usage-response-schema.json
 - aid: adro1b33:adro1b33-announcements-api
   name: ADRO Announcements API
   description: The announcements API from ADRO — 1 operation(s) for announcements.
@@ -170,6 +270,14 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-artifact-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-paginated-artifact-list-list-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-artifact-copy-pending-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-artifact-copy-request-schema.json
 - aid: adro1b33:adro1b33-asset-notifications-api
   name: ADRO Asset Notifications API
   description: The asset-notifications API from ADRO — 1 operation(s) for asset-notifications.
@@ -256,6 +364,8 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-book-demo-create-schema.json
 - aid: adro1b33:adro1b33-credits-api
   name: ADRO Credits API
   description: The credits API from ADRO — 11 operation(s) for credits.
@@ -278,6 +388,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-one-time-prepare-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-credit-bucket-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-credit-operation-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-credit-wallet-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-credit-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-bundle-purchase-schema.json
 - aid: adro1b33:adro1b33-deletion-executions-api
   name: ADRO Deletion Executions API
   description: The deletion-executions API from ADRO — 1 operation(s) for deletion-executions.
@@ -298,6 +420,8 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-deletion-execution-status-schema.json
 - aid: adro1b33:adro1b33-error-feedback-api
   name: ADRO Error Feedback API
   description: The error-feedback API from ADRO — 1 operation(s) for error-feedback.
@@ -381,6 +505,10 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-improvement-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-improvement-request-create-schema.json
 - aid: adro1b33:adro1b33-job-api
   name: ADRO Job API
   description: The job API from ADRO — 4 operation(s) for job.
@@ -403,6 +531,12 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-canonical-job-submission-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-unified-job-submission-response-schema.json
 - aid: adro1b33:adro1b33-job-notifications-api
   name: ADRO Job Notifications API
   description: The job-notifications API from ADRO — 3 operation(s) for job-notifications.
@@ -445,6 +579,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-g2-job-restart-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-download-ticket-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-usage-summary-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-job-parameters-response-schema.json
 - aid: adro1b33:adro1b33-les-api
   name: ADRO Les API
   description: The les API from ADRO — 21 operation(s) for les.
@@ -465,6 +611,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-run-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-run-submission-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-capabilities-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-autoconfig-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-input-upload-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-les-autoconfig-upload-complete-schema.json
 - aid: adro1b33:adro1b33-patches-api
   name: ADRO Patches API
   description: The patches API from ADRO — 11 operation(s) for patches.
@@ -487,6 +645,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-proxy-artifact-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-proxy-artifact-presign-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-unmerge-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-merge-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-merge-schema.json
 - aid: adro1b33:adro1b33-payments-api
   name: ADRO Payments API
   description: The payments API from ADRO — 12 operation(s) for payments.
@@ -509,6 +679,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-one-time-prepare-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-billing-method-swap-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-billing-key-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-billing-key-swap-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-current-billing-method-schema.json
 - aid: adro1b33:adro1b33-plans-api
   name: ADRO Plans API
   description: The plans API from ADRO — 16 operation(s) for plans.
@@ -531,6 +713,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-upgrade-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-subscription-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-plan-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-team-storage-addon-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-storage-addon-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-subscription-cycle-schema.json
 - aid: adro1b33:adro1b33-presigned-url-api
   name: ADRO Presigned URL API
   description: The presigned_url API from ADRO — 2 operation(s) for presigned_url.
@@ -552,6 +746,8 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-presigned-schema.json
 - aid: adro1b33:adro1b33-projects-api
   name: ADRO Projects API
   description: The projects API from ADRO — 21 operation(s) for projects.
@@ -574,6 +770,12 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-patch-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-activate-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-schema.json
 - aid: adro1b33:adro1b33-racing-api
   name: ADRO Racing API
   description: The racing API from ADRO — 6 operation(s) for racing.
@@ -596,6 +798,16 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-race-lap-create-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-race-session-create-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-race-session-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-race-feedback-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-race-job-list-response-schema.json
 - aid: adro1b33:adro1b33-sample-stls-api
   name: ADRO Sample Stls API
   description: The sample-stls API from ADRO — 2 operation(s) for sample-stls.
@@ -616,6 +828,10 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-sample-stl-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sample-stl-download-schema.json
 - aid: adro1b33:adro1b33-sketch-api
   name: ADRO Sketch API
   description: The sketch API from ADRO — 13 operation(s) for sketch.
@@ -638,6 +854,18 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-session-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-project-state-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-geometry-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-project-state-update-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-project-create-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-sketch-conditions-schema.json
 - aid: adro1b33:adro1b33-subscriptions-api
   name: ADRO Subscriptions API
   description: The subscriptions API from ADRO — 2 operation(s) for subscriptions.
@@ -726,6 +954,10 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-file-upload-tracker-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-paginated-file-upload-tracker-list-schema.json
 - aid: adro1b33:adro1b33-verifier-api
   name: ADRO Verifier API
   description: The verifier API from ADRO — 2 operation(s) for verifier.
@@ -748,6 +980,10 @@ apis:
     url: errors/adro1b33-problem-types.yml
   - type: DataModel
     url: data-model/adro1b33-data-model.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-email-verifier-create-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-email-verifier-confirm-schema.json
 - aid: adro1b33:adro1b33-agent-api
   name: ADRO Agent API
   description: The Agent API from ADRO — 20 operation(s) for agent.
@@ -758,6 +994,18 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-agent-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-client-result-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-client-claim-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-attachment-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-conversation-projection-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-attachment-init-response-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-agent-thread-navigation-response-schema.json
 - aid: adro1b33:adro1b33-comment-notifications-api
   name: ADRO Comment Notifications API
   description: The comment-notifications API from ADRO — 2 operation(s) for comment-notifications.
@@ -768,6 +1016,12 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-comment-notifications-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-comment-notification-page-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-comment-notification-read-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-comment-notification-read-response-schema.json
 - aid: adro1b33:adro1b33-comment-threads-api
   name: ADRO Comment Threads API
   description: The comment-threads API from ADRO — 2 operation(s) for comment-threads.
@@ -778,6 +1032,14 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-comment-threads-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-comment-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-comment-thread-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-comment-page-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-comment-content-request-schema.json
 - aid: adro1b33:adro1b33-comments-api
   name: ADRO Comments API
   description: The comments API from ADRO — 1 operation(s) for comments.
@@ -788,6 +1050,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-comments-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-project-comment-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-comment-content-request-node-schema.json
 - aid: adro1b33:adro1b33-cwt-api
   name: ADRO Cwt API
   description: The cwt API from ADRO — 16 operation(s) for cwt.
@@ -798,6 +1064,18 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-cwt-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-run-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-upload-summary-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-run-create-accepted-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-upload-init-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-input-session-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cwt-run-create-schema.json
 - aid: adro1b33:adro1b33-geometry-cleaning-api
   name: ADRO Geometry Cleaning API
   description: The geometry-cleaning API from ADRO — 20 operation(s) for geometry-cleaning.
@@ -808,6 +1086,18 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-geometry-cleaning-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-cleaning-progress-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cleaning-run-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-preparation-chat-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-chat-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-preparation-proposal-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-cleaning-review-schema.json
 - aid: adro1b33:adro1b33-geometry-versions-api
   name: ADRO Geometry Versions API
   description: The geometry-versions API from ADRO — 1 operation(s) for geometry-versions.
@@ -818,6 +1108,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-geometry-versions-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-geometry-version-detail-schema.json
 - aid: adro1b33:adro1b33-internal-api
   name: ADRO Internal API
   description: The internal API from ADRO — 1 operation(s) for internal.
@@ -838,6 +1130,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-landing-announcements-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-landing-site-announcement-list-schema.json
 - aid: adro1b33:adro1b33-marine-api
   name: ADRO Marine API
   description: The marine API from ADRO — 3 operation(s) for marine.
@@ -858,6 +1152,14 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-notifications-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-notification-read-all-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-notification-summary-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-notification-page-schema.json
+  - type: JSONSchema
+    url: json-schema/adro1b33-notification-read-schema.json
 - aid: adro1b33:adro1b33-special-offer-api
   name: ADRO Special Offer API
   description: The special_offer API from ADRO — 1 operation(s) for special_offer.
@@ -868,6 +1170,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-special-offer-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-special-offer-request-create-schema.json
 - aid: adro1b33:adro1b33-student-team-api
   name: ADRO Student Team API
   description: The student_team API from ADRO — 1 operation(s) for student_team.
@@ -878,76 +1182,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/adro1b33-student-team-api-openapi.yml
-common:
-- type: CapabilityMap
-  url: capabilities/adro1b33-capability-edges.yml
-  name: ADRO Business Capability Map
-- type: Website
-  url: https://adro.com/
-- type: Website
-  url: https://aoxlabs.com/
-- type: Documentation
-  url: https://aoxlabs.com/product
-- type: APIReference
-  url: https://api.aoxlabs.com/swagger/
-- type: Pricing
-  url: https://aoxlabs.com/pricing
-- type: SignUp
-  url: https://aoxlabs.com/login
-- type: Login
-  url: https://aoxlabs.com/login
-- type: Support
-  url: https://aoxlabs.com/contact
-- type: TermsOfService
-  url: https://aoxlabs.com/terms
-- type: PrivacyPolicy
-  url: https://aoxlabs.com/privacy
-- type: Blog
-  url: https://adro.com/blogs/news
-- type: ChangeLog
-  url: https://aoxlabs.com/board
-- type: OpenAPI
-  url: openapi/_original/adro1b33-aox-openapi.yaml
-- type: MCPServer
-  url: mcp/adro1b33-mcp.yml
-- type: LLMsTxt
-  url: llms/adro1b33-llms.txt
-- type: WellKnown
-  url: well-known/adro1b33-well-known.yml
-- type: Authentication
-  url: authentication/adro1b33-authentication.yml
-- type: Conventions
-  url: conventions/adro1b33-conventions.yml
-- type: ErrorCatalog
-  url: errors/adro1b33-problem-types.yml
-- type: DataModel
-  url: data-model/adro1b33-data-model.yml
-- type: Conformance
-  url: conformance/adro1b33-conformance.yml
-- type: Compliance
-  url: conformance/adro1b33-conformance.yml
-- type: TrustCenter
-  url: security/adro1b33-trust-center.yml
-- type: Lifecycle
-  url: lifecycle/adro1b33-lifecycle.yml
-- type: ChangeLog
-  url: changelog/adro1b33-changelog.yml
-- type: Plans
-  url: plans/adro1b33-plans-pricing.yml
-- type: RateLimits
-  url: rate-limits/adro1b33-rate-limits.yml
-- type: Packages
-  url: packages/adro1b33-packages.yml
-- type: Overlay
-  url: overlays/adro1b33-aox-overlay.yaml
-- type: AgentSkill
-  url: skills/_index.yml
-- type: DomainSecurity
-  url: security/adro1b33-domain-security.yml
-- type: OAuthScopes
-  url: scopes/adro1b33-scopes.yml
+  - type: JSONSchema
+    url: json-schema/adro1b33-student-team-application-create-schema.json
 x-enrichment:
-  date: '2026-09-07'
+  date: '2026-10-20'
   status: enriched
-  artifacts_added: 29
-  pass: local-v3
+  artifacts_added: 0
+  pass: local-v5

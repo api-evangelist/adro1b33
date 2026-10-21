@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-deletion-execution-status-schema.json",
+  "title": "DeletionExecutionStatus",
+  "description": "Team-safe execution progress. Storage targets and errors stay private.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-deletion-executions-api-openapi.yml#/components/schemas/DeletionExecutionStatus",
+  "type": "object",
+  "properties": {
+    "executionId": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "resourceType": {
+      "type": "string",
+      "readOnly": true
+    },
+    "resourceUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "scheduled",
+        "pending",
+        "running",
+        "retry",
+        "blocked",
+        "succeeded",
+        "failed",
+        "cancelled"
+      ],
+      "type": "string",
+      "description": "* `scheduled` - Scheduled\n* `pending` - Pending\n* `running` - Running\n* `retry` - Retry\n* `blocked` - Blocked for manual review\n* `succeeded` - Succeeded\n* `failed` - Failed\n* `cancelled` - Cancelled",
+      "x-spec-enum-id": "2ff34784721dc0e0",
+      "readOnly": true
+    },
+    "phase": {
+      "enum": [
+        "s3_purge",
+        "db_finalize"
+      ],
+      "type": "string",
+      "description": "* `s3_purge` - S3 purge\n* `db_finalize` - Database finalization",
+      "x-spec-enum-id": "eb377700a0ac201c",
+      "readOnly": true
+    },
+    "scheduledFor": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "claimedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "nextRetryAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "completedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "deletedObjectCount": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "deletedVersionCount": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "deletedBytes": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "isTerminal": {
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "claimedAt",
+    "completedAt",
+    "deletedBytes",
+    "deletedObjectCount",
+    "deletedVersionCount",
+    "executionId",
+    "isTerminal",
+    "nextRetryAt",
+    "phase",
+    "resourceType",
+    "resourceUid",
+    "scheduledFor",
+    "status"
+  ]
+}

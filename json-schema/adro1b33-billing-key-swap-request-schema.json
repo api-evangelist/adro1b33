@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-billing-key-swap-request-schema.json",
+  "title": "BillingKeySwapRequest",
+  "description": "결제수단 변경(swap) 요청.\n\n프론트 흐름:\n  - PayLetter : `/payments/prepare/?provider=payletter` 로 소액 paymentId 채번 →\n    `requestIssueBillingKeyAndPay` 로 발급+소액결제 → 콜백 billingKey + paymentId 전달.\n  - PayPal/Galaxia : `requestIssueBillingKey` 로 단독발급 → 콜백 billingKey 전달\n    (payment_id 불필요).",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-payments-api-openapi.yml#/components/schemas/BillingKeySwapRequest",
+  "type": "object",
+  "properties": {
+    "teamId": {
+      "type": "integer"
+    },
+    "provider": {
+      "enum": [
+        "payletter",
+        "paypal",
+        "galaxia"
+      ],
+      "type": "string",
+      "description": "* `payletter` - PayLetter\n* `paypal` - PayPal\n* `galaxia` - Galaxia",
+      "x-spec-enum-id": "57f6d0e06595d82e",
+      "default": "paypal"
+    },
+    "billingKey": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "paymentId": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "channelKey": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "billingCountry": {
+      "type": "string",
+      "maxLength": 2
+    },
+    "legalName": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "billingEmail": {
+      "type": "string",
+      "format": "email"
+    }
+  },
+  "required": [
+    "billingCountry",
+    "billingEmail",
+    "billingKey",
+    "legalName",
+    "teamId"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-artifact-schema.json",
+  "title": "Artifact",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-artifacts-api-openapi.yml#/components/schemas/Artifact",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "artifactRole": {
+      "enum": [
+        "PROJECT_THUMBNAIL_IMAGE",
+        "PROJECT_SOURCE_STL",
+        "OPTIMIZED_STL",
+        "G2_SUMMARY_IMAGE",
+        "G2_SHAPE_REPORT_IMAGE",
+        "G2_FIGS_ZIP",
+        "G1_INPUT_STL",
+        "G1_SUMMARY_GIF",
+        "G1_FIGS_ZIP",
+        "G1_NORMAL_DISPLACEMENT_VTP",
+        "RESULT_MESH",
+        "RESULT_HISTORY",
+        "RESULT_SUMMARY_JSON",
+        "RESULT_FLOW_VOLUME",
+        "RESULT_GEOMETRY_SCALE",
+        "RESULT_PREVIEW_POINTS",
+        "RESULT_PROXY_MESH",
+        "RESULT_PROXY_LAYOUT",
+        "RESULT_PROXY_ATLAS",
+        "STREAMLINES_BIN",
+        "FLOWFIELD_BIN",
+        "G4_SUMMARY_IMAGE",
+        "G4_FIGS_ZIP",
+        "STEP_EXPORT_ASSEMBLY",
+        "STEP_EXPORT_PART_STEP",
+        "STEP_EXPORT_PART_STL",
+        "ASSET_FLOW_VISUALIZATION_IMAGE",
+        "ASSET_RENDERED_IMAGE",
+        "S2_FINAL_FIELD_IMAGE",
+        "S2_REPLAY_FRAMES",
+        "RACING_BASELINE_GLB",
+        "RACING_OPTIMIZED_GLB",
+        "CWT_RESULT",
+        "USER_PROFILE_IMAGE"
+      ],
+      "type": "string",
+      "description": "* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image\n* `PROJECT_SOURCE_STL` - Project Source STL\n* `OPTIMIZED_STL` - Optimized STL\n* `G2_SUMMARY_IMAGE` - G2 Summary Image\n* `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image\n* `G2_FIGS_ZIP` - G2 Figs ZIP\n* `G1_INPUT_STL` - G1 Input STL\n* `G1_SUMMARY_GIF` - G1 Summary GIF\n* `G1_FIGS_ZIP` - G1 Figs ZIP\n* `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP\n* `RESULT_MESH` - Result Mesh\n* `RESULT_HISTORY` - Result History\n* `RESULT_SUMMARY_JSON` - Result Summary JSON\n* `RESULT_FLOW_VOLUME` - Result Flow Volume\n* `RESULT_GEOMETRY_SCALE` - Result Geometry Scale\n* `RESULT_PREVIEW_POINTS` - Result Preview Points\n* `RESULT_PROXY_MESH` - Result Proxy Mesh\n* `RESULT_PROXY_LAYOUT` - Result Proxy Layout\n* `RESULT_PROXY_ATLAS` - Result Proxy Atlas\n* `STREAMLINES_BIN` - Streamlines Binary\n* `FLOWFIELD_BIN` - Flow Field Binary\n* `G4_SUMMARY_IMAGE` - G4 Summary Image\n* `G4_FIGS_ZIP` - G4 Figs ZIP\n* `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly\n* `STEP_EXPORT_PART_STEP` - STEP Export Part STEP\n* `STEP_EXPORT_PART_STL` - STEP Export Part STL\n* `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image\n* `ASSET_RENDERED_IMAGE` - Asset Rendered Image\n* `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image\n* `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames\n* `RACING_BASELINE_GLB` - Racing Baseline GLB\n* `RACING_OPTIMIZED_GLB` - Racing Optimized GLB\n* `CWT_RESULT` - Cornering Wind Tunnel Result\n* `USER_PROFILE_IMAGE` - User Profile Image",
+      "x-spec-enum-id": "ffcff9a4293b8568"
+    },
+    "storageProvider": {
+      "enum": [
+        "S3",
+        "GCS",
+        "AZURE"
+      ],
+      "type": "string",
+      "description": "* `S3` - Amazon S3\n* `GCS` - Google Cloud Storage\n* `AZURE` - Azure Blob Storage",
+      "x-spec-enum-id": "3e1757d60d74052a"
+    },
+    "s3Bucket": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "s3Key": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "s3Url": {
+      "type": "string",
+      "readOnly": true
+    },
+    "fileName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "contentType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    },
+    "sizeBytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 9223372036854775807,
+      "minimum": -9223372036854775808,
+      "format": "int64"
+    },
+    "checksumSha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "artifactRole",
+    "createdAt",
+    "fileName",
+    "id",
+    "s3Bucket",
+    "s3Key",
+    "s3Url",
+    "uid"
+  ]
+}

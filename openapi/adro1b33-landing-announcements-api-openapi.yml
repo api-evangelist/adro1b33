@@ -23,6 +23,46 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    SiteAnnouncementAttachment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        kind:
+          enum:
+          - image
+          - file
+          type: string
+          description: '* `image` - Image
+
+            * `file` - File'
+          x-spec-enum-id: 7a240f368c7b0df7
+        originalName:
+          type: string
+          maxLength: 255
+        contentType:
+          type: string
+          maxLength: 150
+        sizeBytes:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        url:
+          type: string
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - id
+      - kind
+      - originalName
+      - sizeBytes
+      - url
     LandingSiteAnnouncement:
       type: object
       properties:
@@ -86,46 +126,6 @@ components:
       - id
       - message
       - updatedAt
-    SiteAnnouncementAttachment:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        kind:
-          enum:
-          - image
-          - file
-          type: string
-          description: '* `image` - Image
-
-            * `file` - File'
-          x-spec-enum-id: 7a240f368c7b0df7
-        originalName:
-          type: string
-          maxLength: 255
-        contentType:
-          type: string
-          maxLength: 150
-        sizeBytes:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        url:
-          type: string
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - id
-      - kind
-      - originalName
-      - sizeBytes
-      - url
     LandingSiteAnnouncementList:
       type: object
       properties:

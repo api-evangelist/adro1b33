@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-project-comment-schema.json",
+  "title": "ProjectComment",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-comment-threads-api-openapi.yml#/components/schemas/ProjectComment",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "threadId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "authorUserId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "author": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommentAuthor"
+        }
+      ],
+      "readOnly": true
+    },
+    "content": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CommentContentResponseNode"
+      },
+      "readOnly": true
+    },
+    "revision": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "author",
+    "authorUserId",
+    "content",
+    "createdAt",
+    "id",
+    "revision",
+    "threadId",
+    "uid",
+    "updatedAt"
+  ],
+  "$defs": {
+    "CommentAuthor": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "displayName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isActiveTeamMember": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "displayName",
+        "isActiveTeamMember",
+        "userId"
+      ]
+    },
+    "CommentContentResponseNode": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CommentTextResponseNode"
+        },
+        {
+          "$ref": "#/$defs/CommentMentionResponseNode"
+        }
+      ]
+    },
+    "CommentMentionResponseNode": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "mention"
+          ],
+          "type": "string",
+          "description": "* `mention` - mention",
+          "x-spec-enum-id": "9b68383fda6100b7"
+        },
+        "userId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "displayText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "currentDisplayName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isActiveTeamMember": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "currentDisplayName",
+        "displayText",
+        "isActiveTeamMember",
+        "type",
+        "userId"
+      ]
+    },
+    "CommentTextResponseNode": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "text"
+          ],
+          "type": "string",
+          "description": "* `text` - text",
+          "x-spec-enum-id": "db74f2b3b2995084"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "type"
+      ]
+    }
+  }
+}

@@ -1,0 +1,431 @@
+generated: '2026-10-20'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/adro1b33-accounts-api-openapi.yml
+- openapi/adro1b33-agent-api-openapi.yml
+- openapi/adro1b33-ai-api-openapi.yml
+- openapi/adro1b33-announcements-api-openapi.yml
+- openapi/adro1b33-artifacts-api-openapi.yml
+vocabulary:
+  name: ADRO Domain Vocabulary
+  description: 'Terms declared by ADRO''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions. Derived,
+    not authored.'
+  version: '2026-10-20'
+  terms:
+  - term: LoginResponse
+    definition: 'Object declared by the contract with fields: detail, teamId, teamName, userType, mustChangePassword.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/LoginResponse
+  - term: SocialLink
+    definition: 'Object declared by the contract with fields: linkToken, password.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/SocialLink
+  - term: UserSocialLogin
+    definition: 'Object declared by the contract with fields: code, socialAccessToken, state, inviteToken, accessToken, refreshToken, teamId,
+      registerToken, isRegister.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserSocialLogin
+  - term: StorageUsageSummary
+    definition: 'Object declared by the contract with fields: totalSizeBytes, g1TotalSizeBytes, g2TotalSizeBytes, g4TotalSizeBytes, frontierTotalSizeBytes,
+      stl2stpTotalSizeBytes.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/StorageUsageSummary
+  - term: LoginRequest
+    definition: 'Object declared by the contract with fields: email, password.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/LoginRequest
+  - term: UserPasswordVerify
+    definition: 'Object declared by the contract with fields: oldPassword, token.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserPasswordVerify
+  - term: TeamCapabilities
+    definition: role→액션 매핑으로 계산한 capability boolean 10종. `app.teams.permissions.get_team_capabilities` 반환 dict 스키마와 1:1 대응한다 (설계 문서 §3.6). 필드명은
+      스네이크로 두되 camel-case 렌더러가 응답에서 canManageTeamSettings 형태로 직렬화한다.
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TeamCapabilities
+  - term: StorageUsageProject
+    definition: 'Object declared by the contract with fields: projectId, projectName, mode, totalSizeBytes.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/StorageUsageProject
+  - term: TeamsResponse
+    definition: 'Object declared by the contract with fields: teams.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TeamsResponse
+  - term: DetailResponse
+    definition: 'Object declared by the contract with fields: detail.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/DetailResponse
+  - term: TenantFeatureAccess
+    definition: 'Object declared by the contract with fields: disabledDisplay, disabledDisplayOverrides, projects, validationDes, manualOptimization,
+      market, racingDiv, g3, laboratory, marine, stl2stp, submenus.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TenantFeatureAccess
+  - term: JobDailyUsage
+    definition: 'Object declared by the contract with fields: date, g1TotalSeconds, g2TotalSeconds, g4TotalSeconds, frontierTotalSeconds.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/JobDailyUsage
+  - term: SocialRegisterResponse
+    definition: 'Object declared by the contract with fields: detail, teamId.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/SocialRegisterResponse
+  - term: PatchedMeTimeZoneUpdate
+    definition: 'Object declared by the contract with fields: timeZone.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/PatchedMeTimeZoneUpdate
+  - term: MeResponse
+    definition: 'Object declared by the contract with fields: timeZone, id, email, displayName, userType, isPlatformAdmin, role, isSuperAdmin,
+      canViewPlatform, canManagePlatform, mustChangePassword, defaultTeamId. (6 more)'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/MeResponse
+  - term: Stl2StpStorageUsage
+    definition: 'Object declared by the contract with fields: usedBytes, objectCount.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/Stl2StpStorageUsage
+  - term: StorageUsage
+    definition: 'Object declared by the contract with fields: summary, project.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/StorageUsage
+  - term: TeamStorageUsage
+    definition: 'Object declared by the contract with fields: teamId, usedBytes, quotaBytes, baseQuotaBytes, addonQuotaBytes, maxAddonBytes, availableBytes,
+      usagePercent, isOverQuota, objectCount, measuredAt, source. (2 more)'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TeamStorageUsage
+  - term: AccountTeam
+    definition: 'Object declared by the contract with fields: id, uid, name, slug, role, displayNameOverride, tenantId, tenantSchemaName, capabilities.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/AccountTeam
+  - term: Signup
+    definition: 'Object declared by the contract with fields: email, password, displayName, inviteToken, emailToken.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/Signup
+  - term: UserMeUsage
+    definition: 'Object declared by the contract with fields: jobDailyUsage, storageUsageByProject, storageUsage.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserMeUsage
+  - term: SignupResponse
+    definition: 'Object declared by the contract with fields: id, email, displayName, teamId, teamName.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/SignupResponse
+  - term: UserPasswordResetConfirm
+    definition: 'Object declared by the contract with fields: email, token, password, passwordConfirm.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserPasswordResetConfirm
+  - term: SocialRegister
+    definition: 소셜 신규 가입 — social-login 에서 받은 register_token 으로 계정 생성.
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/SocialRegister
+  - term: TeamSwitchRequest
+    definition: 'Object declared by the contract with fields: teamId.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TeamSwitchRequest
+  - term: UserSearchResult
+    definition: 'Object declared by the contract with fields: id, email, displayName.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserSearchResult
+  - term: UserPasswordChange
+    definition: 'Object declared by the contract with fields: token, password, passwordConfirm.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserPasswordChange
+  - term: TenantFeatureDisabledDisplayOverride
+    definition: 'Object declared by the contract with fields: feature, submenu, display.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/TenantFeatureDisabledDisplayOverride
+  - term: UserPasswordReset
+    definition: 'Object declared by the contract with fields: email.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserPasswordReset
+  - term: MeTeam
+    definition: 'Object declared by the contract with fields: id, uid, name, slug, role, displayNameOverride, tenantId, tenantSchemaName, capabilities,
+      featureAccess, featurePolicyRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/MeTeam
+  - term: UserForcePasswordChange
+    definition: must_change_password=True 계정 전용 강제 변경 시리얼라이저. 기존 password-verify 2단계 흐름과 달리 old-password 검증을 생략한다 — 대신 View 에서 must_change_password
+      플래그로 접근을 제한한다.
+    tags:
+    - Object
+    source: openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserForcePasswordChange
+  - term: TextContentBlock
+    definition: 'Object declared by the contract with fields: schemaVersion, kind, text.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/TextContentBlock
+  - term: AgentTurnCancelRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, expectedStatusRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnCancelRequest
+  - term: AgentWorkspaceProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, workspaceUid, status, statusRevision, readyEntryCount, totalEntryCount,
+      materializedBytes, declaredTotalBytes.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentWorkspaceProjection
+  - term: AgentTurnSurfaceRequest
+    definition: 'Object declared by the contract with fields: route, projectUid, selectedGeometryVersionUid, selectedJobUid, workbenchRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnSurfaceRequest
+  - term: AgentEventPageResponse
+    definition: 'Object declared by the contract with fields: items, nextAfter, hasMore, latestSequence.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentEventPageResponse
+  - term: AgentMemoryFact
+    definition: 'Object declared by the contract with fields: toolName, projectUids, resourceUids, returnedCount, hasMore, projectStatus.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentMemoryFact
+  - term: AgentTurnMessageRequest
+    definition: 'Object declared by the contract with fields: text, attachments.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnMessageRequest
+  - term: AgentTurnCancelResponse
+    definition: 'Object declared by the contract with fields: turnUid, status, statusRevision, eventsUrl, lastSequence.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnCancelResponse
+  - term: AgentTurnProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, turnUid, origin, status, statusRevision, createdAt, completedAt,
+      errorCode.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnProjection
+  - term: AgentClientCancelResponse
+    definition: 'Object declared by the contract with fields: cancelled.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientCancelResponse
+  - term: AgentMessageHistoryResponse
+    definition: 'Object declared by the contract with fields: items, nextBefore.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentMessageHistoryResponse
+  - term: AgentAttachmentCompleteRequest
+    definition: 'Object declared by the contract with fields: sizeBytes, sha256.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentCompleteRequest
+  - term: AgentArtifactProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, artifactUid, status, statusRevision, mediaType, size, displayName.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentArtifactProjection
+  - term: AgentError
+    definition: 'Object declared by the contract with fields: code, message, retryable, requestId, retryAfterMs.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentError
+  - term: AgentEventWireEnvelope
+    definition: 'Object declared by the contract with fields: sequence, threadUid, turnUid, type, createdAt, payload.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentEventWireEnvelope
+  - term: AgentThreadNavigationResponse
+    definition: 'Object declared by the contract with fields: workspace, projects, trashSummary, generatedAt.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadNavigationResponse
+  - term: AttachmentContentBlock
+    definition: 'Object declared by the contract with fields: schemaVersion, kind, attachmentUid, category, sourceTrust, originalSha256, processorProfileVersion,
+      processorImageDigest, statusRevision, derivatives.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AttachmentContentBlock
+  - term: AgentAttachmentInitResponse
+    definition: 'Object declared by the contract with fields: attachmentUid, status, upload.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentInitResponse
+  - term: AgentWorkspaceThreadCreateRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, scope.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentWorkspaceThreadCreateRequest
+  - term: AgentAttachmentInitRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, fileName, sizeBytes, sha256, declaredContentType.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentInitRequest
+  - term: AgentMemoryItem
+    definition: 'Object declared by the contract with fields: schemaVersion, memoryUid, fact, observedAt.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentMemoryItem
+  - term: AgentTurnStatusConflict
+    definition: 'Object declared by the contract with fields: code, message, retryable, requestId, retryAfterMs, turn.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnStatusConflict
+  - term: AgentApprovalProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, toolCallUid, status, statusRevision, toolLabel, riskLevel, expiresAt,
+      reasonCode.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentApprovalProjection
+  - term: AgentTurnCreateRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, message, clientContext, surface.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnCreateRequest
+  - term: AgentClientCancelRequest
+    definition: 'Object declared by the contract with fields: clientInstanceUid.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientCancelRequest
+  - term: AgentThreadStatusConflict
+    definition: 'Object declared by the contract with fields: code, message, retryable, requestId, retryAfterMs, thread.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadStatusConflict
+  - term: AgentAttachmentResponse
+    definition: 'Object declared by the contract with fields: attachmentUid, status, statusRevision, category, originalFileName, sizeBytes, detectedContentType,
+      sha256, rejectionCode, expiresAt, createdAt, updatedAt. (1 more)'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentResponse
+  - term: AgentTurnCreateResponse
+    definition: 'Object declared by the contract with fields: turnUid, threadUid, eventsUrl, lastSequence.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentTurnCreateResponse
+  - term: AgentClientToolProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, toolCallUid, name, status, statusRevision, activityLabel.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientToolProjection
+  - term: AgentThreadScopeConflict
+    definition: 'Object declared by the contract with fields: code, message, retryable, requestId, retryAfterMs, thread.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadScopeConflict
+  - term: AgentThreadListResponse
+    definition: 'Object declared by the contract with fields: items, nextCursor.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadListResponse
+  - term: AgentConversationProjection
+    definition: 'Object declared by the contract with fields: thread, activeTurn, messages, pendingActions, attachments, artifacts, workspace,
+      throughSequence.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentConversationProjection
+  - term: AgentMemoryResponse
+    definition: 'Object declared by the contract with fields: schemaVersion, threadUid, items.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentMemoryResponse
+  - term: AgentClientClaimRequest
+    definition: 'Object declared by the contract with fields: clientInstanceUid, expectedToolCallStatusRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientClaimRequest
+  - term: AgentThreadNavigationProjectNode
+    definition: 'Object declared by the contract with fields: projectUid, title, status, activityState, needsApproval, items, nextCursor.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadNavigationProjectNode
+  - term: AgentAttachmentProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, attachmentUid, status, statusRevision, mediaFamily, declaredSize,
+      errorCode.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentProjection
+  - term: AgentThreadProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, threadUid, scope, projectUid, projectStatus, parentThreadUid, title,
+      status, statusRevision, scopeRevision, permissionMode, permissionModeRevision. (5 more)'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadProjection
+  - term: AgentClientResultResponse
+    definition: 'Object declared by the contract with fields: toolCallUid, clientAttemptUid, status.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientResultResponse
+  - term: AgentAttachmentDerivative
+    definition: 'Object declared by the contract with fields: derivativeUid, kind, mediaType, sizeBytes, metadata.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentDerivative
+  - term: RedactedContentBlock
+    definition: 'Object declared by the contract with fields: schemaVersion, kind, reasonCode.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/RedactedContentBlock
+  - term: AgentClientClaimResponse
+    definition: 'Object declared by the contract with fields: clientAttemptUid, clientActionNonce, expiresAt, tool.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientClaimResponse
+  - term: AgentProjectThreadCreateRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, scope, projectUid, parentThreadUid.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentProjectThreadCreateRequest
+  - term: AgentThreadResponse
+    definition: 'Object declared by the contract with fields: thread.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadResponse
+  - term: AgentThreadStatusRequest
+    definition: 'Object declared by the contract with fields: clientRequestUid, expectedStatusRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadStatusRequest
+  - term: AgentAttachmentCapabilities
+    definition: 'Object declared by the contract with fields: enabled, maxFiles, maxBytes, maxImageBytes, extensions.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentCapabilities
+  - term: AgentMessageProjection
+    definition: 'Object declared by the contract with fields: schemaVersion, messageUid, turnUid, role, contentBlocks, completedSequence, createdAt.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentMessageProjection
+  - term: AgentThreadBindRequest
+    definition: 'Object declared by the contract with fields: projectUid, expectedScopeRevision.'
+    tags:
+    - Object
+    source: openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadBindRequest
+  - term: AiFinding
+    definition: 'Object declared by the contract with fields: severity, title, detail, action.'
+    tags:
+    - Object
+    source: openapi/adro1b33-ai-api-openapi.yml#/components/schemas/AiFinding
+  - term: DiagnoseRequest
+    definition: 'Object declared by the contract with fields: locale, jobUid.'
+    tags:
+    - Object
+    source: openapi/adro1b33-ai-api-openapi.yml#/components/schemas/DiagnoseRequest

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-les-autoconfig-schema.json",
+  "title": "LesAutoconfig",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-les-api-openapi.yml#/components/schemas/LesAutoconfig",
+  "type": "object",
+  "properties": {
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "stlFilename": {
+      "type": "string",
+      "readOnly": true
+    },
+    "intent": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "ready",
+        "failed"
+      ],
+      "type": "string",
+      "description": "* `pending` - Pending\n* `ready` - Ready\n* `failed` - Failed",
+      "x-spec-enum-id": "95a96ed85bfac560",
+      "readOnly": true
+    },
+    "progress": {
+      "readOnly": true
+    },
+    "geometry": {
+      "readOnly": true
+    },
+    "config": {
+      "readOnly": true
+    },
+    "error": {
+      "type": "string",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "config",
+    "createdAt",
+    "error",
+    "geometry",
+    "intent",
+    "progress",
+    "status",
+    "stlFilename",
+    "uid"
+  ]
+}

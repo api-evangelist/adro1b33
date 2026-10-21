@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-ai-diagnosis-response-schema.json",
+  "title": "AiDiagnosisResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-ai-api-openapi.yml#/components/schemas/AiDiagnosisResponse",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AiFinding"
+      }
+    },
+    "needsHumanSupport": {
+      "type": "boolean"
+    },
+    "supportSummary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "findings",
+    "needsHumanSupport",
+    "summary",
+    "supportSummary"
+  ],
+  "$defs": {
+    "AiFinding": {
+      "type": "object",
+      "properties": {
+        "severity": {
+          "enum": [
+            "blocker",
+            "warning",
+            "info"
+          ],
+          "type": "string",
+          "description": "* `blocker` - blocker\n* `warning` - warning\n* `info` - info",
+          "x-spec-enum-id": "89eaa3468c08a8fe"
+        },
+        "title": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "detail",
+        "severity",
+        "title"
+      ]
+    }
+  }
+}

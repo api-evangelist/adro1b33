@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-improvement-request-schema.json",
+  "title": "ImprovementRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-improvement-requests-api-openapi.yml#/components/schemas/ImprovementRequest",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "tenantSchema": {
+      "type": "string",
+      "readOnly": true
+    },
+    "tenantName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "userId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "userEmail": {
+      "type": "string",
+      "format": "email",
+      "readOnly": true
+    },
+    "title": {
+      "type": "string",
+      "readOnly": true
+    },
+    "category": {
+      "enum": [
+        "improvement",
+        "requirement",
+        "other"
+      ],
+      "type": "string",
+      "description": "* `improvement` - Improvement\n* `requirement` - Additional requirement\n* `other` - Other",
+      "x-spec-enum-id": "a54dc59c6316068e",
+      "readOnly": true
+    },
+    "categoryLabel": {
+      "type": "string",
+      "readOnly": true
+    },
+    "content": {
+      "type": "string",
+      "readOnly": true
+    },
+    "pagePath": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "new",
+        "reviewing",
+        "resolved",
+        "closed"
+      ],
+      "type": "string",
+      "description": "* `new` - New\n* `reviewing` - Reviewing\n* `resolved` - Resolved\n* `closed` - Closed",
+      "x-spec-enum-id": "f58cf3c567404c66",
+      "readOnly": true
+    },
+    "adminNote": {
+      "type": "string",
+      "readOnly": true
+    },
+    "reviewedByEmail": {
+      "type": "string",
+      "format": "email",
+      "readOnly": true
+    },
+    "assignee": {
+      "type": "string",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "adminNote",
+    "assignee",
+    "category",
+    "categoryLabel",
+    "content",
+    "createdAt",
+    "id",
+    "pagePath",
+    "reviewedByEmail",
+    "status",
+    "teamId",
+    "teamName",
+    "tenantName",
+    "tenantSchema",
+    "title",
+    "updatedAt",
+    "userEmail",
+    "userId"
+  ]
+}

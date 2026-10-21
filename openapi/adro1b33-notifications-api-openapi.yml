@@ -108,6 +108,24 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    NotificationSummary:
+      type: object
+      properties:
+        unreadCount:
+          type: integer
+          minimum: 0
+        unreadByCategory:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 0
+        serverTime:
+          type: string
+          format: date-time
+      required:
+      - serverTime
+      - unreadByCategory
+      - unreadCount
     NotificationRead:
       type: object
       properties:
@@ -151,6 +169,54 @@ components:
           x-spec-enum-id: 875314d5dd0b91d7
       required:
       - readBefore
+    NotificationActor:
+      type: object
+      properties:
+        userId:
+          type:
+          - integer
+          - 'null'
+        displayName:
+          type:
+          - string
+          - 'null'
+        state:
+          enum:
+          - active_team_member
+          - former_team_member
+          - account_user
+          - deleted
+          type: string
+          description: '* `active_team_member` - active_team_member
+
+            * `former_team_member` - former_team_member
+
+            * `account_user` - account_user
+
+            * `deleted` - deleted'
+          x-spec-enum-id: af07836788a62409
+      required:
+      - displayName
+      - state
+      - userId
+    NotificationPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        serverTime:
+          type: string
+          format: date-time
+      required:
+      - nextCursor
+      - results
+      - serverTime
     Notification:
       type: object
       properties:
@@ -230,72 +296,6 @@ components:
       - scope
       - teamId
       - type
-    NotificationActor:
-      type: object
-      properties:
-        userId:
-          type:
-          - integer
-          - 'null'
-        displayName:
-          type:
-          - string
-          - 'null'
-        state:
-          enum:
-          - active_team_member
-          - former_team_member
-          - account_user
-          - deleted
-          type: string
-          description: '* `active_team_member` - active_team_member
-
-            * `former_team_member` - former_team_member
-
-            * `account_user` - account_user
-
-            * `deleted` - deleted'
-          x-spec-enum-id: af07836788a62409
-      required:
-      - displayName
-      - state
-      - userId
-    NotificationPage:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Notification'
-        nextCursor:
-          type:
-          - string
-          - 'null'
-        serverTime:
-          type: string
-          format: date-time
-      required:
-      - nextCursor
-      - results
-      - serverTime
-    NotificationSummary:
-      type: object
-      properties:
-        unreadCount:
-          type: integer
-          minimum: 0
-        unreadByCategory:
-          type: object
-          additionalProperties:
-            type: integer
-            minimum: 0
-        serverTime:
-          type: string
-          format: date-time
-      required:
-      - serverTime
-      - unreadByCategory
-      - unreadCount
   securitySchemes:
     agentBearerAuth:
       type: http

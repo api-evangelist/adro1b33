@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cwt-upload-init-schema.json",
+  "title": "CwtUploadInit",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-cwt-api-openapi.yml#/components/schemas/CwtUploadInit",
+  "type": "object",
+  "properties": {
+    "inputSessionUid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "role": {
+      "enum": [
+        "sourceStl",
+        "bodyStl",
+        "frontWheelLeftStl",
+        "frontWheelRightStl",
+        "rearWheelStl",
+        "rearWheelLeftStl",
+        "rearWheelRightStl",
+        "aeroPart"
+      ],
+      "type": "string",
+      "description": "* `sourceStl` - Unclassified source STL\n* `bodyStl` - Body STL\n* `frontWheelLeftStl` - Front wheel left STL\n* `frontWheelRightStl` - Front wheel right STL\n* `rearWheelStl` - Rear wheel STL\n* `rearWheelLeftStl` - Rear wheel left STL\n* `rearWheelRightStl` - Rear wheel right STL\n* `aeroPart` - Aero part",
+      "x-spec-enum-id": "f28ed5ac6109a980"
+    },
+    "name": {
+      "type": "string",
+      "default": "",
+      "maxLength": 128
+    },
+    "fileName": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "sizeBytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "checksumSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    }
+  },
+  "required": [
+    "checksumSha256",
+    "fileName",
+    "inputSessionUid",
+    "role",
+    "sizeBytes"
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-storage-addon-quote-schema.json",
+  "title": "StorageAddonQuote",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-plans-api-openapi.yml#/components/schemas/StorageAddonQuote",
+  "type": "object",
+  "properties": {
+    "currency": {
+      "type": "string"
+    },
+    "unitCount": {
+      "type": "integer"
+    },
+    "unitBytes": {
+      "type": "integer"
+    },
+    "addedBytes": {
+      "type": "integer"
+    },
+    "monthlySupplyAmountMinor": {
+      "type": "integer"
+    },
+    "monthlyTaxAmountMinor": {
+      "type": "integer"
+    },
+    "monthlyTotalAmountMinor": {
+      "type": "integer"
+    },
+    "chargedSupplyAmountMinor": {
+      "type": "integer"
+    },
+    "chargedTaxAmountMinor": {
+      "type": "integer"
+    },
+    "chargedTotalAmountMinor": {
+      "type": "integer"
+    },
+    "cycleStartedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cycleEndsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "remainingDays": {
+      "type": "integer"
+    },
+    "totalDays": {
+      "type": "integer"
+    },
+    "prorationRatio": {
+      "type": "string"
+    },
+    "display": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StorageAddonQuoteDisplay"
+        }
+      ],
+      "readOnly": true,
+      "description": "Backend-formatted currency strings; do not recalculate client-side."
+    }
+  },
+  "required": [
+    "addedBytes",
+    "chargedSupplyAmountMinor",
+    "chargedTaxAmountMinor",
+    "chargedTotalAmountMinor",
+    "currency",
+    "cycleEndsAt",
+    "cycleStartedAt",
+    "display",
+    "monthlySupplyAmountMinor",
+    "monthlyTaxAmountMinor",
+    "monthlyTotalAmountMinor",
+    "prorationRatio",
+    "remainingDays",
+    "totalDays",
+    "unitBytes",
+    "unitCount"
+  ],
+  "$defs": {
+    "StorageAddonQuoteDisplay": {
+      "type": "object",
+      "description": "Backend-formatted UI strings for a storage add-on quote.",
+      "properties": {
+        "monthlySupplyAmount": {
+          "type": "string"
+        },
+        "monthlyTaxAmount": {
+          "type": "string"
+        },
+        "monthlyTotalAmount": {
+          "type": "string"
+        },
+        "chargedSupplyAmount": {
+          "type": "string"
+        },
+        "chargedTaxAmount": {
+          "type": "string"
+        },
+        "chargedTotalAmount": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chargedSupplyAmount",
+        "chargedTaxAmount",
+        "chargedTotalAmount",
+        "monthlySupplyAmount",
+        "monthlyTaxAmount",
+        "monthlyTotalAmount"
+      ]
+    }
+  }
+}

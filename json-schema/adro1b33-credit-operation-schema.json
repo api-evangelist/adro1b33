@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-credit-operation-schema.json",
+  "title": "CreditOperation",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-credits-api-openapi.yml#/components/schemas/CreditOperation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "kind": {
+      "enum": [
+        "GRANT",
+        "CONSUME",
+        "REFUND_REVERSAL",
+        "EXPIRE",
+        "COMPENSATION",
+        "FAILURE_RESTORE"
+      ],
+      "type": "string",
+      "description": "* `GRANT` - 발급\n* `CONSUME` - 차감(사용)\n* `REFUND_REVERSAL` - 환불 회수\n* `EXPIRE` - 만료 소멸\n* `COMPENSATION` - 오류 보상 지급\n* `FAILURE_RESTORE` - 실패 원본 버킷 복원",
+      "x-spec-enum-id": "0f341b903ae05315"
+    },
+    "totalDelta": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "walletBalanceAfter": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "unmetAmount": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "id",
+    "idempotencyKey",
+    "kind",
+    "totalDelta",
+    "walletBalanceAfter"
+  ]
+}

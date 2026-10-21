@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-special-offer-request-create-schema.json",
+  "title": "SpecialOfferRequestCreate",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-special-offer-api-openapi.yml#/components/schemas/SpecialOfferRequestCreate",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "applicantName": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "applicantEmail": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254
+    },
+    "organizationName": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "organizationType": {
+      "enum": [
+        "Company / startup",
+        "University / research lab",
+        "Student team",
+        "Government / public organization",
+        "Other organization"
+      ],
+      "type": "string",
+      "description": "* `Company / startup` - Company / startup\n* `University / research lab` - University / research lab\n* `Student team` - Student team\n* `Government / public organization` - Government / public organization\n* `Other organization` - Other organization",
+      "x-spec-enum-id": "518144fe7dbddb0c"
+    },
+    "teamSize": {
+      "enum": [
+        "1-10",
+        "11-50",
+        "51-200",
+        "201+"
+      ],
+      "type": "string",
+      "description": "* `1-10` - 1-10\n* `11-50` - 11-50\n* `51-200` - 51-200\n* `201+` - 201+",
+      "x-spec-enum-id": "4dabc486bba13eec"
+    },
+    "useCase": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "preferredSetup": {
+      "enum": [
+        "Cloud",
+        "On-premises",
+        "Not sure"
+      ],
+      "type": "string",
+      "description": "* `Cloud` - Cloud\n* `On-premises` - On-premises\n* `Not sure` - Not sure",
+      "x-spec-enum-id": "3e092af4586457ad"
+    },
+    "networkRequirement": {
+      "enum": [
+        "Fully offline (air-gapped)",
+        "Limited internet access is permitted",
+        "Not sure yet",
+        "",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "* `Fully offline (air-gapped)` - Fully offline (air-gapped)\n* `Limited internet access is permitted` - Limited internet access is permitted\n* `Not sure yet` - Not sure yet",
+      "x-spec-enum-id": "3e717b0795cc4fdf"
+    },
+    "dataResidency": {
+      "enum": [
+        "Data must remain within our internal network",
+        "No specific restriction",
+        "Not sure yet",
+        "",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "* `Data must remain within our internal network` - Data must remain within our internal network\n* `No specific restriction` - No specific restriction\n* `Not sure yet` - Not sure yet",
+      "x-spec-enum-id": "a4cfad24b489649a"
+    },
+    "availableInfrastructure": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "privacyConsent": {
+      "type": "boolean"
+    },
+    "marketingConsent": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "applicantEmail",
+    "applicantName",
+    "id",
+    "organizationName",
+    "organizationType",
+    "preferredSetup",
+    "privacyConsent",
+    "teamSize",
+    "useCase"
+  ]
+}

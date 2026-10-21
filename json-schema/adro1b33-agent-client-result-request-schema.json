@@ -1,0 +1,451 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-client-result-request-schema.json",
+  "title": "AgentClientResultRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientResultRequest",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "resultRequestUid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "clientInstanceUid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "succeeded"
+          ]
+        },
+        "result": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "route": {
+                  "type": "string",
+                  "maxLength": 8192
+                }
+              },
+              "required": [
+                "route"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "route": {
+                  "type": "string",
+                  "enum": [
+                    "/renewal/paper-plane"
+                  ]
+                },
+                "observation": {
+                  "type": "object",
+                  "properties": {
+                    "schemaVersion": {
+                      "type": "integer",
+                      "enum": [
+                        1
+                      ]
+                    },
+                    "source": {
+                      "type": "string",
+                      "enum": [
+                        "browser_observation"
+                      ]
+                    },
+                    "observedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "phase": {
+                      "type": "string",
+                      "enum": [
+                        "setup",
+                        "fold",
+                        "analysis",
+                        "ready",
+                        "flight",
+                        "result"
+                      ]
+                    },
+                    "paper": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "enum": [
+                            "copy",
+                            "hanji",
+                            "color",
+                            "kraft",
+                            "card"
+                          ]
+                        },
+                        "name": {
+                          "type": "string",
+                          "maxLength": 150
+                        },
+                        "widthMm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "heightMm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "grammageGsm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "widthMm",
+                        "heightMm",
+                        "grammageGsm"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "design": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "enum": [
+                            "dart",
+                            "glider",
+                            "free"
+                          ]
+                        },
+                        "name": {
+                          "type": "string",
+                          "maxLength": 150
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "fold": {
+                      "type": "object",
+                      "properties": {
+                        "completedSteps": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "totalSteps": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "customFolds": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10000
+                        },
+                        "instruction": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "maxLength": 2000
+                        },
+                        "direction": {
+                          "oneOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "valley",
+                                "mountain"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "offsetMm": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "progressRatio": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        }
+                      },
+                      "required": [
+                        "completedSteps",
+                        "totalSteps",
+                        "customFolds",
+                        "instruction",
+                        "direction",
+                        "offsetMm",
+                        "progressRatio"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "throwSpeedMps": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "throwAngleDeg": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "tailAngleDeg": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        },
+                        "dihedralDeg": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": -1000000,
+                          "maximum": 1000000
+                        }
+                      },
+                      "required": [
+                        "throwSpeedMps",
+                        "throwAngleDeg",
+                        "tailAngleDeg",
+                        "dihedralDeg"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "analysis": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "massGrams": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "wingAreaM2": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "wingspanM": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "staticMarginRatio": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "glideRatio": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            }
+                          },
+                          "required": [
+                            "massGrams",
+                            "wingAreaM2",
+                            "wingspanM",
+                            "staticMarginRatio",
+                            "glideRatio"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "result": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "distanceMeters": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "flightTimeSeconds": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "maxHeightMeters": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            },
+                            "driftMetersRight": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": -1000000,
+                              "maximum": 1000000
+                            }
+                          },
+                          "required": [
+                            "distanceMeters",
+                            "flightTimeSeconds",
+                            "maxHeightMeters",
+                            "driftMetersRight"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "schemaVersion",
+                    "source",
+                    "observedAt",
+                    "phase",
+                    "paper",
+                    "design",
+                    "fold",
+                    "settings",
+                    "analysis",
+                    "result"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "route",
+                "observation"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "resultRequestUid",
+        "clientInstanceUid",
+        "status",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "resultRequestUid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "clientInstanceUid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "failed"
+          ]
+        },
+        "result": {
+          "enum": [
+            null
+          ]
+        },
+        "errorCode": {
+          "type": "string",
+          "enum": [
+            "CLIENT_NAVIGATION_FAILED",
+            "CLIENT_NAVIGATION_TIMEOUT",
+            "CLIENT_ROUTE_REJECTED",
+            "CLIENT_OBSERVATION_UNAVAILABLE"
+          ]
+        }
+      },
+      "required": [
+        "resultRequestUid",
+        "clientInstanceUid",
+        "status",
+        "result",
+        "errorCode"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

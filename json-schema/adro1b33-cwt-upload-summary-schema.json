@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cwt-upload-summary-schema.json",
+  "title": "CwtUploadSummary",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-cwt-api-openapi.yml#/components/schemas/CwtUploadSummary",
+  "type": "object",
+  "properties": {
+    "uploadUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "inputSessionUid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "role": {
+      "enum": [
+        "sourceStl",
+        "bodyStl",
+        "frontWheelLeftStl",
+        "frontWheelRightStl",
+        "rearWheelStl",
+        "rearWheelLeftStl",
+        "rearWheelRightStl",
+        "aeroPart"
+      ],
+      "type": "string",
+      "description": "* `sourceStl` - Unclassified source STL\n* `bodyStl` - Body STL\n* `frontWheelLeftStl` - Front wheel left STL\n* `frontWheelRightStl` - Front wheel right STL\n* `rearWheelStl` - Rear wheel STL\n* `rearWheelLeftStl` - Rear wheel left STL\n* `rearWheelRightStl` - Rear wheel right STL\n* `aeroPart` - Aero part",
+      "x-spec-enum-id": "f28ed5ac6109a980",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "fileName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "sizeBytes": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "uploading",
+        "verifying",
+        "ready",
+        "failed",
+        "aborted"
+      ],
+      "type": "string",
+      "description": "* `pending` - Pending\n* `uploading` - Uploading\n* `verifying` - Verifying\n* `ready` - Ready\n* `failed` - Failed\n* `aborted` - Aborted",
+      "x-spec-enum-id": "4b83d33cf96dcd8f",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "verifiedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "createdAt",
+    "error",
+    "fileName",
+    "inputSessionUid",
+    "name",
+    "role",
+    "sizeBytes",
+    "status",
+    "uploadUid",
+    "verifiedAt"
+  ]
+}

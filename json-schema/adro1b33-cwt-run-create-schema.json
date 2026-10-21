@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cwt-run-create-schema.json",
+  "title": "CwtRunCreate",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-cwt-api-openapi.yml#/components/schemas/CwtRunCreate",
+  "type": "object",
+  "properties": {
+    "inputSessionUid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "projectUid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "name": {
+      "type": "string",
+      "default": "",
+      "maxLength": 128
+    },
+    "vehicle": {
+      "$ref": "#/$defs/CwtRunVehicleCreate"
+    },
+    "conditions": {
+      "$ref": "#/$defs/CwtRunConditionsCreate"
+    },
+    "mesh": {
+      "$ref": "#/$defs/CwtRunMeshCreate"
+    },
+    "solver": {
+      "$ref": "#/$defs/CwtRunSolverCreate"
+    },
+    "execution": {
+      "$ref": "#/$defs/CwtRunExecutionCreate"
+    }
+  },
+  "required": [
+    "conditions",
+    "execution",
+    "inputSessionUid",
+    "mesh",
+    "projectUid",
+    "solver",
+    "vehicle"
+  ],
+  "$defs": {
+    "CwtRunAeroPartCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}$"
+        },
+        "uploadUid": {
+          "type": "string",
+          "maxLength": 36
+        }
+      },
+      "required": [
+        "name",
+        "uploadUid"
+      ]
+    },
+    "CwtRunConditionsCreate": {
+      "type": "object",
+      "properties": {
+        "autoSteer": {
+          "enum": [
+            "on",
+            "off"
+          ],
+          "type": "string",
+          "description": "* `on` - on\n* `off` - off",
+          "x-spec-enum-id": "3bd1fea2f14d31ac",
+          "default": "off"
+        },
+        "radiusM": {
+          "type": "number",
+          "format": "double",
+          "maximum": 2000.0,
+          "minimum": 0.001
+        },
+        "speedMps": {
+          "type": "number",
+          "format": "double",
+          "maximum": 100.0,
+          "minimum": 1.0
+        },
+        "turbulenceIntensity": {
+          "type": "number",
+          "format": "double",
+          "maximum": 0.1,
+          "minimum": 0.001,
+          "default": 0.008
+        },
+        "turbulenceLengthScaleM": {
+          "type": "number",
+          "format": "double",
+          "maximum": 5.0,
+          "minimum": 0.01,
+          "default": 0.503
+        }
+      },
+      "required": [
+        "radiusM",
+        "speedMps"
+      ]
+    },
+    "CwtRunExecutionCreate": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "mesh_only",
+            "full"
+          ],
+          "type": "string",
+          "description": "* `mesh_only` - mesh_only\n* `full` - full",
+          "x-spec-enum-id": "4907d27a6ee408c3"
+        }
+      },
+      "required": [
+        "mode"
+      ]
+    },
+    "CwtRunMeshCreate": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "enum": [
+            "teaching",
+            "low",
+            "balanced",
+            "fine"
+          ],
+          "type": "string",
+          "description": "* `teaching` - teaching\n* `low` - low\n* `balanced` - balanced\n* `fine` - fine",
+          "x-spec-enum-id": "69a6c932900c1ea3"
+        },
+        "layers": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "layers",
+        "profile"
+      ]
+    },
+    "CwtRunSolverCreate": {
+      "type": "object",
+      "properties": {
+        "maxIterations": {
+          "type": "integer",
+          "maximum": 3000,
+          "minimum": 100
+        },
+        "fieldWriteInterval": {
+          "type": "integer",
+          "maximum": 500,
+          "minimum": 10
+        }
+      },
+      "required": [
+        "fieldWriteInterval",
+        "maxIterations"
+      ]
+    },
+    "CwtRunVehicleCreate": {
+      "type": "object",
+      "properties": {
+        "frontDirection": {
+          "enum": [
+            "-x",
+            "+x",
+            "-y",
+            "+y"
+          ],
+          "type": "string",
+          "description": "* `-x` - -x\n* `+x` - +x\n* `-y` - -y\n* `+y` - +y",
+          "x-spec-enum-id": "3690b455433c9410"
+        },
+        "sourceUnits": {
+          "enum": [
+            "auto",
+            "m",
+            "cm",
+            "mm"
+          ],
+          "type": "string",
+          "description": "* `auto` - auto\n* `m` - m\n* `cm` - cm\n* `mm` - mm",
+          "x-spec-enum-id": "6dbaf62d7b50de72"
+        },
+        "bodyUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "frontWheelLeftUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "frontWheelRightUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "rearWheelUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "rearWheelLeftUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "rearWheelRightUploadUid": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "rearWheelMode": {
+          "enum": [
+            "combined",
+            "split"
+          ],
+          "type": "string",
+          "description": "* `combined` - combined\n* `split` - split",
+          "x-spec-enum-id": "fb5cc94bbc68e884"
+        },
+        "aeroParts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CwtRunAeroPartCreate"
+          }
+        }
+      },
+      "required": [
+        "bodyUploadUid",
+        "frontDirection",
+        "frontWheelLeftUploadUid",
+        "frontWheelRightUploadUid",
+        "sourceUnits"
+      ]
+    }
+  }
+}

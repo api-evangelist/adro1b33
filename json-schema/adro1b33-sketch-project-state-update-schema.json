@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-sketch-project-state-update-schema.json",
+  "title": "SketchProjectStateUpdate",
+  "description": "Reject retired client controls instead of silently accepting them.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-sketch-api-openapi.yml#/components/schemas/SketchProjectStateUpdate",
+  "type": "object",
+  "properties": {
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "state": {
+      "$ref": "#/$defs/SketchInput"
+    }
+  },
+  "required": [
+    "revision",
+    "state"
+  ],
+  "$defs": {
+    "SketchInput": {
+      "type": "object",
+      "description": "Reject retired client controls instead of silently accepting them.",
+      "properties": {
+        "board": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {}
+        },
+        "strokes": {
+          "type": "array",
+          "items": {}
+        },
+        "conditions": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "penWidthMm": {
+          "type": "number",
+          "format": "double",
+          "minimum": 1e-06
+        },
+        "quality": {
+          "enum": [
+            "coarse",
+            "fine"
+          ],
+          "type": "string",
+          "description": "* `coarse` - coarse\n* `fine` - fine",
+          "x-spec-enum-id": "361df4b011166ecc"
+        }
+      },
+      "required": [
+        "conditions",
+        "penWidthMm",
+        "quality",
+        "strokes"
+      ]
+    }
+  }
+}

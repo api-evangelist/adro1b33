@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-comment-notification-page-schema.json",
+  "title": "CommentNotificationPage",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-comment-notifications-api-openapi.yml#/components/schemas/CommentNotificationPage",
+  "type": "object",
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CommentNotification"
+      }
+    },
+    "next": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "next",
+    "results"
+  ],
+  "$defs": {
+    "CommentNotification": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "projectId": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "threadId": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "commentId": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "reason": {
+          "enum": [
+            "direct_mention",
+            "thread_activity"
+          ],
+          "type": "string",
+          "description": "* `direct_mention` - Direct mention\n* `thread_activity` - Thread activity",
+          "x-spec-enum-id": "385bc0b40d524e1d",
+          "readOnly": true
+        },
+        "readAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "readOnly": true
+        },
+        "lastTriggeredAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "commentId",
+        "createdAt",
+        "id",
+        "lastTriggeredAt",
+        "projectId",
+        "readAt",
+        "reason",
+        "threadId"
+      ]
+    }
+  }
+}

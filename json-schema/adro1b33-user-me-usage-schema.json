@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-user-me-usage-schema.json",
+  "title": "UserMeUsage",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserMeUsage",
+  "type": "object",
+  "properties": {
+    "jobDailyUsage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JobDailyUsage"
+      },
+      "readOnly": true
+    },
+    "storageUsageByProject": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/StorageUsage"
+      },
+      "readOnly": true
+    },
+    "storageUsage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TeamStorageUsage"
+        }
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "jobDailyUsage",
+    "storageUsage",
+    "storageUsageByProject"
+  ],
+  "$defs": {
+    "JobDailyUsage": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "g1TotalSeconds": {
+          "type": "integer"
+        },
+        "g2TotalSeconds": {
+          "type": "integer"
+        },
+        "g4TotalSeconds": {
+          "type": "integer"
+        },
+        "frontierTotalSeconds": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "date",
+        "g1TotalSeconds",
+        "g2TotalSeconds"
+      ]
+    },
+    "Stl2StpStorageUsage": {
+      "type": "object",
+      "properties": {
+        "usedBytes": {
+          "type": "integer"
+        },
+        "objectCount": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "objectCount",
+        "usedBytes"
+      ]
+    },
+    "StorageUsage": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/$defs/StorageUsageSummary"
+        },
+        "project": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StorageUsageProject"
+          }
+        }
+      },
+      "required": [
+        "project",
+        "summary"
+      ]
+    },
+    "StorageUsageProject": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "integer"
+        },
+        "projectName": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "totalSizeBytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mode",
+        "projectId",
+        "projectName",
+        "totalSizeBytes"
+      ]
+    },
+    "StorageUsageSummary": {
+      "type": "object",
+      "properties": {
+        "totalSizeBytes": {
+          "type": "integer"
+        },
+        "g1TotalSizeBytes": {
+          "type": "integer"
+        },
+        "g2TotalSizeBytes": {
+          "type": "integer"
+        },
+        "g4TotalSizeBytes": {
+          "type": "integer"
+        },
+        "frontierTotalSizeBytes": {
+          "type": "integer"
+        },
+        "stl2stpTotalSizeBytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "g1TotalSizeBytes",
+        "g2TotalSizeBytes",
+        "totalSizeBytes"
+      ]
+    },
+    "TeamStorageUsage": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "integer"
+        },
+        "usedBytes": {
+          "type": "integer"
+        },
+        "quotaBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "baseQuotaBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "addonQuotaBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "maxAddonBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "availableBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "usagePercent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        },
+        "isOverQuota": {
+          "type": "boolean"
+        },
+        "objectCount": {
+          "type": "integer"
+        },
+        "measuredAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "enum": [
+            "s3",
+            "artifact_db"
+          ],
+          "type": "string",
+          "description": "* `s3` - s3\n* `artifact_db` - artifact_db",
+          "x-spec-enum-id": "8a4851ae1bab9fd0"
+        },
+        "isEstimated": {
+          "type": "boolean"
+        },
+        "stl2stp": {
+          "$ref": "#/$defs/Stl2StpStorageUsage"
+        }
+      },
+      "required": [
+        "addonQuotaBytes",
+        "availableBytes",
+        "baseQuotaBytes",
+        "isEstimated",
+        "isOverQuota",
+        "maxAddonBytes",
+        "measuredAt",
+        "objectCount",
+        "quotaBytes",
+        "source",
+        "teamId",
+        "usagePercent",
+        "usedBytes"
+      ]
+    }
+  }
+}

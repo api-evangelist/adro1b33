@@ -445,6 +445,15 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    LesRunListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LesRunList'
+      required:
+      - results
     LesInputUploadComplete:
       type: object
       properties:
@@ -462,50 +471,6 @@ components:
       - completedParts
       - reservationId
       - uploadId
-    LesInputUpload:
-      type: object
-      properties:
-        uid:
-          type: string
-          readOnly: true
-        stlFilename:
-          type: string
-          readOnly: true
-        sizeBytes:
-          type: integer
-          readOnly: true
-        status:
-          enum:
-          - pending
-          - ready
-          - failed
-          type: string
-          description: '* `pending` - Pending
-
-            * `ready` - Ready
-
-            * `failed` - Failed'
-          x-spec-enum-id: 95a96ed85bfac560
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - createdAt
-      - sizeBytes
-      - status
-      - stlFilename
-      - uid
-    LesRunListResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/LesRunList'
-      required:
-      - results
     LesRunSubmission:
       type: object
       description: Schema for the transport handles resolved before input validation.
@@ -616,6 +581,64 @@ components:
           format: uri
       required:
       - name
+    LesCapabilities:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        contractVersion:
+          type:
+          - integer
+          - 'null'
+        defaultGrade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+        groundClearanceMin:
+          type: number
+          format: double
+        groundClearanceMax:
+          type: number
+          format: double
+        wheelTreatmentSupported:
+          type: boolean
+        publicationProtocol:
+          enum:
+          - legacy
+          - native
+          - manifest
+          type: string
+          description: '* `legacy` - legacy
+
+            * `native` - native
+
+            * `manifest` - manifest'
+          x-spec-enum-id: 11cc3e4f02bde017
+        geometryContractSupported:
+          type: boolean
+        grades:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: {}
+      required:
+      - contractVersion
+      - defaultGrade
+      - enabled
+      - geometryContractSupported
+      - grades
+      - groundClearanceMax
+      - groundClearanceMin
+      - publicationProtocol
+      - wheelTreatmentSupported
     LesAutoconfig:
       type: object
       properties:
@@ -664,6 +687,123 @@ components:
       - status
       - stlFilename
       - uid
+    LesRunList:
+      type: object
+      description: 'Compact LES run representation used by the run list.
+
+
+        Keep remote artifacts such as the failure diagnosis out of this serializer.
+
+        Fetching those artifacts belongs to the run detail endpoint.'
+      properties:
+        uid:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        stlFilename:
+          type: string
+          readOnly: true
+        grade:
+          enum:
+          - smoke
+          - standard
+          - precision
+          type: string
+          description: '* `smoke` - Smoke (wiring test)
+
+            * `standard` - Standard (3-level)
+
+            * `precision` - Precision (versioned profile)'
+          x-spec-enum-id: da381bb7cd0f6163
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        result:
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        deletion:
+          readOnly: true
+        figureArtifacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        downloadQuota:
+          readOnly: true
+        resultSummary:
+          readOnly: true
+        mediaArtifacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        lesContractVersion:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        executionProfile:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        scheduling:
+          readOnly: true
+      required:
+      - createdAt
+      - deletion
+      - downloadQuota
+      - executionProfile
+      - figureArtifacts
+      - finishedAt
+      - grade
+      - lesContractVersion
+      - mediaArtifacts
+      - name
+      - result
+      - resultSummary
+      - scheduling
+      - startedAt
+      - status
+      - stlFilename
+      - uid
+    LesAutoconfigUploadComplete:
+      type: object
+      properties:
+        uploadId:
+          type: string
+          maxLength: 512
+        completedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/_CompletedPart'
+        reservationId:
+          type: string
+          format: uuid
+      required:
+      - completedParts
+      - reservationId
+      - uploadId
     LesRun:
       type: object
       properties:
@@ -852,164 +992,41 @@ components:
       - uid
       - wheels
       - yawDeg
-    LesRunList:
+    LesInputUpload:
       type: object
-      description: 'Compact LES run representation used by the run list.
-
-
-        Keep remote artifacts such as the failure diagnosis out of this serializer.
-
-        Fetching those artifacts belongs to the run detail endpoint.'
       properties:
         uid:
-          type: string
-          readOnly: true
-        name:
           type: string
           readOnly: true
         stlFilename:
           type: string
           readOnly: true
-        grade:
-          enum:
-          - smoke
-          - standard
-          - precision
-          type: string
-          description: '* `smoke` - Smoke (wiring test)
-
-            * `standard` - Standard (3-level)
-
-            * `precision` - Precision (versioned profile)'
-          x-spec-enum-id: da381bb7cd0f6163
+        sizeBytes:
+          type: integer
           readOnly: true
         status:
+          enum:
+          - pending
+          - ready
+          - failed
           type: string
-          readOnly: true
-        result:
+          description: '* `pending` - Pending
+
+            * `ready` - Ready
+
+            * `failed` - Failed'
+          x-spec-enum-id: 95a96ed85bfac560
           readOnly: true
         createdAt:
           type: string
           format: date-time
           readOnly: true
-        startedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        finishedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        deletion:
-          readOnly: true
-        figureArtifacts:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-          readOnly: true
-        downloadQuota:
-          readOnly: true
-        resultSummary:
-          readOnly: true
-        mediaArtifacts:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-          readOnly: true
-        lesContractVersion:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        executionProfile:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        scheduling:
-          readOnly: true
       required:
       - createdAt
-      - deletion
-      - downloadQuota
-      - executionProfile
-      - figureArtifacts
-      - finishedAt
-      - grade
-      - lesContractVersion
-      - mediaArtifacts
-      - name
-      - result
-      - resultSummary
-      - scheduling
-      - startedAt
+      - sizeBytes
       - status
       - stlFilename
       - uid
-    LesCapabilities:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        contractVersion:
-          type:
-          - integer
-          - 'null'
-        defaultGrade:
-          enum:
-          - smoke
-          - standard
-          - precision
-          type: string
-          description: '* `smoke` - Smoke (wiring test)
-
-            * `standard` - Standard (3-level)
-
-            * `precision` - Precision (versioned profile)'
-          x-spec-enum-id: da381bb7cd0f6163
-        groundClearanceMin:
-          type: number
-          format: double
-        groundClearanceMax:
-          type: number
-          format: double
-        wheelTreatmentSupported:
-          type: boolean
-        publicationProtocol:
-          enum:
-          - legacy
-          - native
-          - manifest
-          type: string
-          description: '* `legacy` - legacy
-
-            * `native` - native
-
-            * `manifest` - manifest'
-          x-spec-enum-id: 11cc3e4f02bde017
-        geometryContractSupported:
-          type: boolean
-        grades:
-          type: object
-          additionalProperties:
-            type: object
-            additionalProperties: {}
-      required:
-      - contractVersion
-      - defaultGrade
-      - enabled
-      - geometryContractSupported
-      - grades
-      - groundClearanceMax
-      - groundClearanceMin
-      - publicationProtocol
-      - wheelTreatmentSupported
     _CompletedPart:
       type: object
       properties:
@@ -1023,23 +1040,6 @@ components:
       required:
       - etag
       - partNumber
-    LesAutoconfigUploadComplete:
-      type: object
-      properties:
-        uploadId:
-          type: string
-          maxLength: 512
-        completedParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/_CompletedPart'
-        reservationId:
-          type: string
-          format: uuid
-      required:
-      - completedParts
-      - reservationId
-      - uploadId
   securitySchemes:
     agentBearerAuth:
       type: http

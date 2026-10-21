@@ -117,33 +117,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    AiFinding:
-      type: object
-      properties:
-        severity:
-          enum:
-          - blocker
-          - warning
-          - info
-          type: string
-          description: '* `blocker` - blocker
-
-            * `warning` - warning
-
-            * `info` - info'
-          x-spec-enum-id: 89eaa3468c08a8fe
-        title:
-          type: string
-        detail:
-          type: string
-        action:
-          type: string
-      required:
-      - action
-      - detail
-      - severity
-      - title
-    DiagnoseRequest:
+    AiChatRequest:
       type: object
       properties:
         locale:
@@ -156,39 +130,45 @@ components:
             * `en` - en'
           x-spec-enum-id: 659d4ef1ad5b5558
           default: ko
+        intent:
+          enum:
+          - setup_guide
+          - parameter_help
+          - recommendation
+          - diagnosis
+          - usage
+          - support
+          type: string
+          description: '* `setup_guide` - setup_guide
+
+            * `parameter_help` - parameter_help
+
+            * `recommendation` - recommendation
+
+            * `diagnosis` - diagnosis
+
+            * `usage` - usage
+
+            * `support` - support'
+          x-spec-enum-id: 2d57c9fc7f22c92f
+        message:
+          type: string
+          default: ''
+          maxLength: 2000
         jobUid:
           type: string
+          default: ''
           maxLength: 36
-      required:
-      - jobUid
-    AiRecommendationResponse:
-      type: object
-      properties:
-        baseRevision:
-          type: integer
-        summary:
+        parameterPath:
           type: string
-        findings:
+          default: ''
+          maxLength: 160
+        history:
           type: array
           items:
-            $ref: '#/components/schemas/AiFinding'
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiRecommendationChange'
-        proposedUnifiedConfig: {}
-        needsHumanSupport:
-          type: boolean
-        supportSummary:
-          type: string
+            $ref: '#/components/schemas/AiChatHistoryItem'
       required:
-      - baseRevision
-      - changes
-      - findings
-      - needsHumanSupport
-      - proposedUnifiedConfig
-      - summary
-      - supportSummary
+      - intent
     AiChatHistoryItem:
       type: object
       properties:
@@ -207,65 +187,6 @@ components:
       required:
       - content
       - role
-    AiDiagnosisResponse:
-      type: object
-      properties:
-        summary:
-          type: string
-        findings:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiFinding'
-        needsHumanSupport:
-          type: boolean
-        supportSummary:
-          type: string
-      required:
-      - findings
-      - needsHumanSupport
-      - summary
-      - supportSummary
-    AiAssistRequest:
-      type: object
-      properties:
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: ko
-    AiRecommendationChange:
-      type: object
-      properties:
-        path:
-          type: string
-        before: {}
-        after: {}
-        reason:
-          type: string
-      required:
-      - after
-      - before
-      - path
-      - reason
-    AiUsageResponse:
-      type: object
-      properties:
-        used:
-          type: integer
-        limit:
-          type: integer
-        resetsAt:
-          type: string
-          format: date-time
-      required:
-      - limit
-      - resetsAt
-      - used
     AiChatResponse:
       type: object
       properties:
@@ -321,7 +242,65 @@ components:
       - recommendation
       - sources
       - supportSummary
-    AiChatRequest:
+    AiFinding:
+      type: object
+      properties:
+        severity:
+          enum:
+          - blocker
+          - warning
+          - info
+          type: string
+          description: '* `blocker` - blocker
+
+            * `warning` - warning
+
+            * `info` - info'
+          x-spec-enum-id: 89eaa3468c08a8fe
+        title:
+          type: string
+        detail:
+          type: string
+        action:
+          type: string
+      required:
+      - action
+      - detail
+      - severity
+      - title
+    AiDiagnosisResponse:
+      type: object
+      properties:
+        summary:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiFinding'
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
+      required:
+      - findings
+      - needsHumanSupport
+      - summary
+      - supportSummary
+    AiRecommendationChange:
+      type: object
+      properties:
+        path:
+          type: string
+        before: {}
+        after: {}
+        reason:
+          type: string
+      required:
+      - after
+      - before
+      - path
+      - reason
+    DiagnoseRequest:
       type: object
       properties:
         locale:
@@ -334,45 +313,66 @@ components:
             * `en` - en'
           x-spec-enum-id: 659d4ef1ad5b5558
           default: ko
-        intent:
-          enum:
-          - setup_guide
-          - parameter_help
-          - recommendation
-          - diagnosis
-          - usage
-          - support
-          type: string
-          description: '* `setup_guide` - setup_guide
-
-            * `parameter_help` - parameter_help
-
-            * `recommendation` - recommendation
-
-            * `diagnosis` - diagnosis
-
-            * `usage` - usage
-
-            * `support` - support'
-          x-spec-enum-id: 2d57c9fc7f22c92f
-        message:
-          type: string
-          default: ''
-          maxLength: 2000
         jobUid:
           type: string
-          default: ''
           maxLength: 36
-        parameterPath:
+      required:
+      - jobUid
+    AiAssistRequest:
+      type: object
+      properties:
+        locale:
+          enum:
+          - ko
+          - en
           type: string
-          default: ''
-          maxLength: 160
-        history:
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: ko
+    AiRecommendationResponse:
+      type: object
+      properties:
+        baseRevision:
+          type: integer
+        summary:
+          type: string
+        findings:
           type: array
           items:
-            $ref: '#/components/schemas/AiChatHistoryItem'
+            $ref: '#/components/schemas/AiFinding'
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiRecommendationChange'
+        proposedUnifiedConfig: {}
+        needsHumanSupport:
+          type: boolean
+        supportSummary:
+          type: string
       required:
-      - intent
+      - baseRevision
+      - changes
+      - findings
+      - needsHumanSupport
+      - proposedUnifiedConfig
+      - summary
+      - supportSummary
+    AiUsageResponse:
+      type: object
+      properties:
+        used:
+          type: integer
+        limit:
+          type: integer
+        resetsAt:
+          type: string
+          format: date-time
+      required:
+      - limit
+      - resetsAt
+      - used
   securitySchemes:
     agentBearerAuth:
       type: http

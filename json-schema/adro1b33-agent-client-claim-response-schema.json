@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-client-claim-response-schema.json",
+  "title": "AgentClientClaimResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentClientClaimResponse",
+  "type": "object",
+  "properties": {
+    "clientAttemptUid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "clientActionNonce": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tool": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.navigate"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "type": "string",
+                  "enum": [
+                    "home",
+                    "projects"
+                  ]
+                }
+              },
+              "required": [
+                "page"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.set_project_query"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              },
+              "required": [
+                "q"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.open_project"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "projectUid": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9]{1,36}$",
+                  "maxLength": 36
+                }
+              },
+              "required": [
+                "projectUid"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.open_assets"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "view": {
+                  "type": "string",
+                  "enum": [
+                    "explore",
+                    "team"
+                  ]
+                }
+              },
+              "required": [
+                "view"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.open_asset_registration"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "jobUid": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9]{1,36}$",
+                  "maxLength": 36
+                }
+              },
+              "required": [
+                "jobUid"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.open_asset"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {
+                "assetUid": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9]{1,36}$",
+                  "maxLength": 36
+                }
+              },
+              "required": [
+                "assetUid"
+              ],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.open_paper_plane"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "ui.read_paper_plane"
+              ]
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "arguments": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "argumentsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "name",
+            "schemaVersion",
+            "arguments",
+            "argumentsSha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "clientAttemptUid",
+    "clientActionNonce",
+    "expiresAt",
+    "tool"
+  ],
+  "additionalProperties": false
+}

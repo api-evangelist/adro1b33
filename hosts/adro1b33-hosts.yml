@@ -1,0 +1,84 @@
+generated: '2026-10-20'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 4
+  own: 2
+  other_domain: 2
+  platform: 0
+  roles:
+  - api
+  - docs
+  - website
+hosts:
+- host: adro.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  - Blog
+  serves:
+  - docs
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: adro.com
+  role: website
+  relation: own
+- host: aoxlabs.com
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  - Documentation
+  - Pricing
+  - SignUp
+  - Login
+  - Support
+  - TermsOfService
+  - PrivacyPolicy
+  - ChangeLog
+  serves:
+  - docs
+  - cdn
+  vendor: cloudfront
+  registrable_domain: aoxlabs.com
+  role: website
+  relation: other-domain
+- host: api.adro.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: adro.com
+  role: api
+  relation: own
+- host: api.aoxlabs.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  types:
+  - APIReference
+  serves:
+  - api
+  - docs
+  - spec
+  registrable_domain: aoxlabs.com
+  role: docs
+  relation: other-domain

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-job-download-ticket-schema.json",
+  "title": "JobDownloadTicket",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-jobs-api-openapi.yml#/components/schemas/JobDownloadTicket",
+  "type": "object",
+  "properties": {
+    "downloadId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "limit": {
+      "type": "integer"
+    },
+    "used": {
+      "type": "integer"
+    },
+    "remaining": {
+      "type": "integer"
+    },
+    "canDownload": {
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ProjectDownloadFile"
+      }
+    },
+    "jobUid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "canDownload",
+    "downloadId",
+    "expiresAt",
+    "files",
+    "jobUid",
+    "limit",
+    "remaining",
+    "updatedAt",
+    "used"
+  ],
+  "$defs": {
+    "ProjectDownloadFile": {
+      "type": "object",
+      "properties": {
+        "artifactUid": {
+          "type": "string"
+        },
+        "fileId": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "artifactUid",
+        "fileId",
+        "fileName",
+        "url"
+      ]
+    }
+  }
+}

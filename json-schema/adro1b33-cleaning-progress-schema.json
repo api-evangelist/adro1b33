@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cleaning-progress-schema.json",
+  "title": "CleaningProgress",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-geometry-cleaning-api-openapi.yml#/components/schemas/CleaningProgress",
+  "type": "object",
+  "properties": {
+    "available": {
+      "type": "boolean"
+    },
+    "reason": {
+      "enum": [
+        "not_supported",
+        "not_running",
+        "not_published",
+        "stale",
+        "invalid",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "* `not_supported` - not_supported\n* `not_running` - not_running\n* `not_published` - not_published\n* `stale` - stale\n* `invalid` - invalid",
+      "x-spec-enum-id": "efc0f57a2614d49c"
+    },
+    "attempt": {
+      "type": "integer"
+    },
+    "boot": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "seq": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stageStartedAt": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double"
+    },
+    "publishedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "viewer": {},
+    "sourceToWorking": {},
+    "scan": {},
+    "issuesRev": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {}
+      }
+    },
+    "issueCounts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "attempt",
+    "available",
+    "boot",
+    "issueCounts",
+    "issues",
+    "issuesRev",
+    "publishedAt",
+    "reason",
+    "scan",
+    "seq",
+    "sourceToWorking",
+    "stage",
+    "stageStartedAt",
+    "updatedAt",
+    "viewer"
+  ]
+}

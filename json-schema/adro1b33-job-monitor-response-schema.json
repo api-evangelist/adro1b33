@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-job-monitor-response-schema.json",
+  "title": "JobMonitorResponse",
+  "description": "Job Monitor API 전체 응답 스키마.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-jobs-api-openapi.yml#/components/schemas/JobMonitorResponse",
+  "type": "object",
+  "properties": {
+    "jobId": {
+      "type": "integer"
+    },
+    "project": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SimpleProject"
+        }
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "progress": {
+      "type": "number",
+      "format": "double"
+    },
+    "metrics": {
+      "$ref": "#/$defs/JobMonitorMetrics"
+    },
+    "consoleLogs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JobMonitorConsoleLog"
+      }
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "consoleLogs",
+    "jobId",
+    "metrics",
+    "progress",
+    "project",
+    "stage",
+    "status",
+    "updatedAt"
+  ],
+  "$defs": {
+    "JobMonitorConsoleLog": {
+      "type": "object",
+      "description": "Monitor API console log 엔트리.",
+      "properties": {
+        "seq": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "seq",
+        "tag",
+        "timestamp"
+      ]
+    },
+    "JobMonitorIter": {
+      "type": "object",
+      "description": "Monitor API iteration 정보.",
+      "properties": {
+        "current": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "total": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "current",
+        "total"
+      ]
+    },
+    "JobMonitorMetrics": {
+      "type": "object",
+      "description": "Monitor API metrics 정보.",
+      "properties": {
+        "iter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/JobMonitorIter"
+            }
+          ]
+        },
+        "residual": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/JobMonitorValueLabel"
+            }
+          ]
+        },
+        "runtime": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/JobMonitorRuntime"
+            }
+          ]
+        },
+        "cd": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/JobMonitorValueLabel"
+            }
+          ]
+        },
+        "cl": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/JobMonitorValueLabel"
+            }
+          ]
+        }
+      },
+      "required": [
+        "cd",
+        "cl",
+        "iter",
+        "residual",
+        "runtime"
+      ]
+    },
+    "JobMonitorRuntime": {
+      "type": "object",
+      "description": "Monitor API runtime 정보.",
+      "properties": {
+        "seconds": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "seconds"
+      ]
+    },
+    "JobMonitorValueLabel": {
+      "type": "object",
+      "description": "Monitor API value-label 페어.",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ]
+    },
+    "SimpleProject": {
+      "type": "object",
+      "description": "Job 응답에 포함될 간단한 Project 정보.",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "mode": {
+          "enum": [
+            "MARINE",
+            "G1",
+            "G2",
+            "G3",
+            "G4",
+            "S2",
+            "SX"
+          ],
+          "type": "string",
+          "description": "* `MARINE` - Marine\n* `G1` - G1\n* `G2` - G2\n* `G3` - G3\n* `G4` - G4\n* `S2` - Sketch 2D\n* `SX` - Sketch to 3D",
+          "x-spec-enum-id": "2726f65caad83ecc"
+        }
+      },
+      "required": [
+        "id",
+        "uid"
+      ]
+    }
+  }
+}

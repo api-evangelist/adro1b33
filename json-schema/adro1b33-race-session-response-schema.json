@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-race-session-response-schema.json",
+  "title": "RaceSessionResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-racing-api-openapi.yml#/components/schemas/RaceSessionResponse",
+  "type": "object",
+  "properties": {
+    "uid": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "readOnly": {
+      "type": "boolean"
+    },
+    "performanceSnapshot": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "bestLaps": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "bestLaps",
+    "error",
+    "expiresAt",
+    "performanceSnapshot",
+    "readOnly",
+    "status",
+    "uid"
+  ]
+}

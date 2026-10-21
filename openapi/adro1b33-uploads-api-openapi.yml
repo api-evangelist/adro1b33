@@ -223,31 +223,6 @@ components:
       - s3Key
       - s3Url
       - uid
-    PaginatedFileUploadTrackerList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileUploadTracker'
     FileUploadTracker:
       type: object
       properties:
@@ -346,6 +321,31 @@ components:
       - updatedAt
       - uploadId
       - userId
+    PaginatedFileUploadTrackerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileUploadTracker'
   securitySchemes:
     agentBearerAuth:
       type: http

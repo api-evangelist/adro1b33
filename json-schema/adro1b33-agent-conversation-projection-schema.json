@@ -1,0 +1,913 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-conversation-projection-schema.json",
+  "title": "AgentConversationProjection",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentConversationProjection",
+  "type": "object",
+  "properties": {
+    "thread": {
+      "$ref": "#/$defs/AgentThreadProjection"
+    },
+    "activeTurn": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AgentTurnProjection"
+        }
+      ]
+    },
+    "messages": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentMessageProjection"
+          },
+          "minItems": 0
+        },
+        "historyCursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "items",
+        "historyCursor"
+      ],
+      "additionalProperties": false
+    },
+    "pendingActions": {
+      "type": "object",
+      "properties": {
+        "approvals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentApprovalProjection"
+          },
+          "minItems": 0
+        },
+        "clientTools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentClientToolProjection"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "approvals",
+        "clientTools"
+      ],
+      "additionalProperties": false
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AgentAttachmentProjection"
+      },
+      "minItems": 0
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AgentArtifactProjection"
+      },
+      "minItems": 0
+    },
+    "workspace": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AgentWorkspaceProjection"
+        }
+      ]
+    },
+    "throughSequence": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "thread",
+    "activeTurn",
+    "messages",
+    "pendingActions",
+    "attachments",
+    "artifacts",
+    "workspace",
+    "throughSequence"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "AgentApprovalProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "toolCallUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "pending",
+            "approved",
+            "rejected",
+            "expired"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "toolLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "riskLevel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "expiresAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "reasonCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "toolCallUid",
+        "status",
+        "statusRevision",
+        "toolLabel",
+        "riskLevel",
+        "expiresAt",
+        "reasonCode"
+      ],
+      "additionalProperties": false
+    },
+    "AgentArtifactProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "artifactUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "staged",
+            "published",
+            "discarded",
+            "expired"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mediaType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "displayName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "artifactUid",
+        "status",
+        "statusRevision",
+        "mediaType",
+        "size",
+        "displayName"
+      ],
+      "additionalProperties": false
+    },
+    "AgentAttachmentProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "attachmentUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "pending_upload",
+            "uploaded",
+            "scanning",
+            "processing",
+            "ready",
+            "rejected",
+            "expired"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mediaFamily": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "declaredSize": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errorCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "attachmentUid",
+        "status",
+        "statusRevision",
+        "mediaFamily",
+        "declaredSize",
+        "errorCode"
+      ],
+      "additionalProperties": false
+    },
+    "AgentClientToolProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "toolCallUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "requested",
+            "waiting_for_approval",
+            "executing",
+            "succeeded",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "activityLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "toolCallUid",
+        "name",
+        "status",
+        "statusRevision",
+        "activityLabel"
+      ],
+      "additionalProperties": false
+    },
+    "AgentMessageContentBlock": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TextContentBlock"
+        },
+        {
+          "$ref": "#/$defs/RedactedContentBlock"
+        },
+        {
+          "$ref": "#/$defs/AttachmentContentBlock"
+        }
+      ]
+    },
+    "AgentMessageProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "messageUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "turnUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "user",
+            "assistant"
+          ]
+        },
+        "contentBlocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentMessageContentBlock"
+          },
+          "minItems": 1,
+          "maxItems": 256
+        },
+        "completedSequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "messageUid",
+        "turnUid",
+        "role",
+        "contentBlocks",
+        "completedSequence",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "AgentThreadProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "threadUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "workspace",
+            "project"
+          ]
+        },
+        "projectUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36
+        },
+        "projectStatus": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "parentThreadUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "active",
+            "archived"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scopeRevision": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "permissionMode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "ask_for_approval",
+            "auto_review",
+            "full_access"
+          ]
+        },
+        "permissionModeRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "activityState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "idle",
+            "queued",
+            "running",
+            "waiting_for_client",
+            "waiting_for_approval"
+          ]
+        },
+        "activeTurnUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "lastActiveAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "threadUid",
+        "scope",
+        "projectUid",
+        "projectStatus",
+        "parentThreadUid",
+        "title",
+        "status",
+        "statusRevision",
+        "scopeRevision",
+        "permissionMode",
+        "permissionModeRevision",
+        "activityState",
+        "activeTurnUid",
+        "lastActiveAt",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "AgentTurnProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "turnUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "user_message",
+            "structured_action"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "queued",
+            "running",
+            "waiting_for_client",
+            "waiting_for_approval",
+            "completed",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "errorCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "turnUid",
+        "origin",
+        "status",
+        "statusRevision",
+        "createdAt",
+        "completedAt",
+        "errorCode"
+      ],
+      "additionalProperties": false
+    },
+    "AgentWorkspaceProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "workspaceUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "preparing",
+            "ready",
+            "in_use",
+            "cooling",
+            "deleting",
+            "deleted"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "readyEntryCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalEntryCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "materializedBytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "declaredTotalBytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "workspaceUid",
+        "status",
+        "statusRevision",
+        "readyEntryCount",
+        "totalEntryCount",
+        "materializedBytes",
+        "declaredTotalBytes"
+      ],
+      "additionalProperties": false
+    },
+    "AttachmentContentBlock": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "attachment"
+          ]
+        },
+        "attachmentUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "image",
+            "mesh",
+            "cad"
+          ]
+        },
+        "sourceTrust": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "untrusted_user_input"
+          ]
+        },
+        "originalSha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "processorProfileVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "processorImageDigest": {
+          "type": "string",
+          "minLength": 71,
+          "maxLength": 71
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "derivatives": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "derivativeUid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 36,
+                "format": "uuid"
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "enum": [
+                  "normalized_image",
+                  "geometry_manifest",
+                  "geometry_preview"
+                ]
+              },
+              "mediaType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "enum": [
+                  "image/png",
+                  "application/json"
+                ]
+              },
+              "sizeBytes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "minLength": 64,
+                "maxLength": 64
+              }
+            },
+            "required": [
+              "derivativeUid",
+              "kind",
+              "mediaType",
+              "sizeBytes",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "attachmentUid",
+        "category",
+        "sourceTrust",
+        "originalSha256",
+        "processorProfileVersion",
+        "processorImageDigest",
+        "statusRevision",
+        "derivatives"
+      ],
+      "additionalProperties": false
+    },
+    "RedactedContentBlock": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "content_redacted"
+          ]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "PROJECT_PURGED",
+            "THREAD_PURGED",
+            "USER_DELETED"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "reasonCode"
+      ],
+      "additionalProperties": false
+    },
+    "TextContentBlock": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "text"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1048576
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

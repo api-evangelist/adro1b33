@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-canonical-job-submission-schema.json",
+  "title": "CanonicalJobSubmission",
+  "description": "Validates the unified request envelope: project_id + a CanonicalJobSpec.\n\nThe spec itself is validated by the adapter (CanonicalJobSpecSerializer); here\nwe only carry the project binding. Credit estimation derives its inputs from\nthe persisted Project and WorkbenchState.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-job-api-openapi.yml#/components/schemas/CanonicalJobSubmission",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "type": "integer"
+    },
+    "geometryVersionId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "projectId",
+    "spec"
+  ]
+}

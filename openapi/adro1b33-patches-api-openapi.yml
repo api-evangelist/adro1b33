@@ -368,6 +368,172 @@ paths:
           description: ''
 components:
   schemas:
+    PatchMerge:
+      type: object
+      properties:
+        patchIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+          minItems: 2
+      required:
+      - patchIds
+    PatchMergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        batchJobId:
+          type: string
+        mergeJobId:
+          type: integer
+        patch:
+          allOf:
+          - $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - batchJobId
+      - mergeJobId
+      - patch
+      - patchId
+      - status
+    PatchProxyArtifactPresign:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        sizeBytes:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          default: application/octet-stream
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyCacheKey:
+          type: string
+      required:
+      - kind
+      - sizeBytes
+    PatchUnmergeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        patchId:
+          type: integer
+        restoredPatchIds:
+          type: array
+          items:
+            type: integer
+        restoredPatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Patch'
+          readOnly: true
+      required:
+      - patchId
+      - restoredPatchIds
+      - restoredPatches
+      - status
+    PatchProxyArtifact:
+      type: object
+      properties:
+        kind:
+          enum:
+          - proxy_mesh
+          - proxy_layout
+          - atlas
+          type: string
+          description: '* `proxy_mesh` - proxy_mesh
+
+            * `proxy_layout` - proxy_layout
+
+            * `atlas` - atlas'
+          x-spec-enum-id: 52920026f3197740
+        key:
+          type: string
+        proxyMeshKey:
+          type: string
+        proxyLayoutKey:
+          type: string
+        atlasKey:
+          type: string
+        proxyCacheKey:
+          type: string
+        proxyWorkerRevision:
+          type: string
+        proxyArtifactSignature:
+          type: string
+        proxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+        triangleCount:
+          type:
+          - integer
+          - 'null'
+        originalMeshTriangleCount:
+          type:
+          - integer
+          - 'null'
+        originalTriangleCount:
+          type:
+          - integer
+          - 'null'
+        surfaceArea:
+          type:
+          - number
+          - 'null'
+          format: double
+          minimum: 1.0e-06
+        boundingBox: {}
+        proxyMeshMaskKey:
+          type: string
+        selectedProxyTriangleCount:
+          type:
+          - integer
+          - 'null'
+        sourceProxyArtifactSignature:
+          type: string
+        proxyMaskSignature:
+          type: string
+        reservationId:
+          type: string
+          format: uuid
+    MergedSourcePatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        boundingBox:
+          readOnly: true
+        inputPreviewPoints:
+          readOnly: true
+      required:
+      - boundingBox
+      - id
+      - inputPreviewPoints
+      - label
     PatchProxyMaskFinalize:
       type: object
       properties:
@@ -620,172 +786,6 @@ components:
       - sourcePatchId
       - uid
       - updatedAt
-    PatchMergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        batchJobId:
-          type: string
-        mergeJobId:
-          type: integer
-        patch:
-          allOf:
-          - $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - batchJobId
-      - mergeJobId
-      - patch
-      - patchId
-      - status
-    MergedSourcePatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        boundingBox:
-          readOnly: true
-        inputPreviewPoints:
-          readOnly: true
-      required:
-      - boundingBox
-      - id
-      - inputPreviewPoints
-      - label
-    PatchUnmergeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        patchId:
-          type: integer
-        restoredPatchIds:
-          type: array
-          items:
-            type: integer
-        restoredPatches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Patch'
-          readOnly: true
-      required:
-      - patchId
-      - restoredPatchIds
-      - restoredPatches
-      - status
-    PatchProxyArtifactPresign:
-      type: object
-      properties:
-        kind:
-          enum:
-          - proxy_mesh
-          - proxy_layout
-          - atlas
-          type: string
-          description: '* `proxy_mesh` - proxy_mesh
-
-            * `proxy_layout` - proxy_layout
-
-            * `atlas` - atlas'
-          x-spec-enum-id: 52920026f3197740
-        sizeBytes:
-          type: integer
-          minimum: 1
-        contentType:
-          type: string
-          default: application/octet-stream
-        proxyWorkerRevision:
-          type: string
-        proxyArtifactSignature:
-          type: string
-        proxyCacheKey:
-          type: string
-      required:
-      - kind
-      - sizeBytes
-    PatchProxyArtifact:
-      type: object
-      properties:
-        kind:
-          enum:
-          - proxy_mesh
-          - proxy_layout
-          - atlas
-          type: string
-          description: '* `proxy_mesh` - proxy_mesh
-
-            * `proxy_layout` - proxy_layout
-
-            * `atlas` - atlas'
-          x-spec-enum-id: 52920026f3197740
-        key:
-          type: string
-        proxyMeshKey:
-          type: string
-        proxyLayoutKey:
-          type: string
-        atlasKey:
-          type: string
-        proxyCacheKey:
-          type: string
-        proxyWorkerRevision:
-          type: string
-        proxyArtifactSignature:
-          type: string
-        proxyTriangleCount:
-          type:
-          - integer
-          - 'null'
-        triangleCount:
-          type:
-          - integer
-          - 'null'
-        originalMeshTriangleCount:
-          type:
-          - integer
-          - 'null'
-        originalTriangleCount:
-          type:
-          - integer
-          - 'null'
-        surfaceArea:
-          type:
-          - number
-          - 'null'
-          format: double
-          minimum: 1.0e-06
-        boundingBox: {}
-        proxyMeshMaskKey:
-          type: string
-        selectedProxyTriangleCount:
-          type:
-          - integer
-          - 'null'
-        sourceProxyArtifactSignature:
-          type: string
-        proxyMaskSignature:
-          type: string
-        reservationId:
-          type: string
-          format: uuid
-    PatchMerge:
-      type: object
-      properties:
-        patchIds:
-          type: array
-          items:
-            type: integer
-            minimum: 1
-          minItems: 2
-      required:
-      - patchIds
   securitySchemes:
     agentBearerAuth:
       type: http

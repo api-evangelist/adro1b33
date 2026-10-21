@@ -1,0 +1,761 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-project-activate-schema.json",
+  "title": "ProjectActivate",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-projects-api-openapi.yml#/components/schemas/ProjectActivate",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255
+    },
+    "mode": {
+      "enum": [
+        "MARINE",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "S2",
+        "SX"
+      ],
+      "type": "string",
+      "description": "* `MARINE` - Marine\n* `G1` - G1\n* `G2` - G2\n* `G3` - G3\n* `G4` - G4\n* `S2` - Sketch 2D\n* `SX` - Sketch to 3D",
+      "x-spec-enum-id": "2726f65caad83ecc"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "open",
+        "closed"
+      ],
+      "type": "string",
+      "x-spec-enum-id": "d9eb0615cd175e4c",
+      "readOnly": true,
+      "description": "Project lifecycle status. Draft projects are hidden from user-facing project lists.\n\n* `draft` - Draft\n* `open` - Open\n* `closed` - Closed"
+    },
+    "slug": {
+      "type": "string",
+      "readOnly": true
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "g1NodeKey": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true,
+      "description": "SM g1-nodes 의 노드 키 (G1 mode 에서만 사용, immutable)"
+    },
+    "lastActivityAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "closedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "closedByUserId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "소프트 삭제 여부. True이면 API에서 노출되지 않음 (어드민에서 복구 가능)."
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true,
+      "description": "소프트 삭제된 시각."
+    },
+    "purgeAfter": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true,
+      "description": "삭제 유예기간이 끝나 S3 및 관련 데이터를 영구 삭제할 수 있는 시각."
+    },
+    "canRestore": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "deletion": {
+      "readOnly": true
+    },
+    "downloadQuota": {
+      "readOnly": true
+    },
+    "workbenchState": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WorkbenchState"
+        }
+      ],
+      "readOnly": true
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Artifact"
+      },
+      "readOnly": true
+    },
+    "patches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Patch"
+      },
+      "readOnly": true
+    },
+    "patchesCount": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "thumbnailUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "readOnly": true
+    },
+    "thumbnailS3Key": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "thumbnailSourceSignature": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "projectInputUnionBoundingBox": {
+      "readOnly": true
+    },
+    "projectInputViewerTranslate": {
+      "readOnly": true
+    },
+    "sourceFiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SourceFile"
+      },
+      "writeOnly": true
+    },
+    "initialWorkbenchGeometry": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/InitialWorkbenchGeometry"
+        }
+      ],
+      "writeOnly": true
+    }
+  },
+  "required": [
+    "artifacts",
+    "canRestore",
+    "closedAt",
+    "closedByUserId",
+    "createdAt",
+    "deletedAt",
+    "deletion",
+    "downloadQuota",
+    "g1NodeKey",
+    "id",
+    "isDeleted",
+    "lastActivityAt",
+    "patches",
+    "patchesCount",
+    "projectInputUnionBoundingBox",
+    "projectInputViewerTranslate",
+    "purgeAfter",
+    "slug",
+    "status",
+    "teamId",
+    "thumbnailS3Key",
+    "thumbnailSourceSignature",
+    "thumbnailUrl",
+    "uid",
+    "updatedAt",
+    "workbenchState"
+  ],
+  "$defs": {
+    "Artifact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "artifactRole": {
+          "enum": [
+            "PROJECT_THUMBNAIL_IMAGE",
+            "PROJECT_SOURCE_STL",
+            "OPTIMIZED_STL",
+            "G2_SUMMARY_IMAGE",
+            "G2_SHAPE_REPORT_IMAGE",
+            "G2_FIGS_ZIP",
+            "G1_INPUT_STL",
+            "G1_SUMMARY_GIF",
+            "G1_FIGS_ZIP",
+            "G1_NORMAL_DISPLACEMENT_VTP",
+            "RESULT_MESH",
+            "RESULT_HISTORY",
+            "RESULT_SUMMARY_JSON",
+            "RESULT_FLOW_VOLUME",
+            "RESULT_GEOMETRY_SCALE",
+            "RESULT_PREVIEW_POINTS",
+            "RESULT_PROXY_MESH",
+            "RESULT_PROXY_LAYOUT",
+            "RESULT_PROXY_ATLAS",
+            "STREAMLINES_BIN",
+            "FLOWFIELD_BIN",
+            "G4_SUMMARY_IMAGE",
+            "G4_FIGS_ZIP",
+            "STEP_EXPORT_ASSEMBLY",
+            "STEP_EXPORT_PART_STEP",
+            "STEP_EXPORT_PART_STL",
+            "ASSET_FLOW_VISUALIZATION_IMAGE",
+            "ASSET_RENDERED_IMAGE",
+            "S2_FINAL_FIELD_IMAGE",
+            "S2_REPLAY_FRAMES",
+            "RACING_BASELINE_GLB",
+            "RACING_OPTIMIZED_GLB",
+            "CWT_RESULT",
+            "USER_PROFILE_IMAGE"
+          ],
+          "type": "string",
+          "description": "* `PROJECT_THUMBNAIL_IMAGE` - Project Thumbnail Image\n* `PROJECT_SOURCE_STL` - Project Source STL\n* `OPTIMIZED_STL` - Optimized STL\n* `G2_SUMMARY_IMAGE` - G2 Summary Image\n* `G2_SHAPE_REPORT_IMAGE` - G2 Shape Report Image\n* `G2_FIGS_ZIP` - G2 Figs ZIP\n* `G1_INPUT_STL` - G1 Input STL\n* `G1_SUMMARY_GIF` - G1 Summary GIF\n* `G1_FIGS_ZIP` - G1 Figs ZIP\n* `G1_NORMAL_DISPLACEMENT_VTP` - G1 Normal Displacement VTP\n* `RESULT_MESH` - Result Mesh\n* `RESULT_HISTORY` - Result History\n* `RESULT_SUMMARY_JSON` - Result Summary JSON\n* `RESULT_FLOW_VOLUME` - Result Flow Volume\n* `RESULT_GEOMETRY_SCALE` - Result Geometry Scale\n* `RESULT_PREVIEW_POINTS` - Result Preview Points\n* `RESULT_PROXY_MESH` - Result Proxy Mesh\n* `RESULT_PROXY_LAYOUT` - Result Proxy Layout\n* `RESULT_PROXY_ATLAS` - Result Proxy Atlas\n* `STREAMLINES_BIN` - Streamlines Binary\n* `FLOWFIELD_BIN` - Flow Field Binary\n* `G4_SUMMARY_IMAGE` - G4 Summary Image\n* `G4_FIGS_ZIP` - G4 Figs ZIP\n* `STEP_EXPORT_ASSEMBLY` - STEP Export Assembly\n* `STEP_EXPORT_PART_STEP` - STEP Export Part STEP\n* `STEP_EXPORT_PART_STL` - STEP Export Part STL\n* `ASSET_FLOW_VISUALIZATION_IMAGE` - Asset Flow Visualization Image\n* `ASSET_RENDERED_IMAGE` - Asset Rendered Image\n* `S2_FINAL_FIELD_IMAGE` - Sketch 2D Final Field Image\n* `S2_REPLAY_FRAMES` - Sketch 2D Replay Frames\n* `RACING_BASELINE_GLB` - Racing Baseline GLB\n* `RACING_OPTIMIZED_GLB` - Racing Optimized GLB\n* `CWT_RESULT` - Cornering Wind Tunnel Result\n* `USER_PROFILE_IMAGE` - User Profile Image",
+          "x-spec-enum-id": "ffcff9a4293b8568"
+        },
+        "storageProvider": {
+          "enum": [
+            "S3",
+            "GCS",
+            "AZURE"
+          ],
+          "type": "string",
+          "description": "* `S3` - Amazon S3\n* `GCS` - Google Cloud Storage\n* `AZURE` - Azure Blob Storage",
+          "x-spec-enum-id": "3e1757d60d74052a"
+        },
+        "s3Bucket": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "s3Key": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "s3Url": {
+          "type": "string",
+          "readOnly": true
+        },
+        "fileName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contentType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 255
+        },
+        "sizeBytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 9223372036854775807,
+          "minimum": -9223372036854775808,
+          "format": "int64"
+        },
+        "checksumSha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "artifactRole",
+        "createdAt",
+        "fileName",
+        "id",
+        "s3Bucket",
+        "s3Key",
+        "s3Url",
+        "uid"
+      ]
+    },
+    "InitialWorkbenchGeometry": {
+      "type": "object",
+      "properties": {
+        "isHalfGeometry": {
+          "type": "boolean"
+        },
+        "useSymmetryPlane": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MergedSourcePatch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "label": {
+          "type": "string",
+          "readOnly": true
+        },
+        "boundingBox": {
+          "readOnly": true
+        },
+        "inputPreviewPoints": {
+          "readOnly": true
+        }
+      },
+      "required": [
+        "boundingBox",
+        "id",
+        "inputPreviewPoints",
+        "label"
+      ]
+    },
+    "Patch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "patchType": {
+          "enum": [
+            "source",
+            "ref"
+          ],
+          "type": "string",
+          "description": "* `source` - Source\n* `ref` - Ref",
+          "x-spec-enum-id": "946c46f06a235611",
+          "readOnly": true
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "category": {
+          "enum": [
+            "optimization",
+            "constant",
+            "wing",
+            "wheel_front",
+            "wheel_rear",
+            "optimization_target",
+            "constant_target",
+            "front_wheel",
+            "rear_wheel"
+          ],
+          "type": "string",
+          "description": "* `optimization` - Optimization\n* `constant` - Constant\n* `wing` - Wing\n* `wheel_front` - Wheel Front\n* `wheel_rear` - Wheel Rear\n* `optimization_target` - Optimization Target\n* `constant_target` - Constant Target\n* `front_wheel` - Front Wheel\n* `rear_wheel` - Rear Wheel",
+          "x-spec-enum-id": "5dd1d70043ac53a5"
+        },
+        "artifactId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Associated artifact for source patch",
+          "readOnly": true
+        },
+        "triangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "source patch original STL triangle count"
+        },
+        "surfaceArea": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "source/ref patch surface area"
+        },
+        "selectedProxyTriangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "ref patch only"
+        },
+        "boundingBox": {
+          "description": "source/ref 공용 bbox payload {min:[x,y,z], max:[x,y,z], ffd_degree?:[i,j,k]}"
+        },
+        "ffdDegree": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer"
+          },
+          "writeOnly": true
+        },
+        "proxyMaskSizeBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "writeOnly": true
+        },
+        "normalDisplacementInward": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) normal displacement inward"
+        },
+        "normalDisplacementOutward": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) normal displacement outward"
+        },
+        "planeLimitXMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit x min"
+        },
+        "planeLimitXMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit x max"
+        },
+        "planeLimitYMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit y min"
+        },
+        "planeLimitYMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit y max"
+        },
+        "planeLimitZMin": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit z min"
+        },
+        "planeLimitZMax": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "title": "(constraint) plane limit z max"
+        },
+        "inputPreviewPointsKey": {
+          "type": "string",
+          "description": "source patch point preview only",
+          "maxLength": 1024
+        },
+        "inputPreviewPoints": {
+          "description": "source patch point preview metadata"
+        },
+        "inputPreviewVoxelsKey": {
+          "type": "string",
+          "description": "source patch voxel preview only",
+          "maxLength": 1024
+        },
+        "inputPreviewVoxels": {
+          "description": "source patch voxel preview metadata"
+        },
+        "proxyCacheKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 255
+        },
+        "proxyMeshKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "proxyLayoutKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "atlasKey": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 1024
+        },
+        "proxyWorkerRevision": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 64
+        },
+        "proxyArtifactSignature": {
+          "type": "string",
+          "description": "source patch only",
+          "maxLength": 128
+        },
+        "proxyTriangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "description": "source patch only"
+        },
+        "hasRefs": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isMergeOutput": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isMergePending": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "mergedSourcePatches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MergedSourcePatch"
+          },
+          "readOnly": true
+        },
+        "isInitialSourceUpload": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "source patch only - uploaded while project was draft"
+        },
+        "sourcePatchId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "mergedIntoPatchId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "proxyMeshMaskKey": {
+          "type": "string",
+          "description": "ref patch only",
+          "maxLength": 1024
+        },
+        "sourceProxyArtifactSignature": {
+          "type": "string",
+          "description": "ref patch only — 부모 source patch proxy signature 스냅샷",
+          "maxLength": 128
+        },
+        "proxyMaskSignature": {
+          "type": "string",
+          "description": "ref patch only",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "artifactId",
+        "createdAt",
+        "hasRefs",
+        "id",
+        "isInitialSourceUpload",
+        "isMergeOutput",
+        "isMergePending",
+        "mergedIntoPatchId",
+        "mergedSourcePatches",
+        "patchType",
+        "sourcePatchId",
+        "uid",
+        "updatedAt"
+      ]
+    },
+    "SourceFile": {
+      "type": "object",
+      "description": "source_files 항목 하나. POST(생성) / PUT(수정) 공용.",
+      "properties": {
+        "s3Key": {
+          "type": "string"
+        },
+        "s3Bucket": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string",
+          "default": ""
+        },
+        "contentType": {
+          "type": "string",
+          "default": ""
+        },
+        "sizeBytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "triangleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "surfaceArea": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "s3Bucket",
+        "s3Key",
+        "surfaceArea",
+        "triangleCount"
+      ]
+    },
+    "WorkbenchState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "projectId": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "unifiedConfig": {
+          "description": "Solver-independent editable project configuration."
+        },
+        "revision": {
+          "type": "integer",
+          "readOnly": true,
+          "description": "Monotonic revision used for conditional workbench UI state updates."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "revision",
+        "updatedAt"
+      ]
+    }
+  }
+}

@@ -1,41 +1,34 @@
 generated: '2026-09-07'
 method: derived
-source: >-
-  openapi/adro1b33-aox-openapi.yaml (no components.securitySchemes are declared, so the model below is
-  derived from the account operations and their request/response schemas) plus live anonymous probes of
-  api.aoxlabs.com recorded under evidence[], and well-known/adro1b33-openid-configuration.json for the
-  separate storefront identity surface.
+source: openapi/adro1b33-aox-openapi.yaml (no components.securitySchemes are declared, so the model below is derived
+  from the account operations and their request/response schemas) plus live anonymous probes of api.aoxlabs.com
+  recorded under evidence[], and well-known/adro1b33-openid-configuration.json for the separate storefront identity
+  surface.
 apis:
 - api: AOX Platform API
   host: https://api.aoxlabs.com
   declared_security_schemes: []
-  gap: >-
-    THE SPEC DECLARES NO securitySchemes AND NO GLOBAL security BLOCK. drf-spectacular emitted the
-    document without an authentication configuration, so a consumer reading the contract alone cannot
-    tell how to authenticate. 212 of 231 operations carry no security field at all and 19 carry
-    `security: [{}]`, which marks them explicitly public. The real behaviour has to be probed.
+  gap: 'THE SPEC DECLARES NO securitySchemes AND NO GLOBAL security BLOCK. drf-spectacular emitted the document
+    without an authentication configuration, so a consumer reading the contract alone cannot tell how to authenticate.
+    212 of 231 operations carry no security field at all and 19 carry `security: [{}]`, which marks them explicitly
+    public. The real behaviour has to be probed.'
   observed_model:
     style: session
-    mechanism: >-
-      Credential exchange at POST /accounts/login/ (email + password) and POST /accounts/social-login/,
-      with POST /accounts/token/refresh/ for renewal and POST /accounts/logout/ to end the session. The
-      LoginResponse schema carries no token field (only detail, teamId, teamName, userType,
-      mustChangePassword), which is consistent with a browser-oriented httpOnly cookie session rather
-      than a bearer token handed to the client.
+    mechanism: Credential exchange at POST /accounts/login/ (email + password) and POST /accounts/social-login/,
+      with POST /accounts/token/refresh/ for renewal and POST /accounts/logout/ to end the session. The LoginResponse
+      schema carries no token field (only detail, teamId, teamName, userType, mustChangePassword), which is consistent
+      with a browser-oriented httpOnly cookie session rather than a bearer token handed to the client.
     bearer_token_documented: false
     api_key_documented: false
     confidence: medium
-    note: >-
-      No published developer documentation describes machine-to-machine authentication for this API.
-      This is the honest limit of what can be established anonymously; the exact credential material
-      cannot be confirmed without an account.
+    note: No published developer documentation describes machine-to-machine authentication for this API. This is
+      the honest limit of what can be established anonymously; the exact credential material cannot be confirmed
+      without an account.
   multi_tenancy:
     model: team
-    mechanism: >-
-      Every substantive resource is scoped to a team. POST /accounts/team-switch/ changes the active
-      team for the session, GET /accounts/teams/ lists memberships, and Project, Job, CreditWallet,
-      Subscription and Payment all carry teamId. POST /tenants/exists/ is a public tenant-existence
-      check.
+    mechanism: Every substantive resource is scoped to a team. POST /accounts/team-switch/ changes the active team
+      for the session, GET /accounts/teams/ lists memberships, and Project, Job, CreditWallet, Subscription and
+      Payment all carry teamId. POST /tenants/exists/ is a public tenant-existence check.
   public_operations:
     count: 19
     operations:
@@ -73,8 +66,7 @@ apis:
     status: 401
   - url: https://api.aoxlabs.com/board/
     status: 200
-    note: >-
-      Confirms the spec's `security: [{}]` marking — this operation really is anonymous.
+    note: 'Confirms the spec''s `security: [{}]` marking — this operation really is anonymous.'
   - url: https://api.aoxlabs.com/health/
     status: 200
     body: '{"status":"ok"}'
@@ -85,14 +77,11 @@ apis:
   host: https://adro.com
   observed_model:
     style: oidc
-    mechanism: >-
-      Shopify Customer Accounts. adro.com serves OpenID Connect and OAuth 2.0 authorization-server
-      metadata on its own domain, issued for ADRO's shop (issuer
-      https://shopify.com/authentication/67310649500). Authorization code with PKCE (S256), refresh
-      tokens and the JWT bearer grant; RS256 id tokens; bearer methods: header.
+    mechanism: 'Shopify Customer Accounts. adro.com serves OpenID Connect and OAuth 2.0 authorization-server metadata
+      on its own domain, issued for ADRO''s shop (issuer https://shopify.com/authentication/67310649500). Authorization
+      code with PKCE (S256), refresh tokens and the JWT bearer grant; RS256 id tokens; bearer methods: header.'
     confidence: high
-  anonymous_surface: >-
-    The UCP MCP endpoint at POST /api/ucp/mcp answers tools/list with no credential at all. Catalog
+  anonymous_surface: The UCP MCP endpoint at POST /api/ucp/mcp answers tools/list with no credential at all. Catalog
     browsing, cart and checkout creation are anonymous; only payment completion requires buyer consent.
   scopes: scopes/adro1b33-scopes.yml
   evidence:
@@ -105,3 +94,19 @@ apis:
   - url: https://adro.com/api/ucp/mcp
     status: 200
     note: POST tools/list, no Authorization header sent.
+schemes:
+- name: AOX session (cookie, observed)
+  type: session-cookie
+  api: AOX Platform API
+  description: Credential exchange at POST /accounts/login/ (email + password) and POST /accounts/social-login/,
+    with POST /accounts/token/refresh/ for renewal and POST /accounts/logout/ to end the session. The LoginResponse
+    schema carries no token field (only detail, teamId, teamName, userType, mustChangePassword), which is consistent
+    with a browser-oriented httpOnly cookie session rather than a bearer token handed to the client.
+  confidence: medium
+- name: Shopify Customer Accounts OIDC
+  type: openIdConnect
+  api: ADRO US Store Agent Commerce (UCP / MCP)
+  description: 'Shopify Customer Accounts. adro.com serves OpenID Connect and OAuth 2.0 authorization-server metadata
+    on its own domain, issued for ADRO''s shop (issuer https://shopify.com/authentication/67310649500). Authorization
+    code with PKCE (S256), refresh tokens and the JWT bearer grant; RS256 id tokens; bearer methods: header.'
+  confidence: high

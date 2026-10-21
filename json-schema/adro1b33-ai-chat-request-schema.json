@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-ai-chat-request-schema.json",
+  "title": "AiChatRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-ai-api-openapi.yml#/components/schemas/AiChatRequest",
+  "type": "object",
+  "properties": {
+    "locale": {
+      "enum": [
+        "ko",
+        "en"
+      ],
+      "type": "string",
+      "description": "* `ko` - ko\n* `en` - en",
+      "x-spec-enum-id": "659d4ef1ad5b5558",
+      "default": "ko"
+    },
+    "intent": {
+      "enum": [
+        "setup_guide",
+        "parameter_help",
+        "recommendation",
+        "diagnosis",
+        "usage",
+        "support"
+      ],
+      "type": "string",
+      "description": "* `setup_guide` - setup_guide\n* `parameter_help` - parameter_help\n* `recommendation` - recommendation\n* `diagnosis` - diagnosis\n* `usage` - usage\n* `support` - support",
+      "x-spec-enum-id": "2d57c9fc7f22c92f"
+    },
+    "message": {
+      "type": "string",
+      "default": "",
+      "maxLength": 2000
+    },
+    "jobUid": {
+      "type": "string",
+      "default": "",
+      "maxLength": 36
+    },
+    "parameterPath": {
+      "type": "string",
+      "default": "",
+      "maxLength": 160
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AiChatHistoryItem"
+      }
+    }
+  },
+  "required": [
+    "intent"
+  ],
+  "$defs": {
+    "AiChatHistoryItem": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "enum": [
+            "user",
+            "assistant"
+          ],
+          "type": "string",
+          "description": "* `user` - user\n* `assistant` - assistant",
+          "x-spec-enum-id": "da623bca3e193af6"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 3000
+        }
+      },
+      "required": [
+        "content",
+        "role"
+      ]
+    }
+  }
+}

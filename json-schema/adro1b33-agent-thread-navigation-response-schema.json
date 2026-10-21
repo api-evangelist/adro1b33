@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-thread-navigation-response-schema.json",
+  "title": "AgentThreadNavigationResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentThreadNavigationResponse",
+  "type": "object",
+  "properties": {
+    "workspace": {
+      "$ref": "#/$defs/AgentThreadListResponse"
+    },
+    "projects": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentThreadNavigationProjectNode"
+          },
+          "minItems": 0,
+          "maxItems": 50
+        },
+        "nextCursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "trashSummary": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "count"
+      ],
+      "additionalProperties": false
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "workspace",
+    "projects",
+    "trashSummary",
+    "generatedAt"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "AgentThreadListResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentThreadProjection"
+          },
+          "minItems": 0
+        },
+        "nextCursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "AgentThreadNavigationProjectNode": {
+      "type": "object",
+      "properties": {
+        "projectUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 0,
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "activityState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "idle",
+            "queued",
+            "running",
+            "waiting_for_client",
+            "waiting_for_approval"
+          ]
+        },
+        "needsApproval": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgentThreadProjection"
+          },
+          "minItems": 0,
+          "maxItems": 20
+        },
+        "nextCursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "projectUid",
+        "title",
+        "status",
+        "activityState",
+        "needsApproval",
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "AgentThreadProjection": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "threadUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "workspace",
+            "project"
+          ]
+        },
+        "projectUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36
+        },
+        "projectStatus": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "parentThreadUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "active",
+            "archived"
+          ]
+        },
+        "statusRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scopeRevision": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "permissionMode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "ask_for_approval",
+            "auto_review",
+            "full_access"
+          ]
+        },
+        "permissionModeRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "activityState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "idle",
+            "queued",
+            "running",
+            "waiting_for_client",
+            "waiting_for_approval"
+          ]
+        },
+        "activeTurnUid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "lastActiveAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "threadUid",
+        "scope",
+        "projectUid",
+        "projectStatus",
+        "parentThreadUid",
+        "title",
+        "status",
+        "statusRevision",
+        "scopeRevision",
+        "permissionMode",
+        "permissionModeRevision",
+        "activityState",
+        "activeTurnUid",
+        "lastActiveAt",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

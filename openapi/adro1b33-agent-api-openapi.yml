@@ -2001,29 +2001,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    TextContentBlock:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        kind:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - text
-        text:
-          type: string
-          minLength: 1
-          maxLength: 1048576
-      required:
-      - schemaVersion
-      - kind
-      - text
-      additionalProperties: false
-    AgentTurnCancelRequest:
+    AgentMessageContentBlock:
+      oneOf:
+      - $ref: '#/components/schemas/TextContentBlock'
+      - $ref: '#/components/schemas/RedactedContentBlock'
+      - $ref: '#/components/schemas/AttachmentContentBlock'
+      discriminator:
+        propertyName: kind
+        mapping:
+          text: '#/components/schemas/TextContentBlock'
+          content_redacted: '#/components/schemas/RedactedContentBlock'
+          attachment: '#/components/schemas/AttachmentContentBlock'
+    AgentTurnCreateRequest:
       type: object
       properties:
         clientRequestUid:
@@ -2031,114 +2020,101 @@ components:
           minLength: 1
           maxLength: 36
           format: uuid
-        expectedStatusRevision:
-          type: integer
-          minimum: 1
+        message:
+          $ref: '#/components/schemas/AgentTurnMessageRequest'
+        clientContext:
+          type: object
+          properties:
+            timeZoneHint:
+              type: string
+              minLength: 1
+              maxLength: 64
+          required: []
+          additionalProperties: false
+        surface:
+          $ref: '#/components/schemas/AgentTurnSurfaceRequest'
       required:
       - clientRequestUid
-      - expectedStatusRevision
+      - message
       additionalProperties: false
-    AgentWorkspaceProjection:
+    AgentAttachmentCompleteRequest:
+      type: object
+      properties:
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 104857600
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+      required:
+      - sizeBytes
+      - sha256
+      additionalProperties: false
+    AgentMessageProjection:
       type: object
       properties:
         schemaVersion:
           type: integer
           enum:
           - 1
-        workspaceUid:
+        messageUid:
           type: string
           minLength: 1
           maxLength: 36
           format: uuid
-        status:
+        turnUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        role:
           type: string
           minLength: 1
           maxLength: 128
           enum:
-          - preparing
-          - ready
-          - in_use
-          - cooling
-          - deleting
-          - deleted
-        statusRevision:
+          - user
+          - assistant
+        contentBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentMessageContentBlock'
+          minItems: 1
+          maxItems: 256
+        completedSequence:
           type: integer
           minimum: 1
-        readyEntryCount:
-          type: integer
-          minimum: 0
-        totalEntryCount:
-          type: integer
-          minimum: 0
-        materializedBytes:
-          type: integer
-          minimum: 0
-        declaredTotalBytes:
-          type: integer
-          minimum: 0
-      required:
-      - schemaVersion
-      - workspaceUid
-      - status
-      - statusRevision
-      - readyEntryCount
-      - totalEntryCount
-      - materializedBytes
-      - declaredTotalBytes
-      additionalProperties: false
-    AgentTurnSurfaceRequest:
-      type: object
-      properties:
-        route:
+        createdAt:
           type: string
           minLength: 1
-          maxLength: 2048
-        projectUid:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 36
-        selectedGeometryVersionUid:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 36
-        selectedJobUid:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 36
-        workbenchRevision:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-      required: []
+          maxLength: 64
+          format: date-time
+      required:
+      - schemaVersion
+      - messageUid
+      - turnUid
+      - role
+      - contentBlocks
+      - completedSequence
+      - createdAt
       additionalProperties: false
-    AgentEventPageResponse:
+    AgentMessageHistoryResponse:
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/AgentEventWireEnvelope'
+            $ref: '#/components/schemas/AgentMessageProjection'
           minItems: 0
-        nextAfter:
-          type: integer
-          minimum: 0
-        hasMore:
-          type: boolean
-        latestSequence:
-          type: integer
-          minimum: 0
+        nextBefore:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 4096
       required:
       - items
-      - nextAfter
-      - hasMore
-      - latestSequence
+      - nextBefore
       additionalProperties: false
     AgentMemoryFact:
       type: object
@@ -2202,6 +2178,59 @@ components:
       - hasMore
       - projectStatus
       additionalProperties: false
+    AgentThreadNavigationProjectNode:
+      type: object
+      properties:
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        title:
+          type:
+          - string
+          - 'null'
+          minLength: 0
+          maxLength: 255
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - open
+          - closed
+        activityState:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - idle
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+        needsApproval:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentThreadProjection'
+          minItems: 0
+          maxItems: 20
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 8192
+      required:
+      - projectUid
+      - title
+      - status
+      - activityState
+      - needsApproval
+      - items
+      - nextCursor
+      additionalProperties: false
     AgentTurnMessageRequest:
       type: object
       properties:
@@ -2238,10 +2267,224 @@ components:
           attachments:
             minItems: 1
       x-maxTextUtf8Bytes: 65536
-    AgentTurnCancelResponse:
+    AgentAttachmentCapabilities:
       type: object
       properties:
-        turnUid:
+        enabled:
+          type: boolean
+        maxFiles:
+          type: integer
+          enum:
+          - 10
+        maxBytes:
+          type: integer
+          enum:
+          - 104857600
+        maxImageBytes:
+          type: integer
+          enum:
+          - 20971520
+        extensions:
+          type: array
+          minItems: 7
+          maxItems: 7
+          uniqueItems: true
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+            enum:
+            - png
+            - jpg
+            - jpeg
+            - webp
+            - stl
+            - step
+            - stp
+      required:
+      - enabled
+      - maxFiles
+      - maxBytes
+      - maxImageBytes
+      - extensions
+      additionalProperties: false
+    AgentThreadScopeConflict:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - AGENT_THREAD_SCOPE_CONFLICT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - thread
+      additionalProperties: false
+    AgentThreadStatusConflict:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - AGENT_THREAD_STATUS_CONFLICT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - thread
+      additionalProperties: false
+    AgentError:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        message:
+          type: string
+          minLength: 1
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+      required:
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      additionalProperties: false
+    AgentAttachmentDerivative:
+      type: object
+      properties:
+        derivativeUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - normalized_image
+          - pdf_text
+          - pdf_page_preview
+          - geometry_manifest
+          - geometry_preview
+        mediaType:
+          type: string
+          minLength: 1
+          maxLength: 128
+        sizeBytes:
+          type: integer
+          minimum: 1
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+      - derivativeUid
+      - kind
+      - mediaType
+      - sizeBytes
+      - metadata
+      additionalProperties: false
+    AgentThreadListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentThreadProjection'
+          minItems: 0
+        nextCursor:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 8192
+      required:
+      - items
+      - nextCursor
+      additionalProperties: false
+    AgentClientClaimRequest:
+      type: object
+      properties:
+        clientInstanceUid:
+          type: string
+          format: uuid
+        expectedToolCallStatusRevision:
+          type: integer
+          minimum: 1
+      required:
+      - clientInstanceUid
+      - expectedToolCallStatusRevision
+      additionalProperties: false
+    AgentAttachmentProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        attachmentUid:
           type: string
           minLength: 1
           maxLength: 36
@@ -2251,29 +2494,877 @@ components:
           minLength: 1
           maxLength: 128
           enum:
-          - queued
-          - running
-          - waiting_for_client
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        mediaFamily:
+          type: string
+          minLength: 1
+          maxLength: 64
+        declaredSize:
+          type: integer
+          minimum: 0
+        errorCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - schemaVersion
+      - attachmentUid
+      - status
+      - statusRevision
+      - mediaFamily
+      - declaredSize
+      - errorCode
+      additionalProperties: false
+    AgentClientCancelResponse:
+      type: object
+      properties:
+        cancelled:
+          type: boolean
+      required:
+      - cancelled
+      additionalProperties: false
+    AgentThreadBindRequest:
+      type: object
+      properties:
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        expectedScopeRevision:
+          type: integer
+          enum:
+          - 0
+          - 1
+      required:
+      - projectUid
+      - expectedScopeRevision
+      additionalProperties: false
+    AgentClientResultResponse:
+      type: object
+      properties:
+        toolCallUid:
+          type: string
+          format: uuid
+        clientAttemptUid:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - succeeded
+          - failed
+      required:
+      - toolCallUid
+      - clientAttemptUid
+      - status
+      additionalProperties: false
+    AgentEventPageResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentEventWireEnvelope'
+          minItems: 0
+        nextAfter:
+          type: integer
+          minimum: 0
+        hasMore:
+          type: boolean
+        latestSequence:
+          type: integer
+          minimum: 0
+      required:
+      - items
+      - nextAfter
+      - hasMore
+      - latestSequence
+      additionalProperties: false
+    AgentConversationProjection:
+      type: object
+      properties:
+        thread:
+          $ref: '#/components/schemas/AgentThreadProjection'
+        activeTurn:
+          allOf:
+          - $ref: '#/components/schemas/AgentTurnProjection'
+        messages:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentMessageProjection'
+              minItems: 0
+            historyCursor:
+              type:
+              - string
+              - 'null'
+              minLength: 1
+              maxLength: 8192
+          required:
+          - items
+          - historyCursor
+          additionalProperties: false
+        pendingActions:
+          type: object
+          properties:
+            approvals:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentApprovalProjection'
+              minItems: 0
+            clientTools:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentClientToolProjection'
+              minItems: 0
+          required:
+          - approvals
+          - clientTools
+          additionalProperties: false
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentAttachmentProjection'
+          minItems: 0
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentArtifactProjection'
+          minItems: 0
+        workspace:
+          allOf:
+          - $ref: '#/components/schemas/AgentWorkspaceProjection'
+        throughSequence:
+          type: integer
+          minimum: 0
+      required:
+      - thread
+      - activeTurn
+      - messages
+      - pendingActions
+      - attachments
+      - artifacts
+      - workspace
+      - throughSequence
+      additionalProperties: false
+    AgentWorkspaceThreadCreateRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - workspace
+      required:
+      - clientRequestUid
+      - scope
+      additionalProperties: false
+    AttachmentContentBlock:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - attachment
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        category:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - image
+          - mesh
+          - cad
+        sourceTrust:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - untrusted_user_input
+        originalSha256:
+          type: string
+          minLength: 64
+          maxLength: 64
+        processorProfileVersion:
+          type: string
+          minLength: 1
+          maxLength: 64
+        processorImageDigest:
+          type: string
+          minLength: 71
+          maxLength: 71
+        statusRevision:
+          type: integer
+          minimum: 1
+        derivatives:
+          type: array
+          minItems: 1
+          maxItems: 2
+          items:
+            type: object
+            properties:
+              derivativeUid:
+                type: string
+                minLength: 1
+                maxLength: 36
+                format: uuid
+              kind:
+                type: string
+                minLength: 1
+                maxLength: 128
+                enum:
+                - normalized_image
+                - geometry_manifest
+                - geometry_preview
+              mediaType:
+                type: string
+                minLength: 1
+                maxLength: 128
+                enum:
+                - image/png
+                - application/json
+              sizeBytes:
+                type: integer
+                minimum: 1
+              sha256:
+                type: string
+                minLength: 64
+                maxLength: 64
+            required:
+            - derivativeUid
+            - kind
+            - mediaType
+            - sizeBytes
+            - sha256
+            additionalProperties: false
+      required:
+      - schemaVersion
+      - kind
+      - attachmentUid
+      - category
+      - sourceTrust
+      - originalSha256
+      - processorProfileVersion
+      - processorImageDigest
+      - statusRevision
+      - derivatives
+      additionalProperties: false
+    AgentMemoryResponse:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentMemoryItem'
+          minItems: 0
+          maxItems: 8
+      required:
+      - schemaVersion
+      - threadUid
+      - items
+      additionalProperties: false
+    AgentAttachmentInitRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        fileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 104857600
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        declaredContentType:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - clientRequestUid
+      - fileName
+      - sizeBytes
+      - sha256
+      additionalProperties: false
+    AgentEventWireEnvelope:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          minimum: 1
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        turnUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        type:
+          type: string
+          minLength: 1
+          maxLength: 128
+        createdAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        payload:
+          type: object
+          additionalProperties: true
+      required:
+      - sequence
+      - threadUid
+      - turnUid
+      - type
+      - createdAt
+      - payload
+      additionalProperties: false
+    AgentMemoryItem:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        memoryUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        fact:
+          $ref: '#/components/schemas/AgentMemoryFact'
+        observedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - schemaVersion
+      - memoryUid
+      - fact
+      - observedAt
+      additionalProperties: false
+    AgentApprovalProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        toolCallUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending
+          - approved
+          - rejected
+          - expired
+        statusRevision:
+          type: integer
+          minimum: 1
+        toolLabel:
+          type: string
+          minLength: 1
+          maxLength: 255
+        riskLevel:
+          type: string
+          minLength: 1
+          maxLength: 64
+        expiresAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+        reasonCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+      required:
+      - schemaVersion
+      - toolCallUid
+      - status
+      - statusRevision
+      - toolLabel
+      - riskLevel
+      - expiresAt
+      - reasonCode
+      additionalProperties: false
+    AgentWorkspaceProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        workspaceUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - preparing
+          - ready
+          - in_use
+          - cooling
+          - deleting
+          - deleted
+        statusRevision:
+          type: integer
+          minimum: 1
+        readyEntryCount:
+          type: integer
+          minimum: 0
+        totalEntryCount:
+          type: integer
+          minimum: 0
+        materializedBytes:
+          type: integer
+          minimum: 0
+        declaredTotalBytes:
+          type: integer
+          minimum: 0
+      required:
+      - schemaVersion
+      - workspaceUid
+      - status
+      - statusRevision
+      - readyEntryCount
+      - totalEntryCount
+      - materializedBytes
+      - declaredTotalBytes
+      additionalProperties: false
+    AgentClientClaimResponse:
+      type: object
+      properties:
+        clientAttemptUid:
+          type: string
+          format: uuid
+        clientActionNonce:
+          type: string
+          pattern: ^[A-Za-z0-9_-]{43}$
+        expiresAt:
+          type: string
+          format: date-time
+        tool:
+          oneOf:
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.navigate
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  page:
+                    type: string
+                    enum:
+                    - home
+                    - projects
+                required:
+                - page
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.set_project_query
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  q:
+                    type: string
+                    maxLength: 2048
+                required:
+                - q
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_project
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  projectUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - projectUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_assets
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  view:
+                    type: string
+                    enum:
+                    - explore
+                    - team
+                required:
+                - view
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_asset_registration
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  jobUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - jobUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_asset
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties:
+                  assetUid:
+                    type: string
+                    pattern: ^[A-Za-z0-9]{1,36}$
+                    maxLength: 36
+                required:
+                - assetUid
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.open_paper_plane
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties: {}
+                required: []
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+          - type: object
+            properties:
+              name:
+                type: string
+                enum:
+                - ui.read_paper_plane
+              schemaVersion:
+                type: integer
+                minimum: 1
+                maximum: 1
+              arguments:
+                type: object
+                properties: {}
+                required: []
+                additionalProperties: false
+              argumentsSha256:
+                type: string
+                pattern: ^[0-9a-f]{64}$
+            required:
+            - name
+            - schemaVersion
+            - arguments
+            - argumentsSha256
+            additionalProperties: false
+      required:
+      - clientAttemptUid
+      - clientActionNonce
+      - expiresAt
+      - tool
+      additionalProperties: false
+    AgentClientToolProjection:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          enum:
+          - 1
+        toolCallUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 128
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - requested
           - waiting_for_approval
-          - completed
+          - executing
+          - succeeded
           - failed
           - cancelled
         statusRevision:
           type: integer
           minimum: 1
-        eventsUrl:
-          type: string
+        activityLabel:
+          type:
+          - string
+          - 'null'
           minLength: 1
           maxLength: 255
-        lastSequence:
-          type: integer
-          minimum: 0
       required:
-      - turnUid
+      - schemaVersion
+      - toolCallUid
+      - name
       - status
       - statusRevision
-      - eventsUrl
-      - lastSequence
+      - activityLabel
+      additionalProperties: false
+    AgentThreadNavigationResponse:
+      type: object
+      properties:
+        workspace:
+          $ref: '#/components/schemas/AgentThreadListResponse'
+        projects:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentThreadNavigationProjectNode'
+              minItems: 0
+              maxItems: 50
+            nextCursor:
+              type:
+              - string
+              - 'null'
+              minLength: 1
+              maxLength: 8192
+          required:
+          - items
+          - nextCursor
+          additionalProperties: false
+        trashSummary:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+          required:
+          - count
+          additionalProperties: false
+        generatedAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
+      required:
+      - workspace
+      - projects
+      - trashSummary
+      - generatedAt
+      additionalProperties: false
+    AgentClientCancelRequest:
+      type: object
+      properties:
+        clientInstanceUid:
+          type: string
+          format: uuid
+      required:
+      - clientInstanceUid
+      additionalProperties: false
+    AgentProjectThreadCreateRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - project
+        projectUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+        parentThreadUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+          format: uuid
+      required:
+      - clientRequestUid
+      - scope
+      - projectUid
       additionalProperties: false
     AgentTurnProjection:
       type: object
@@ -2336,6 +3427,108 @@ components:
       - createdAt
       - completedAt
       - errorCode
+      additionalProperties: false
+    AgentAttachmentInitResponse:
+      type: object
+      properties:
+        attachmentUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        status:
+          type: string
+          minLength: 1
+          maxLength: 128
+          enum:
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        upload:
+          type:
+          - object
+          - 'null'
+          properties:
+            method:
+              type: string
+              minLength: 1
+              maxLength: 128
+              enum:
+              - PUT
+            url:
+              type: string
+              minLength: 1
+              maxLength: 8192
+            requiredHeaders:
+              type: object
+              additionalProperties:
+                type: string
+            expiresAt:
+              type: string
+              minLength: 1
+              maxLength: 64
+              format: date-time
+          required:
+          - method
+          - url
+          - requiredHeaders
+          - expiresAt
+          additionalProperties: false
+      required:
+      - attachmentUid
+      - status
+      - upload
+      additionalProperties: false
+    AgentTurnCancelRequest:
+      type: object
+      properties:
+        clientRequestUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        expectedStatusRevision:
+          type: integer
+          minimum: 1
+      required:
+      - clientRequestUid
+      - expectedStatusRevision
+      additionalProperties: false
+    AgentTurnSurfaceRequest:
+      type: object
+      properties:
+        route:
+          type: string
+          minLength: 1
+          maxLength: 2048
+        projectUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        selectedGeometryVersionUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        selectedJobUid:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 36
+        workbenchRevision:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+      required: []
       additionalProperties: false
     AgentClientResultRequest:
       oneOf:
@@ -2654,45 +3847,40 @@ components:
         - result
         - errorCode
         additionalProperties: false
-    AgentClientCancelResponse:
+    AgentThreadCreateRequest:
+      oneOf:
+      - $ref: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
+      - $ref: '#/components/schemas/AgentProjectThreadCreateRequest'
+      discriminator:
+        propertyName: scope
+        mapping:
+          workspace: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
+          project: '#/components/schemas/AgentProjectThreadCreateRequest'
+    AgentTurnCreateResponse:
       type: object
       properties:
-        cancelled:
-          type: boolean
-      required:
-      - cancelled
-      additionalProperties: false
-    AgentMessageHistoryResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentMessageProjection'
-          minItems: 0
-        nextBefore:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 4096
-      required:
-      - items
-      - nextBefore
-      additionalProperties: false
-    AgentAttachmentCompleteRequest:
-      type: object
-      properties:
-        sizeBytes:
-          type: integer
-          minimum: 1
-          maximum: 104857600
-        sha256:
+        turnUid:
           type: string
-          pattern: ^[0-9a-f]{64}$
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        threadUid:
+          type: string
+          minLength: 1
+          maxLength: 36
+          format: uuid
+        eventsUrl:
+          type: string
+          minLength: 1
+          maxLength: 255
+        lastSequence:
+          type: integer
+          minimum: 0
       required:
-      - sizeBytes
-      - sha256
+      - turnUid
+      - threadUid
+      - eventsUrl
+      - lastSequence
       additionalProperties: false
     AgentArtifactProjection:
       type: object
@@ -2740,120 +3928,7 @@ components:
       - size
       - displayName
       additionalProperties: false
-    AgentError:
-      type: object
-      properties:
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
-        message:
-          type: string
-          minLength: 1
-          maxLength: 255
-        retryable:
-          type: boolean
-        requestId:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-        retryAfterMs:
-          type:
-          - integer
-          - 'null'
-          minimum: 0
-      required:
-      - code
-      - message
-      - retryable
-      - requestId
-      - retryAfterMs
-      additionalProperties: false
-    AgentEventWireEnvelope:
-      type: object
-      properties:
-        sequence:
-          type: integer
-          minimum: 1
-        threadUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        turnUid:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        type:
-          type: string
-          minLength: 1
-          maxLength: 128
-        createdAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-        payload:
-          type: object
-          additionalProperties: true
-      required:
-      - sequence
-      - threadUid
-      - turnUid
-      - type
-      - createdAt
-      - payload
-      additionalProperties: false
-    AgentThreadNavigationResponse:
-      type: object
-      properties:
-        workspace:
-          $ref: '#/components/schemas/AgentThreadListResponse'
-        projects:
-          type: object
-          properties:
-            items:
-              type: array
-              items:
-                $ref: '#/components/schemas/AgentThreadNavigationProjectNode'
-              minItems: 0
-              maxItems: 50
-            nextCursor:
-              type:
-              - string
-              - 'null'
-              minLength: 1
-              maxLength: 8192
-          required:
-          - items
-          - nextCursor
-          additionalProperties: false
-        trashSummary:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
-          required:
-          - count
-          additionalProperties: false
-        generatedAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-      required:
-      - workspace
-      - projects
-      - trashSummary
-      - generatedAt
-      additionalProperties: false
-    AttachmentContentBlock:
+    RedactedContentBlock:
       type: object
       properties:
         schemaVersion:
@@ -2865,485 +3940,21 @@ components:
           minLength: 1
           maxLength: 128
           enum:
-          - attachment
-        attachmentUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        category:
+          - content_redacted
+        reasonCode:
           type: string
           minLength: 1
           maxLength: 128
           enum:
-          - image
-          - mesh
-          - cad
-        sourceTrust:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - untrusted_user_input
-        originalSha256:
-          type: string
-          minLength: 64
-          maxLength: 64
-        processorProfileVersion:
-          type: string
-          minLength: 1
-          maxLength: 64
-        processorImageDigest:
-          type: string
-          minLength: 71
-          maxLength: 71
-        statusRevision:
-          type: integer
-          minimum: 1
-        derivatives:
-          type: array
-          minItems: 1
-          maxItems: 2
-          items:
-            type: object
-            properties:
-              derivativeUid:
-                type: string
-                minLength: 1
-                maxLength: 36
-                format: uuid
-              kind:
-                type: string
-                minLength: 1
-                maxLength: 128
-                enum:
-                - normalized_image
-                - geometry_manifest
-                - geometry_preview
-              mediaType:
-                type: string
-                minLength: 1
-                maxLength: 128
-                enum:
-                - image/png
-                - application/json
-              sizeBytes:
-                type: integer
-                minimum: 1
-              sha256:
-                type: string
-                minLength: 64
-                maxLength: 64
-            required:
-            - derivativeUid
-            - kind
-            - mediaType
-            - sizeBytes
-            - sha256
-            additionalProperties: false
+          - PROJECT_PURGED
+          - THREAD_PURGED
+          - USER_DELETED
       required:
       - schemaVersion
       - kind
-      - attachmentUid
-      - category
-      - sourceTrust
-      - originalSha256
-      - processorProfileVersion
-      - processorImageDigest
-      - statusRevision
-      - derivatives
-      additionalProperties: false
-    AgentAttachmentInitResponse:
-      type: object
-      properties:
-        attachmentUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        status:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - pending_upload
-          - uploaded
-          - scanning
-          - processing
-          - ready
-          - rejected
-          - expired
-        upload:
-          type:
-          - object
-          - 'null'
-          properties:
-            method:
-              type: string
-              minLength: 1
-              maxLength: 128
-              enum:
-              - PUT
-            url:
-              type: string
-              minLength: 1
-              maxLength: 8192
-            requiredHeaders:
-              type: object
-              additionalProperties:
-                type: string
-            expiresAt:
-              type: string
-              minLength: 1
-              maxLength: 64
-              format: date-time
-          required:
-          - method
-          - url
-          - requiredHeaders
-          - expiresAt
-          additionalProperties: false
-      required:
-      - attachmentUid
-      - status
-      - upload
-      additionalProperties: false
-    AgentWorkspaceThreadCreateRequest:
-      type: object
-      properties:
-        clientRequestUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        scope:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - workspace
-      required:
-      - clientRequestUid
-      - scope
-      additionalProperties: false
-    AgentAttachmentInitRequest:
-      type: object
-      properties:
-        clientRequestUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        fileName:
-          type: string
-          minLength: 1
-          maxLength: 255
-        sizeBytes:
-          type: integer
-          minimum: 1
-          maximum: 104857600
-        sha256:
-          type: string
-          pattern: ^[0-9a-f]{64}$
-        declaredContentType:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-      required:
-      - clientRequestUid
-      - fileName
-      - sizeBytes
-      - sha256
-      additionalProperties: false
-    AgentMemoryItem:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        memoryUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        fact:
-          $ref: '#/components/schemas/AgentMemoryFact'
-        observedAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-      required:
-      - schemaVersion
-      - memoryUid
-      - fact
-      - observedAt
-      additionalProperties: false
-    AgentTurnStatusConflict:
-      type: object
-      properties:
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - AGENT_TURN_STATUS_CONFLICT
-        message:
-          type: string
-          minLength: 1
-          maxLength: 255
-        retryable:
-          type: boolean
-        requestId:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-        retryAfterMs:
-          type:
-          - integer
-          - 'null'
-          minimum: 0
-        turn:
-          $ref: '#/components/schemas/AgentTurnCancelResponse'
-      required:
-      - code
-      - message
-      - retryable
-      - requestId
-      - retryAfterMs
-      - turn
-      additionalProperties: false
-    AgentApprovalProjection:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        toolCallUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        status:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - pending
-          - approved
-          - rejected
-          - expired
-        statusRevision:
-          type: integer
-          minimum: 1
-        toolLabel:
-          type: string
-          minLength: 1
-          maxLength: 255
-        riskLevel:
-          type: string
-          minLength: 1
-          maxLength: 64
-        expiresAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-        reasonCode:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-      required:
-      - schemaVersion
-      - toolCallUid
-      - status
-      - statusRevision
-      - toolLabel
-      - riskLevel
-      - expiresAt
       - reasonCode
       additionalProperties: false
-    AgentTurnCreateRequest:
-      type: object
-      properties:
-        clientRequestUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        message:
-          $ref: '#/components/schemas/AgentTurnMessageRequest'
-        clientContext:
-          type: object
-          properties:
-            timeZoneHint:
-              type: string
-              minLength: 1
-              maxLength: 64
-          required: []
-          additionalProperties: false
-        surface:
-          $ref: '#/components/schemas/AgentTurnSurfaceRequest'
-      required:
-      - clientRequestUid
-      - message
-      additionalProperties: false
-    AgentClientCancelRequest:
-      type: object
-      properties:
-        clientInstanceUid:
-          type: string
-          format: uuid
-      required:
-      - clientInstanceUid
-      additionalProperties: false
-    AgentThreadStatusConflict:
-      type: object
-      properties:
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - AGENT_THREAD_STATUS_CONFLICT
-        message:
-          type: string
-          minLength: 1
-          maxLength: 255
-        retryable:
-          type: boolean
-        requestId:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-        retryAfterMs:
-          type:
-          - integer
-          - 'null'
-          minimum: 0
-        thread:
-          $ref: '#/components/schemas/AgentThreadProjection'
-      required:
-      - code
-      - message
-      - retryable
-      - requestId
-      - retryAfterMs
-      - thread
-      additionalProperties: false
-    AgentAttachmentResponse:
-      type: object
-      properties:
-        attachmentUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        status:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - pending_upload
-          - uploaded
-          - scanning
-          - processing
-          - ready
-          - rejected
-          - expired
-        statusRevision:
-          type: integer
-          minimum: 1
-        category:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-          enum:
-          - image
-          - pdf
-          - mesh
-          - cad
-        originalFileName:
-          type: string
-          minLength: 1
-          maxLength: 255
-        sizeBytes:
-          type: integer
-          minimum: 1
-        detectedContentType:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-        sha256:
-          type: string
-          pattern: ^[0-9a-f]{64}$
-        rejectionCode:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-          enum:
-          - unsupported_media_type
-          - checksum_mismatch
-          - malware_detected
-          - encrypted_pdf
-          - active_pdf_content
-          - malformed_file
-          - resource_limit_exceeded
-          - processor_timeout
-          - processing_failed
-        expiresAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-        createdAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-        updatedAt:
-          type: string
-          minLength: 1
-          maxLength: 64
-          format: date-time
-        derivatives:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentAttachmentDerivative'
-          minItems: 0
-          maxItems: 102
-      required:
-      - attachmentUid
-      - status
-      - statusRevision
-      - category
-      - originalFileName
-      - sizeBytes
-      - detectedContentType
-      - sha256
-      - rejectionCode
-      - expiresAt
-      - createdAt
-      - updatedAt
-      - derivatives
-      additionalProperties: false
-    AgentTurnCreateResponse:
+    AgentTurnCancelResponse:
       type: object
       properties:
         turnUid:
@@ -3351,11 +3962,21 @@ components:
           minLength: 1
           maxLength: 36
           format: uuid
-        threadUid:
+        status:
           type: string
           minLength: 1
-          maxLength: 36
-          format: uuid
+          maxLength: 128
+          enum:
+          - queued
+          - running
+          - waiting_for_client
+          - waiting_for_approval
+          - completed
+          - failed
+          - cancelled
+        statusRevision:
+          type: integer
+          minimum: 1
         eventsUrl:
           type: string
           minLength: 1
@@ -3365,334 +3986,40 @@ components:
           minimum: 0
       required:
       - turnUid
-      - threadUid
+      - status
+      - statusRevision
       - eventsUrl
       - lastSequence
       additionalProperties: false
-    AgentClientToolProjection:
+    TextContentBlock:
       type: object
       properties:
         schemaVersion:
           type: integer
           enum:
           - 1
-        toolCallUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        name:
-          type: string
-          minLength: 1
-          maxLength: 128
-        status:
+        kind:
           type: string
           minLength: 1
           maxLength: 128
           enum:
-          - requested
-          - waiting_for_approval
-          - executing
-          - succeeded
-          - failed
-          - cancelled
-        statusRevision:
-          type: integer
-          minimum: 1
-        activityLabel:
-          type:
-          - string
-          - 'null'
+          - text
+        text:
+          type: string
           minLength: 1
-          maxLength: 255
+          maxLength: 1048576
       required:
       - schemaVersion
-      - toolCallUid
-      - name
-      - status
-      - statusRevision
-      - activityLabel
+      - kind
+      - text
       additionalProperties: false
-    AgentThreadScopeConflict:
-      type: object
-      properties:
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - AGENT_THREAD_SCOPE_CONFLICT
-        message:
-          type: string
-          minLength: 1
-          maxLength: 255
-        retryable:
-          type: boolean
-        requestId:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-        retryAfterMs:
-          type:
-          - integer
-          - 'null'
-          minimum: 0
-        thread:
-          $ref: '#/components/schemas/AgentThreadProjection'
-      required:
-      - code
-      - message
-      - retryable
-      - requestId
-      - retryAfterMs
-      - thread
-      additionalProperties: false
-    AgentMessageContentBlock:
-      oneOf:
-      - $ref: '#/components/schemas/TextContentBlock'
-      - $ref: '#/components/schemas/RedactedContentBlock'
-      - $ref: '#/components/schemas/AttachmentContentBlock'
-      discriminator:
-        propertyName: kind
-        mapping:
-          text: '#/components/schemas/TextContentBlock'
-          content_redacted: '#/components/schemas/RedactedContentBlock'
-          attachment: '#/components/schemas/AttachmentContentBlock'
-    AgentThreadListResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentThreadProjection'
-          minItems: 0
-        nextCursor:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 8192
-      required:
-      - items
-      - nextCursor
-      additionalProperties: false
-    AgentConversationProjection:
+    AgentThreadResponse:
       type: object
       properties:
         thread:
           $ref: '#/components/schemas/AgentThreadProjection'
-        activeTurn:
-          allOf:
-          - $ref: '#/components/schemas/AgentTurnProjection'
-        messages:
-          type: object
-          properties:
-            items:
-              type: array
-              items:
-                $ref: '#/components/schemas/AgentMessageProjection'
-              minItems: 0
-            historyCursor:
-              type:
-              - string
-              - 'null'
-              minLength: 1
-              maxLength: 8192
-          required:
-          - items
-          - historyCursor
-          additionalProperties: false
-        pendingActions:
-          type: object
-          properties:
-            approvals:
-              type: array
-              items:
-                $ref: '#/components/schemas/AgentApprovalProjection'
-              minItems: 0
-            clientTools:
-              type: array
-              items:
-                $ref: '#/components/schemas/AgentClientToolProjection'
-              minItems: 0
-          required:
-          - approvals
-          - clientTools
-          additionalProperties: false
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentAttachmentProjection'
-          minItems: 0
-        artifacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentArtifactProjection'
-          minItems: 0
-        workspace:
-          allOf:
-          - $ref: '#/components/schemas/AgentWorkspaceProjection'
-        throughSequence:
-          type: integer
-          minimum: 0
       required:
       - thread
-      - activeTurn
-      - messages
-      - pendingActions
-      - attachments
-      - artifacts
-      - workspace
-      - throughSequence
-      additionalProperties: false
-    AgentMemoryResponse:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        threadUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentMemoryItem'
-          minItems: 0
-          maxItems: 8
-      required:
-      - schemaVersion
-      - threadUid
-      - items
-      additionalProperties: false
-    AgentClientClaimRequest:
-      type: object
-      properties:
-        clientInstanceUid:
-          type: string
-          format: uuid
-        expectedToolCallStatusRevision:
-          type: integer
-          minimum: 1
-      required:
-      - clientInstanceUid
-      - expectedToolCallStatusRevision
-      additionalProperties: false
-    AgentThreadNavigationProjectNode:
-      type: object
-      properties:
-        projectUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-        title:
-          type:
-          - string
-          - 'null'
-          minLength: 0
-          maxLength: 255
-        status:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - open
-          - closed
-        activityState:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - idle
-          - queued
-          - running
-          - waiting_for_client
-          - waiting_for_approval
-        needsApproval:
-          type: boolean
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentThreadProjection'
-          minItems: 0
-          maxItems: 20
-        nextCursor:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 8192
-      required:
-      - projectUid
-      - title
-      - status
-      - activityState
-      - needsApproval
-      - items
-      - nextCursor
-      additionalProperties: false
-    AgentThreadCreateRequest:
-      oneOf:
-      - $ref: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
-      - $ref: '#/components/schemas/AgentProjectThreadCreateRequest'
-      discriminator:
-        propertyName: scope
-        mapping:
-          workspace: '#/components/schemas/AgentWorkspaceThreadCreateRequest'
-          project: '#/components/schemas/AgentProjectThreadCreateRequest'
-    AgentAttachmentProjection:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        attachmentUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        status:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - pending_upload
-          - uploaded
-          - scanning
-          - processing
-          - ready
-          - rejected
-          - expired
-        statusRevision:
-          type: integer
-          minimum: 1
-        mediaFamily:
-          type: string
-          minLength: 1
-          maxLength: 64
-        declaredSize:
-          type: integer
-          minimum: 0
-        errorCode:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 128
-      required:
-      - schemaVersion
-      - attachmentUid
-      - status
-      - statusRevision
-      - mediaFamily
-      - declaredSize
-      - errorCode
       additionalProperties: false
     AgentThreadProjection:
       type: object
@@ -3818,366 +4145,41 @@ components:
       - createdAt
       - updatedAt
       additionalProperties: false
-    AgentClientResultResponse:
+    AgentTurnStatusConflict:
       type: object
       properties:
-        toolCallUid:
-          type: string
-          format: uuid
-        clientAttemptUid:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-          - succeeded
-          - failed
-      required:
-      - toolCallUid
-      - clientAttemptUid
-      - status
-      additionalProperties: false
-    AgentAttachmentDerivative:
-      type: object
-      properties:
-        derivativeUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        kind:
+        code:
           type: string
           minLength: 1
           maxLength: 128
           enum:
-          - normalized_image
-          - pdf_text
-          - pdf_page_preview
-          - geometry_manifest
-          - geometry_preview
-        mediaType:
+          - AGENT_TURN_STATUS_CONFLICT
+        message:
           type: string
           minLength: 1
-          maxLength: 128
-        sizeBytes:
-          type: integer
-          minimum: 1
-        metadata:
-          type: object
-          additionalProperties: true
-      required:
-      - derivativeUid
-      - kind
-      - mediaType
-      - sizeBytes
-      - metadata
-      additionalProperties: false
-    RedactedContentBlock:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        kind:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - content_redacted
-        reasonCode:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - PROJECT_PURGED
-          - THREAD_PURGED
-          - USER_DELETED
-      required:
-      - schemaVersion
-      - kind
-      - reasonCode
-      additionalProperties: false
-    AgentClientClaimResponse:
-      type: object
-      properties:
-        clientAttemptUid:
-          type: string
-          format: uuid
-        clientActionNonce:
-          type: string
-          pattern: ^[A-Za-z0-9_-]{43}$
-        expiresAt:
-          type: string
-          format: date-time
-        tool:
-          oneOf:
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.navigate
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  page:
-                    type: string
-                    enum:
-                    - home
-                    - projects
-                required:
-                - page
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.set_project_query
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  q:
-                    type: string
-                    maxLength: 2048
-                required:
-                - q
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.open_project
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  projectUid:
-                    type: string
-                    pattern: ^[A-Za-z0-9]{1,36}$
-                    maxLength: 36
-                required:
-                - projectUid
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.open_assets
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  view:
-                    type: string
-                    enum:
-                    - explore
-                    - team
-                required:
-                - view
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.open_asset_registration
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  jobUid:
-                    type: string
-                    pattern: ^[A-Za-z0-9]{1,36}$
-                    maxLength: 36
-                required:
-                - jobUid
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.open_asset
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties:
-                  assetUid:
-                    type: string
-                    pattern: ^[A-Za-z0-9]{1,36}$
-                    maxLength: 36
-                required:
-                - assetUid
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.open_paper_plane
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties: {}
-                required: []
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-          - type: object
-            properties:
-              name:
-                type: string
-                enum:
-                - ui.read_paper_plane
-              schemaVersion:
-                type: integer
-                minimum: 1
-                maximum: 1
-              arguments:
-                type: object
-                properties: {}
-                required: []
-                additionalProperties: false
-              argumentsSha256:
-                type: string
-                pattern: ^[0-9a-f]{64}$
-            required:
-            - name
-            - schemaVersion
-            - arguments
-            - argumentsSha256
-            additionalProperties: false
-      required:
-      - clientAttemptUid
-      - clientActionNonce
-      - expiresAt
-      - tool
-      additionalProperties: false
-    AgentProjectThreadCreateRequest:
-      type: object
-      properties:
-        clientRequestUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        scope:
-          type: string
-          minLength: 1
-          maxLength: 128
-          enum:
-          - project
-        projectUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-        parentThreadUid:
+          maxLength: 255
+        retryable:
+          type: boolean
+        requestId:
           type:
           - string
           - 'null'
           minLength: 1
-          maxLength: 36
-          format: uuid
+          maxLength: 128
+        retryAfterMs:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        turn:
+          $ref: '#/components/schemas/AgentTurnCancelResponse'
       required:
-      - clientRequestUid
-      - scope
-      - projectUid
-      additionalProperties: false
-    AgentThreadResponse:
-      type: object
-      properties:
-        thread:
-          $ref: '#/components/schemas/AgentThreadProjection'
-      required:
-      - thread
+      - code
+      - message
+      - retryable
+      - requestId
+      - retryAfterMs
+      - turn
       additionalProperties: false
     AgentThreadStatusRequest:
       type: object
@@ -4194,109 +4196,107 @@ components:
       - clientRequestUid
       - expectedStatusRevision
       additionalProperties: false
-    AgentAttachmentCapabilities:
+    AgentAttachmentResponse:
       type: object
       properties:
-        enabled:
-          type: boolean
-        maxFiles:
-          type: integer
-          enum:
-          - 10
-        maxBytes:
-          type: integer
-          enum:
-          - 104857600
-        maxImageBytes:
-          type: integer
-          enum:
-          - 20971520
-        extensions:
-          type: array
-          minItems: 7
-          maxItems: 7
-          uniqueItems: true
-          items:
-            type: string
-            minLength: 1
-            maxLength: 128
-            enum:
-            - png
-            - jpg
-            - jpeg
-            - webp
-            - stl
-            - step
-            - stp
-      required:
-      - enabled
-      - maxFiles
-      - maxBytes
-      - maxImageBytes
-      - extensions
-      additionalProperties: false
-    AgentMessageProjection:
-      type: object
-      properties:
-        schemaVersion:
-          type: integer
-          enum:
-          - 1
-        messageUid:
+        attachmentUid:
           type: string
           minLength: 1
           maxLength: 36
           format: uuid
-        turnUid:
-          type: string
-          minLength: 1
-          maxLength: 36
-          format: uuid
-        role:
+        status:
           type: string
           minLength: 1
           maxLength: 128
           enum:
-          - user
-          - assistant
-        contentBlocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentMessageContentBlock'
-          minItems: 1
-          maxItems: 256
-        completedSequence:
+          - pending_upload
+          - uploaded
+          - scanning
+          - processing
+          - ready
+          - rejected
+          - expired
+        statusRevision:
           type: integer
           minimum: 1
+        category:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - image
+          - pdf
+          - mesh
+          - cad
+        originalFileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 1
+        detectedContentType:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+        sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        rejectionCode:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          enum:
+          - unsupported_media_type
+          - checksum_mismatch
+          - malware_detected
+          - encrypted_pdf
+          - active_pdf_content
+          - malformed_file
+          - resource_limit_exceeded
+          - processor_timeout
+          - processing_failed
+        expiresAt:
+          type: string
+          minLength: 1
+          maxLength: 64
+          format: date-time
         createdAt:
           type: string
           minLength: 1
           maxLength: 64
           format: date-time
-      required:
-      - schemaVersion
-      - messageUid
-      - turnUid
-      - role
-      - contentBlocks
-      - completedSequence
-      - createdAt
-      additionalProperties: false
-    AgentThreadBindRequest:
-      type: object
-      properties:
-        projectUid:
+        updatedAt:
           type: string
           minLength: 1
-          maxLength: 36
-        expectedScopeRevision:
-          type: integer
-          enum:
-          - 0
-          - 1
+          maxLength: 64
+          format: date-time
+        derivatives:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentAttachmentDerivative'
+          minItems: 0
+          maxItems: 102
       required:
-      - projectUid
-      - expectedScopeRevision
+      - attachmentUid
+      - status
+      - statusRevision
+      - category
+      - originalFileName
+      - sizeBytes
+      - detectedContentType
+      - sha256
+      - rejectionCode
+      - expiresAt
+      - createdAt
+      - updatedAt
+      - derivatives
       additionalProperties: false
   securitySchemes:
     agentBearerAuth:

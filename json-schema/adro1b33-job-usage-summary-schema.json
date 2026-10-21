@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-job-usage-summary-schema.json",
+  "title": "JobUsageSummary",
+  "description": "Job 실시간 소모 크레딧 응답 스키마.\n\nconsumedCredits 는 정수로 확정 차감된 누적분. 1 미만 잔여는 아직\n차감 전이라 포함되지 않는다.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-jobs-api-openapi.yml#/components/schemas/JobUsageSummary",
+  "type": "object",
+  "properties": {
+    "consumedCredits": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "consumedCredits"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-email-verifier-confirm-schema.json",
+  "title": "EmailVerifierConfirm",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-verifier-api-openapi.yml#/components/schemas/EmailVerifierConfirm",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "writeOnly": true
+    },
+    "code": {
+      "type": "string",
+      "writeOnly": true
+    },
+    "token": {
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "code",
+    "email",
+    "token"
+  ]
+}

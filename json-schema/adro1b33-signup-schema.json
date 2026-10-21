@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-signup-schema.json",
+  "title": "Signup",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/Signup",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "writeOnly": true,
+      "minLength": 8
+    },
+    "displayName": {
+      "type": "string",
+      "default": "",
+      "maxLength": 150
+    },
+    "inviteToken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "emailToken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "writeOnly": true
+    }
+  },
+  "required": [
+    "email",
+    "password"
+  ]
+}

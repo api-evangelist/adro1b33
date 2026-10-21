@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-patch-schema.json",
+  "title": "Patch",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-patches-api-openapi.yml#/components/schemas/Patch",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "uid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "patchType": {
+      "enum": [
+        "source",
+        "ref"
+      ],
+      "type": "string",
+      "description": "* `source` - Source\n* `ref` - Ref",
+      "x-spec-enum-id": "946c46f06a235611",
+      "readOnly": true
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "category": {
+      "enum": [
+        "optimization",
+        "constant",
+        "wing",
+        "wheel_front",
+        "wheel_rear",
+        "optimization_target",
+        "constant_target",
+        "front_wheel",
+        "rear_wheel"
+      ],
+      "type": "string",
+      "description": "* `optimization` - Optimization\n* `constant` - Constant\n* `wing` - Wing\n* `wheel_front` - Wheel Front\n* `wheel_rear` - Wheel Rear\n* `optimization_target` - Optimization Target\n* `constant_target` - Constant Target\n* `front_wheel` - Front Wheel\n* `rear_wheel` - Rear Wheel",
+      "x-spec-enum-id": "5dd1d70043ac53a5"
+    },
+    "artifactId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Associated artifact for source patch",
+      "readOnly": true
+    },
+    "triangleCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648,
+      "description": "source patch original STL triangle count"
+    },
+    "surfaceArea": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "source/ref patch surface area"
+    },
+    "selectedProxyTriangleCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648,
+      "description": "ref patch only"
+    },
+    "boundingBox": {
+      "description": "source/ref 공용 bbox payload {min:[x,y,z], max:[x,y,z], ffd_degree?:[i,j,k]}"
+    },
+    "ffdDegree": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer"
+      },
+      "writeOnly": true
+    },
+    "proxyMaskSizeBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "writeOnly": true
+    },
+    "normalDisplacementInward": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) normal displacement inward"
+    },
+    "normalDisplacementOutward": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) normal displacement outward"
+    },
+    "planeLimitXMin": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit x min"
+    },
+    "planeLimitXMax": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit x max"
+    },
+    "planeLimitYMin": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit y min"
+    },
+    "planeLimitYMax": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit y max"
+    },
+    "planeLimitZMin": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit z min"
+    },
+    "planeLimitZMax": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "title": "(constraint) plane limit z max"
+    },
+    "inputPreviewPointsKey": {
+      "type": "string",
+      "description": "source patch point preview only",
+      "maxLength": 1024
+    },
+    "inputPreviewPoints": {
+      "description": "source patch point preview metadata"
+    },
+    "inputPreviewVoxelsKey": {
+      "type": "string",
+      "description": "source patch voxel preview only",
+      "maxLength": 1024
+    },
+    "inputPreviewVoxels": {
+      "description": "source patch voxel preview metadata"
+    },
+    "proxyCacheKey": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 255
+    },
+    "proxyMeshKey": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 1024
+    },
+    "proxyLayoutKey": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 1024
+    },
+    "atlasKey": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 1024
+    },
+    "proxyWorkerRevision": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 64
+    },
+    "proxyArtifactSignature": {
+      "type": "string",
+      "description": "source patch only",
+      "maxLength": 128
+    },
+    "proxyTriangleCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648,
+      "description": "source patch only"
+    },
+    "hasRefs": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "isMergeOutput": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "isMergePending": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "mergedSourcePatches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MergedSourcePatch"
+      },
+      "readOnly": true
+    },
+    "isInitialSourceUpload": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "source patch only - uploaded while project was draft"
+    },
+    "sourcePatchId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "mergedIntoPatchId": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "proxyMeshMaskKey": {
+      "type": "string",
+      "description": "ref patch only",
+      "maxLength": 1024
+    },
+    "sourceProxyArtifactSignature": {
+      "type": "string",
+      "description": "ref patch only — 부모 source patch proxy signature 스냅샷",
+      "maxLength": 128
+    },
+    "proxyMaskSignature": {
+      "type": "string",
+      "description": "ref patch only",
+      "maxLength": 128
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "artifactId",
+    "createdAt",
+    "hasRefs",
+    "id",
+    "isInitialSourceUpload",
+    "isMergeOutput",
+    "isMergePending",
+    "mergedIntoPatchId",
+    "mergedSourcePatches",
+    "patchType",
+    "sourcePatchId",
+    "uid",
+    "updatedAt"
+  ],
+  "$defs": {
+    "MergedSourcePatch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "label": {
+          "type": "string",
+          "readOnly": true
+        },
+        "boundingBox": {
+          "readOnly": true
+        },
+        "inputPreviewPoints": {
+          "readOnly": true
+        }
+      },
+      "required": [
+        "boundingBox",
+        "id",
+        "inputPreviewPoints",
+        "label"
+      ]
+    }
+  }
+}

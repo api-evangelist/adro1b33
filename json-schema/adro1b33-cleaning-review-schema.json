@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-cleaning-review-schema.json",
+  "title": "CleaningReview",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-geometry-cleaning-api-openapi.yml#/components/schemas/CleaningReview",
+  "type": "object",
+  "properties": {
+    "revision": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "attempt",
+    "revision"
+  ]
+}

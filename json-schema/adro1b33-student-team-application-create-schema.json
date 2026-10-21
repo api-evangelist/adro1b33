@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-student-team-application-create-schema.json",
+  "title": "StudentTeamApplicationCreate",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-student-team-api-openapi.yml#/components/schemas/StudentTeamApplicationCreate",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamType": {
+      "enum": [
+        "Student team",
+        "Other team",
+        "Individual student",
+        "FSAE team"
+      ],
+      "type": "string",
+      "description": "* `Student team` - Student team\n* `Other team` - Other team\n* `Individual student` - Individual student\n* `FSAE team` - FSAE team",
+      "x-spec-enum-id": "0fac175769b043f3"
+    },
+    "contactName": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "contactEmail": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254
+    },
+    "contactPhone": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "contactRole": {
+      "enum": [
+        "Student",
+        "Professor / faculty advisor",
+        "Other"
+      ],
+      "type": "string",
+      "description": "* `Student` - Student\n* `Professor / faculty advisor` - Professor / faculty advisor\n* `Other` - Other",
+      "x-spec-enum-id": "1b52c13d0d9c4c1c"
+    },
+    "universityName": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "teamName": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "privacyConsent": {
+      "type": "boolean"
+    },
+    "marketingConsent": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "contactEmail",
+    "contactName",
+    "contactRole",
+    "country",
+    "id",
+    "privacyConsent",
+    "teamType",
+    "universityName"
+  ]
+}

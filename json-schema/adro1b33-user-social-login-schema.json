@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-user-social-login-schema.json",
+  "title": "UserSocialLogin",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-accounts-api-openapi.yml#/components/schemas/UserSocialLogin",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "writeOnly": true
+    },
+    "socialAccessToken": {
+      "type": "string",
+      "writeOnly": true
+    },
+    "state": {
+      "enum": [
+        "google"
+      ],
+      "type": "string",
+      "description": "* `google` - google",
+      "x-spec-enum-id": "6ad05742f68a2748",
+      "writeOnly": true
+    },
+    "inviteToken": {
+      "type": "string",
+      "format": "uuid",
+      "writeOnly": true
+    },
+    "accessToken": {
+      "type": "string",
+      "readOnly": true
+    },
+    "refreshToken": {
+      "type": "string",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "registerToken": {
+      "type": "string",
+      "readOnly": true
+    },
+    "isRegister": {
+      "type": "boolean",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "accessToken",
+    "isRegister",
+    "refreshToken",
+    "registerToken",
+    "state",
+    "teamId"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-sample-stl-schema.json",
+  "title": "SampleStl",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-sample-stls-api-openapi.yml#/components/schemas/SampleStl",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "label": {
+      "type": "string",
+      "readOnly": true
+    },
+    "unit": {
+      "type": "string",
+      "readOnly": true
+    },
+    "s3Key": {
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "id",
+    "label",
+    "s3Key",
+    "unit"
+  ]
+}

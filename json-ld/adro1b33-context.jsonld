@@ -1,0 +1,1528 @@
+{
+  "@context": {
+    "@vocab": "https://adro.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "adro1b33": "https://adro.com/schema#",
+    "LoginResponse": "adro1b33:LoginResponse",
+    "detail": {
+      "@id": "adro1b33:detail",
+      "@type": "xsd:string"
+    },
+    "teamId": {
+      "@id": "adro1b33:teamId",
+      "@type": "xsd:integer"
+    },
+    "teamName": {
+      "@id": "adro1b33:teamName",
+      "@type": "xsd:string"
+    },
+    "userType": {
+      "@id": "adro1b33:userType",
+      "@type": "xsd:string"
+    },
+    "mustChangePassword": {
+      "@id": "adro1b33:mustChangePassword",
+      "@type": "xsd:boolean"
+    },
+    "SocialLink": "adro1b33:SocialLink",
+    "linkToken": {
+      "@id": "adro1b33:linkToken",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "adro1b33:password",
+      "@type": "xsd:string"
+    },
+    "UserSocialLogin": "adro1b33:UserSocialLogin",
+    "code": {
+      "@id": "adro1b33:code",
+      "@type": "xsd:string"
+    },
+    "socialAccessToken": {
+      "@id": "adro1b33:socialAccessToken",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "adro1b33:state",
+      "@type": "xsd:string"
+    },
+    "inviteToken": {
+      "@id": "adro1b33:inviteToken",
+      "@type": "xsd:string"
+    },
+    "accessToken": {
+      "@id": "adro1b33:accessToken",
+      "@type": "xsd:string"
+    },
+    "refreshToken": {
+      "@id": "adro1b33:refreshToken",
+      "@type": "xsd:string"
+    },
+    "registerToken": {
+      "@id": "adro1b33:registerToken",
+      "@type": "xsd:string"
+    },
+    "isRegister": {
+      "@id": "adro1b33:isRegister",
+      "@type": "xsd:boolean"
+    },
+    "StorageUsageSummary": "adro1b33:StorageUsageSummary",
+    "totalSizeBytes": {
+      "@id": "adro1b33:totalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "g1TotalSizeBytes": {
+      "@id": "adro1b33:g1TotalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "g2TotalSizeBytes": {
+      "@id": "adro1b33:g2TotalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "g4TotalSizeBytes": {
+      "@id": "adro1b33:g4TotalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "frontierTotalSizeBytes": {
+      "@id": "adro1b33:frontierTotalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "stl2stpTotalSizeBytes": {
+      "@id": "adro1b33:stl2stpTotalSizeBytes",
+      "@type": "xsd:integer"
+    },
+    "LoginRequest": "adro1b33:LoginRequest",
+    "email": {
+      "@id": "adro1b33:email",
+      "@type": "xsd:string"
+    },
+    "UserPasswordVerify": "adro1b33:UserPasswordVerify",
+    "oldPassword": {
+      "@id": "adro1b33:oldPassword",
+      "@type": "xsd:string"
+    },
+    "token": {
+      "@id": "adro1b33:token",
+      "@type": "xsd:string"
+    },
+    "TeamCapabilities": "adro1b33:TeamCapabilities",
+    "canManageTeamSettings": {
+      "@id": "adro1b33:canManageTeamSettings",
+      "@type": "xsd:boolean"
+    },
+    "canManageTeamMembers": {
+      "@id": "adro1b33:canManageTeamMembers",
+      "@type": "xsd:boolean"
+    },
+    "canManageJobRuns": {
+      "@id": "adro1b33:canManageJobRuns",
+      "@type": "xsd:boolean"
+    },
+    "canCreateProjects": {
+      "@id": "adro1b33:canCreateProjects",
+      "@type": "xsd:boolean"
+    },
+    "canManageProjects": {
+      "@id": "adro1b33:canManageProjects",
+      "@type": "xsd:boolean"
+    },
+    "canPurgeStorage": {
+      "@id": "adro1b33:canPurgeStorage",
+      "@type": "xsd:boolean"
+    },
+    "canUpdateProjectWorkflow": {
+      "@id": "adro1b33:canUpdateProjectWorkflow",
+      "@type": "xsd:boolean"
+    },
+    "canCommentOnProjects": {
+      "@id": "adro1b33:canCommentOnProjects",
+      "@type": "xsd:boolean"
+    },
+    "canManageBilling": {
+      "@id": "adro1b33:canManageBilling",
+      "@type": "xsd:boolean"
+    },
+    "canAccessPreviewFeatures": {
+      "@id": "adro1b33:canAccessPreviewFeatures",
+      "@type": "xsd:boolean"
+    },
+    "StorageUsageProject": "adro1b33:StorageUsageProject",
+    "projectId": {
+      "@id": "adro1b33:projectId",
+      "@type": "xsd:integer"
+    },
+    "projectName": {
+      "@id": "adro1b33:projectName",
+      "@type": "xsd:string"
+    },
+    "mode": {
+      "@id": "adro1b33:mode",
+      "@type": "xsd:string"
+    },
+    "TeamsResponse": "adro1b33:TeamsResponse",
+    "teams": {
+      "@id": "adro1b33:teams",
+      "@container": "@list"
+    },
+    "DetailResponse": "adro1b33:DetailResponse",
+    "TenantFeatureAccess": "adro1b33:TenantFeatureAccess",
+    "disabledDisplay": {
+      "@id": "adro1b33:disabledDisplay",
+      "@type": "xsd:string"
+    },
+    "disabledDisplayOverrides": {
+      "@id": "adro1b33:disabledDisplayOverrides",
+      "@container": "@list"
+    },
+    "projects": {
+      "@id": "adro1b33:projects",
+      "@type": "xsd:string"
+    },
+    "validationDes": {
+      "@id": "adro1b33:validationDes",
+      "@type": "xsd:string"
+    },
+    "manualOptimization": {
+      "@id": "adro1b33:manualOptimization",
+      "@type": "xsd:string"
+    },
+    "market": {
+      "@id": "adro1b33:market",
+      "@type": "xsd:string"
+    },
+    "racingDiv": {
+      "@id": "adro1b33:racingDiv",
+      "@type": "xsd:string"
+    },
+    "g3": {
+      "@id": "adro1b33:g3",
+      "@type": "xsd:string"
+    },
+    "laboratory": {
+      "@id": "adro1b33:laboratory",
+      "@type": "xsd:string"
+    },
+    "marine": {
+      "@id": "adro1b33:marine",
+      "@type": "xsd:string"
+    },
+    "stl2stp": {
+      "@id": "adro1b33:stl2stp",
+      "@type": "xsd:string"
+    },
+    "submenus": {
+      "@id": "adro1b33:submenus"
+    },
+    "JobDailyUsage": "adro1b33:JobDailyUsage",
+    "date": {
+      "@id": "adro1b33:date",
+      "@type": "xsd:date"
+    },
+    "g1TotalSeconds": {
+      "@id": "adro1b33:g1TotalSeconds",
+      "@type": "xsd:integer"
+    },
+    "g2TotalSeconds": {
+      "@id": "adro1b33:g2TotalSeconds",
+      "@type": "xsd:integer"
+    },
+    "g4TotalSeconds": {
+      "@id": "adro1b33:g4TotalSeconds",
+      "@type": "xsd:integer"
+    },
+    "frontierTotalSeconds": {
+      "@id": "adro1b33:frontierTotalSeconds",
+      "@type": "xsd:integer"
+    },
+    "SocialRegisterResponse": "adro1b33:SocialRegisterResponse",
+    "PatchedMeTimeZoneUpdate": "adro1b33:PatchedMeTimeZoneUpdate",
+    "timeZone": {
+      "@id": "adro1b33:timeZone",
+      "@type": "xsd:string"
+    },
+    "MeResponse": "adro1b33:MeResponse",
+    "id": {
+      "@id": "adro1b33:id",
+      "@type": "xsd:integer"
+    },
+    "displayName": {
+      "@id": "adro1b33:displayName",
+      "@type": "xsd:string"
+    },
+    "isPlatformAdmin": {
+      "@id": "adro1b33:isPlatformAdmin",
+      "@type": "xsd:boolean"
+    },
+    "role": {
+      "@id": "adro1b33:role",
+      "@type": "xsd:string"
+    },
+    "isSuperAdmin": {
+      "@id": "adro1b33:isSuperAdmin",
+      "@type": "xsd:boolean"
+    },
+    "canViewPlatform": {
+      "@id": "adro1b33:canViewPlatform",
+      "@type": "xsd:boolean"
+    },
+    "canManagePlatform": {
+      "@id": "adro1b33:canManagePlatform",
+      "@type": "xsd:boolean"
+    },
+    "defaultTeamId": {
+      "@id": "adro1b33:defaultTeamId",
+      "@type": "xsd:integer"
+    },
+    "socialKind": {
+      "@id": "adro1b33:socialKind",
+      "@type": "xsd:string"
+    },
+    "hasPassword": {
+      "@id": "adro1b33:hasPassword",
+      "@type": "xsd:boolean"
+    },
+    "tenantFeatureAccess": {
+      "@id": "adro1b33:tenantFeatureAccess",
+      "@type": "@id"
+    },
+    "featurePolicyVersion": {
+      "@id": "adro1b33:featurePolicyVersion",
+      "@type": "xsd:integer"
+    },
+    "billingMode": {
+      "@id": "adro1b33:billingMode",
+      "@type": "xsd:string"
+    },
+    "Stl2StpStorageUsage": "adro1b33:Stl2StpStorageUsage",
+    "usedBytes": {
+      "@id": "adro1b33:usedBytes",
+      "@type": "xsd:integer"
+    },
+    "objectCount": {
+      "@id": "adro1b33:objectCount",
+      "@type": "xsd:integer"
+    },
+    "StorageUsage": "adro1b33:StorageUsage",
+    "summary": {
+      "@id": "adro1b33:summary",
+      "@type": "@id"
+    },
+    "project": {
+      "@id": "adro1b33:project",
+      "@container": "@list"
+    },
+    "TeamStorageUsage": "adro1b33:TeamStorageUsage",
+    "quotaBytes": {
+      "@id": "adro1b33:quotaBytes",
+      "@type": "xsd:integer"
+    },
+    "baseQuotaBytes": {
+      "@id": "adro1b33:baseQuotaBytes",
+      "@type": "xsd:integer"
+    },
+    "addonQuotaBytes": {
+      "@id": "adro1b33:addonQuotaBytes",
+      "@type": "xsd:integer"
+    },
+    "maxAddonBytes": {
+      "@id": "adro1b33:maxAddonBytes",
+      "@type": "xsd:integer"
+    },
+    "availableBytes": {
+      "@id": "adro1b33:availableBytes",
+      "@type": "xsd:integer"
+    },
+    "usagePercent": {
+      "@id": "adro1b33:usagePercent",
+      "@type": "xsd:decimal"
+    },
+    "isOverQuota": {
+      "@id": "adro1b33:isOverQuota",
+      "@type": "xsd:boolean"
+    },
+    "measuredAt": {
+      "@id": "adro1b33:measuredAt",
+      "@type": "xsd:dateTime"
+    },
+    "source": {
+      "@id": "adro1b33:source",
+      "@type": "xsd:string"
+    },
+    "isEstimated": {
+      "@id": "adro1b33:isEstimated",
+      "@type": "xsd:boolean"
+    },
+    "AccountTeam": "adro1b33:AccountTeam",
+    "uid": {
+      "@id": "adro1b33:uid",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "adro1b33:name",
+      "@type": "xsd:string"
+    },
+    "slug": {
+      "@id": "adro1b33:slug",
+      "@type": "xsd:string"
+    },
+    "displayNameOverride": {
+      "@id": "adro1b33:displayNameOverride",
+      "@type": "xsd:string"
+    },
+    "tenantId": {
+      "@id": "adro1b33:tenantId",
+      "@type": "xsd:integer"
+    },
+    "tenantSchemaName": {
+      "@id": "adro1b33:tenantSchemaName",
+      "@type": "xsd:string"
+    },
+    "capabilities": {
+      "@id": "adro1b33:capabilities",
+      "@type": "@id"
+    },
+    "Signup": "adro1b33:Signup",
+    "emailToken": {
+      "@id": "adro1b33:emailToken",
+      "@type": "xsd:string"
+    },
+    "UserMeUsage": "adro1b33:UserMeUsage",
+    "jobDailyUsage": {
+      "@id": "adro1b33:jobDailyUsage",
+      "@container": "@list"
+    },
+    "storageUsageByProject": {
+      "@id": "adro1b33:storageUsageByProject",
+      "@container": "@list"
+    },
+    "storageUsage": {
+      "@id": "adro1b33:storageUsage"
+    },
+    "SignupResponse": "adro1b33:SignupResponse",
+    "UserPasswordResetConfirm": "adro1b33:UserPasswordResetConfirm",
+    "passwordConfirm": {
+      "@id": "adro1b33:passwordConfirm",
+      "@type": "xsd:string"
+    },
+    "SocialRegister": "adro1b33:SocialRegister",
+    "TeamSwitchRequest": "adro1b33:TeamSwitchRequest",
+    "UserSearchResult": "adro1b33:UserSearchResult",
+    "UserPasswordChange": "adro1b33:UserPasswordChange",
+    "TenantFeatureDisabledDisplayOverride": "adro1b33:TenantFeatureDisabledDisplayOverride",
+    "feature": {
+      "@id": "adro1b33:feature",
+      "@type": "xsd:string"
+    },
+    "submenu": {
+      "@id": "adro1b33:submenu",
+      "@type": "xsd:string"
+    },
+    "display": {
+      "@id": "adro1b33:display",
+      "@type": "xsd:string"
+    },
+    "UserPasswordReset": "adro1b33:UserPasswordReset",
+    "MeTeam": "adro1b33:MeTeam",
+    "featureAccess": {
+      "@id": "adro1b33:featureAccess",
+      "@type": "@id"
+    },
+    "featurePolicyRevision": {
+      "@id": "adro1b33:featurePolicyRevision",
+      "@type": "xsd:integer"
+    },
+    "UserForcePasswordChange": "adro1b33:UserForcePasswordChange",
+    "TextContentBlock": "adro1b33:TextContentBlock",
+    "schemaVersion": {
+      "@id": "adro1b33:schemaVersion",
+      "@type": "xsd:integer"
+    },
+    "kind": {
+      "@id": "adro1b33:kind",
+      "@type": "xsd:string"
+    },
+    "text": {
+      "@id": "adro1b33:text",
+      "@type": "xsd:string"
+    },
+    "AgentTurnCancelRequest": "adro1b33:AgentTurnCancelRequest",
+    "clientRequestUid": {
+      "@id": "adro1b33:clientRequestUid",
+      "@type": "xsd:string"
+    },
+    "expectedStatusRevision": {
+      "@id": "adro1b33:expectedStatusRevision",
+      "@type": "xsd:integer"
+    },
+    "AgentWorkspaceProjection": "adro1b33:AgentWorkspaceProjection",
+    "workspaceUid": {
+      "@id": "adro1b33:workspaceUid",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "adro1b33:status",
+      "@type": "xsd:string"
+    },
+    "statusRevision": {
+      "@id": "adro1b33:statusRevision",
+      "@type": "xsd:integer"
+    },
+    "readyEntryCount": {
+      "@id": "adro1b33:readyEntryCount",
+      "@type": "xsd:integer"
+    },
+    "totalEntryCount": {
+      "@id": "adro1b33:totalEntryCount",
+      "@type": "xsd:integer"
+    },
+    "materializedBytes": {
+      "@id": "adro1b33:materializedBytes",
+      "@type": "xsd:integer"
+    },
+    "declaredTotalBytes": {
+      "@id": "adro1b33:declaredTotalBytes",
+      "@type": "xsd:integer"
+    },
+    "AgentTurnSurfaceRequest": "adro1b33:AgentTurnSurfaceRequest",
+    "route": {
+      "@id": "adro1b33:route",
+      "@type": "xsd:string"
+    },
+    "projectUid": {
+      "@id": "adro1b33:projectUid",
+      "@type": "xsd:string"
+    },
+    "selectedGeometryVersionUid": {
+      "@id": "adro1b33:selectedGeometryVersionUid",
+      "@type": "xsd:string"
+    },
+    "selectedJobUid": {
+      "@id": "adro1b33:selectedJobUid",
+      "@type": "xsd:string"
+    },
+    "workbenchRevision": {
+      "@id": "adro1b33:workbenchRevision",
+      "@type": "xsd:integer"
+    },
+    "AgentEventPageResponse": "adro1b33:AgentEventPageResponse",
+    "items": {
+      "@id": "adro1b33:items",
+      "@container": "@list"
+    },
+    "nextAfter": {
+      "@id": "adro1b33:nextAfter",
+      "@type": "xsd:integer"
+    },
+    "hasMore": {
+      "@id": "adro1b33:hasMore",
+      "@type": "xsd:boolean"
+    },
+    "latestSequence": {
+      "@id": "adro1b33:latestSequence",
+      "@type": "xsd:integer"
+    },
+    "AgentMemoryFact": "adro1b33:AgentMemoryFact",
+    "toolName": {
+      "@id": "adro1b33:toolName",
+      "@type": "xsd:string"
+    },
+    "projectUids": {
+      "@id": "adro1b33:projectUids",
+      "@container": "@list"
+    },
+    "resourceUids": {
+      "@id": "adro1b33:resourceUids",
+      "@container": "@list"
+    },
+    "returnedCount": {
+      "@id": "adro1b33:returnedCount",
+      "@type": "xsd:integer"
+    },
+    "projectStatus": {
+      "@id": "adro1b33:projectStatus",
+      "@type": "xsd:string"
+    },
+    "AgentTurnMessageRequest": "adro1b33:AgentTurnMessageRequest",
+    "attachments": {
+      "@id": "adro1b33:attachments",
+      "@container": "@list"
+    },
+    "AgentTurnCancelResponse": "adro1b33:AgentTurnCancelResponse",
+    "turnUid": {
+      "@id": "adro1b33:turnUid",
+      "@type": "xsd:string"
+    },
+    "eventsUrl": {
+      "@id": "adro1b33:eventsUrl",
+      "@type": "xsd:string"
+    },
+    "lastSequence": {
+      "@id": "adro1b33:lastSequence",
+      "@type": "xsd:integer"
+    },
+    "AgentTurnProjection": "adro1b33:AgentTurnProjection",
+    "origin": {
+      "@id": "adro1b33:origin",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
+      "@id": "adro1b33:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "completedAt": {
+      "@id": "adro1b33:completedAt",
+      "@type": "xsd:dateTime"
+    },
+    "errorCode": {
+      "@id": "adro1b33:errorCode",
+      "@type": "xsd:string"
+    },
+    "AgentClientCancelResponse": "adro1b33:AgentClientCancelResponse",
+    "cancelled": {
+      "@id": "adro1b33:cancelled",
+      "@type": "xsd:boolean"
+    },
+    "AgentMessageHistoryResponse": "adro1b33:AgentMessageHistoryResponse",
+    "nextBefore": {
+      "@id": "adro1b33:nextBefore",
+      "@type": "xsd:string"
+    },
+    "AgentAttachmentCompleteRequest": "adro1b33:AgentAttachmentCompleteRequest",
+    "sizeBytes": {
+      "@id": "adro1b33:sizeBytes",
+      "@type": "xsd:integer"
+    },
+    "sha256": {
+      "@id": "adro1b33:sha256",
+      "@type": "xsd:string"
+    },
+    "AgentArtifactProjection": "adro1b33:AgentArtifactProjection",
+    "artifactUid": {
+      "@id": "adro1b33:artifactUid",
+      "@type": "xsd:string"
+    },
+    "mediaType": {
+      "@id": "adro1b33:mediaType",
+      "@type": "xsd:string"
+    },
+    "size": {
+      "@id": "adro1b33:size",
+      "@type": "xsd:integer"
+    },
+    "AgentError": "adro1b33:AgentError",
+    "message": {
+      "@id": "adro1b33:message",
+      "@type": "xsd:string"
+    },
+    "retryable": {
+      "@id": "adro1b33:retryable",
+      "@type": "xsd:boolean"
+    },
+    "requestId": {
+      "@id": "adro1b33:requestId",
+      "@type": "xsd:string"
+    },
+    "retryAfterMs": {
+      "@id": "adro1b33:retryAfterMs",
+      "@type": "xsd:integer"
+    },
+    "AgentEventWireEnvelope": "adro1b33:AgentEventWireEnvelope",
+    "sequence": {
+      "@id": "adro1b33:sequence",
+      "@type": "xsd:integer"
+    },
+    "threadUid": {
+      "@id": "adro1b33:threadUid",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "adro1b33:type",
+      "@type": "xsd:string"
+    },
+    "payload": {
+      "@id": "adro1b33:payload"
+    },
+    "AgentThreadNavigationResponse": "adro1b33:AgentThreadNavigationResponse",
+    "workspace": {
+      "@id": "adro1b33:workspace",
+      "@type": "@id"
+    },
+    "trashSummary": {
+      "@id": "adro1b33:trashSummary"
+    },
+    "generatedAt": {
+      "@id": "adro1b33:generatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "AttachmentContentBlock": "adro1b33:AttachmentContentBlock",
+    "attachmentUid": {
+      "@id": "adro1b33:attachmentUid",
+      "@type": "xsd:string"
+    },
+    "category": {
+      "@id": "adro1b33:category",
+      "@type": "xsd:string"
+    },
+    "sourceTrust": {
+      "@id": "adro1b33:sourceTrust",
+      "@type": "xsd:string"
+    },
+    "originalSha256": {
+      "@id": "adro1b33:originalSha256",
+      "@type": "xsd:string"
+    },
+    "processorProfileVersion": {
+      "@id": "adro1b33:processorProfileVersion",
+      "@type": "xsd:string"
+    },
+    "processorImageDigest": {
+      "@id": "adro1b33:processorImageDigest",
+      "@type": "xsd:string"
+    },
+    "derivatives": {
+      "@id": "adro1b33:derivatives",
+      "@container": "@list"
+    },
+    "AgentAttachmentInitResponse": "adro1b33:AgentAttachmentInitResponse",
+    "upload": {
+      "@id": "adro1b33:upload"
+    },
+    "AgentWorkspaceThreadCreateRequest": "adro1b33:AgentWorkspaceThreadCreateRequest",
+    "scope": {
+      "@id": "adro1b33:scope",
+      "@type": "xsd:string"
+    },
+    "AgentAttachmentInitRequest": "adro1b33:AgentAttachmentInitRequest",
+    "fileName": {
+      "@id": "adro1b33:fileName",
+      "@type": "xsd:string"
+    },
+    "declaredContentType": {
+      "@id": "adro1b33:declaredContentType",
+      "@type": "xsd:string"
+    },
+    "AgentMemoryItem": "adro1b33:AgentMemoryItem",
+    "memoryUid": {
+      "@id": "adro1b33:memoryUid",
+      "@type": "xsd:string"
+    },
+    "fact": {
+      "@id": "adro1b33:fact",
+      "@type": "@id"
+    },
+    "observedAt": {
+      "@id": "adro1b33:observedAt",
+      "@type": "xsd:dateTime"
+    },
+    "AgentTurnStatusConflict": "adro1b33:AgentTurnStatusConflict",
+    "turn": {
+      "@id": "adro1b33:turn",
+      "@type": "@id"
+    },
+    "AgentApprovalProjection": "adro1b33:AgentApprovalProjection",
+    "toolCallUid": {
+      "@id": "adro1b33:toolCallUid",
+      "@type": "xsd:string"
+    },
+    "toolLabel": {
+      "@id": "adro1b33:toolLabel",
+      "@type": "xsd:string"
+    },
+    "riskLevel": {
+      "@id": "adro1b33:riskLevel",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "adro1b33:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "reasonCode": {
+      "@id": "adro1b33:reasonCode",
+      "@type": "xsd:string"
+    },
+    "AgentTurnCreateRequest": "adro1b33:AgentTurnCreateRequest",
+    "clientContext": {
+      "@id": "adro1b33:clientContext"
+    },
+    "surface": {
+      "@id": "adro1b33:surface",
+      "@type": "@id"
+    },
+    "AgentClientCancelRequest": "adro1b33:AgentClientCancelRequest",
+    "clientInstanceUid": {
+      "@id": "adro1b33:clientInstanceUid",
+      "@type": "xsd:string"
+    },
+    "AgentThreadStatusConflict": "adro1b33:AgentThreadStatusConflict",
+    "thread": {
+      "@id": "adro1b33:thread",
+      "@type": "@id"
+    },
+    "AgentAttachmentResponse": "adro1b33:AgentAttachmentResponse",
+    "originalFileName": {
+      "@id": "adro1b33:originalFileName",
+      "@type": "xsd:string"
+    },
+    "detectedContentType": {
+      "@id": "adro1b33:detectedContentType",
+      "@type": "xsd:string"
+    },
+    "rejectionCode": {
+      "@id": "adro1b33:rejectionCode",
+      "@type": "xsd:string"
+    },
+    "updatedAt": {
+      "@id": "adro1b33:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "AgentTurnCreateResponse": "adro1b33:AgentTurnCreateResponse",
+    "AgentClientToolProjection": "adro1b33:AgentClientToolProjection",
+    "activityLabel": {
+      "@id": "adro1b33:activityLabel",
+      "@type": "xsd:string"
+    },
+    "AgentThreadScopeConflict": "adro1b33:AgentThreadScopeConflict",
+    "AgentThreadListResponse": "adro1b33:AgentThreadListResponse",
+    "nextCursor": {
+      "@id": "adro1b33:nextCursor",
+      "@type": "xsd:string"
+    },
+    "AgentConversationProjection": "adro1b33:AgentConversationProjection",
+    "activeTurn": {
+      "@id": "adro1b33:activeTurn"
+    },
+    "messages": {
+      "@id": "adro1b33:messages"
+    },
+    "pendingActions": {
+      "@id": "adro1b33:pendingActions"
+    },
+    "artifacts": {
+      "@id": "adro1b33:artifacts",
+      "@container": "@list"
+    },
+    "throughSequence": {
+      "@id": "adro1b33:throughSequence",
+      "@type": "xsd:integer"
+    },
+    "AgentMemoryResponse": "adro1b33:AgentMemoryResponse",
+    "AgentClientClaimRequest": "adro1b33:AgentClientClaimRequest",
+    "expectedToolCallStatusRevision": {
+      "@id": "adro1b33:expectedToolCallStatusRevision",
+      "@type": "xsd:integer"
+    },
+    "AgentThreadNavigationProjectNode": "adro1b33:AgentThreadNavigationProjectNode",
+    "title": {
+      "@id": "adro1b33:title",
+      "@type": "xsd:string"
+    },
+    "activityState": {
+      "@id": "adro1b33:activityState",
+      "@type": "xsd:string"
+    },
+    "needsApproval": {
+      "@id": "adro1b33:needsApproval",
+      "@type": "xsd:boolean"
+    },
+    "AgentAttachmentProjection": "adro1b33:AgentAttachmentProjection",
+    "mediaFamily": {
+      "@id": "adro1b33:mediaFamily",
+      "@type": "xsd:string"
+    },
+    "declaredSize": {
+      "@id": "adro1b33:declaredSize",
+      "@type": "xsd:integer"
+    },
+    "AgentThreadProjection": "adro1b33:AgentThreadProjection",
+    "parentThreadUid": {
+      "@id": "adro1b33:parentThreadUid",
+      "@type": "xsd:string"
+    },
+    "scopeRevision": {
+      "@id": "adro1b33:scopeRevision",
+      "@type": "xsd:integer"
+    },
+    "permissionMode": {
+      "@id": "adro1b33:permissionMode",
+      "@type": "xsd:string"
+    },
+    "permissionModeRevision": {
+      "@id": "adro1b33:permissionModeRevision",
+      "@type": "xsd:integer"
+    },
+    "activeTurnUid": {
+      "@id": "adro1b33:activeTurnUid",
+      "@type": "xsd:string"
+    },
+    "lastActiveAt": {
+      "@id": "adro1b33:lastActiveAt",
+      "@type": "xsd:dateTime"
+    },
+    "AgentClientResultResponse": "adro1b33:AgentClientResultResponse",
+    "clientAttemptUid": {
+      "@id": "adro1b33:clientAttemptUid",
+      "@type": "xsd:string"
+    },
+    "AgentAttachmentDerivative": "adro1b33:AgentAttachmentDerivative",
+    "derivativeUid": {
+      "@id": "adro1b33:derivativeUid",
+      "@type": "xsd:string"
+    },
+    "metadata": {
+      "@id": "adro1b33:metadata"
+    },
+    "RedactedContentBlock": "adro1b33:RedactedContentBlock",
+    "AgentClientClaimResponse": "adro1b33:AgentClientClaimResponse",
+    "clientActionNonce": {
+      "@id": "adro1b33:clientActionNonce",
+      "@type": "xsd:string"
+    },
+    "tool": {
+      "@id": "adro1b33:tool"
+    },
+    "AgentProjectThreadCreateRequest": "adro1b33:AgentProjectThreadCreateRequest",
+    "AgentThreadResponse": "adro1b33:AgentThreadResponse",
+    "AgentThreadStatusRequest": "adro1b33:AgentThreadStatusRequest",
+    "AgentAttachmentCapabilities": "adro1b33:AgentAttachmentCapabilities",
+    "enabled": {
+      "@id": "adro1b33:enabled",
+      "@type": "xsd:boolean"
+    },
+    "maxFiles": {
+      "@id": "adro1b33:maxFiles",
+      "@type": "xsd:integer"
+    },
+    "maxBytes": {
+      "@id": "adro1b33:maxBytes",
+      "@type": "xsd:integer"
+    },
+    "maxImageBytes": {
+      "@id": "adro1b33:maxImageBytes",
+      "@type": "xsd:integer"
+    },
+    "extensions": {
+      "@id": "adro1b33:extensions",
+      "@container": "@list"
+    },
+    "AgentMessageProjection": "adro1b33:AgentMessageProjection",
+    "messageUid": {
+      "@id": "adro1b33:messageUid",
+      "@type": "xsd:string"
+    },
+    "contentBlocks": {
+      "@id": "adro1b33:contentBlocks",
+      "@container": "@list"
+    },
+    "completedSequence": {
+      "@id": "adro1b33:completedSequence",
+      "@type": "xsd:integer"
+    },
+    "AgentThreadBindRequest": "adro1b33:AgentThreadBindRequest",
+    "expectedScopeRevision": {
+      "@id": "adro1b33:expectedScopeRevision",
+      "@type": "xsd:integer"
+    },
+    "AiFinding": "adro1b33:AiFinding",
+    "severity": {
+      "@id": "adro1b33:severity",
+      "@type": "xsd:string"
+    },
+    "action": {
+      "@id": "adro1b33:action",
+      "@type": "xsd:string"
+    },
+    "DiagnoseRequest": "adro1b33:DiagnoseRequest",
+    "locale": {
+      "@id": "adro1b33:locale",
+      "@type": "xsd:string"
+    },
+    "jobUid": {
+      "@id": "adro1b33:jobUid",
+      "@type": "xsd:string"
+    },
+    "AiRecommendationResponse": "adro1b33:AiRecommendationResponse",
+    "baseRevision": {
+      "@id": "adro1b33:baseRevision",
+      "@type": "xsd:integer"
+    },
+    "findings": {
+      "@id": "adro1b33:findings",
+      "@container": "@list"
+    },
+    "changes": {
+      "@id": "adro1b33:changes",
+      "@container": "@list"
+    },
+    "proposedUnifiedConfig": {
+      "@id": "adro1b33:proposedUnifiedConfig"
+    },
+    "needsHumanSupport": {
+      "@id": "adro1b33:needsHumanSupport",
+      "@type": "xsd:boolean"
+    },
+    "supportSummary": {
+      "@id": "adro1b33:supportSummary",
+      "@type": "xsd:string"
+    },
+    "AiChatHistoryItem": "adro1b33:AiChatHistoryItem",
+    "content": {
+      "@id": "adro1b33:content",
+      "@type": "xsd:string"
+    },
+    "AiDiagnosisResponse": "adro1b33:AiDiagnosisResponse",
+    "AiAssistRequest": "adro1b33:AiAssistRequest",
+    "AiRecommendationChange": "adro1b33:AiRecommendationChange",
+    "path": {
+      "@id": "adro1b33:path",
+      "@type": "xsd:string"
+    },
+    "before": {
+      "@id": "adro1b33:before"
+    },
+    "after": {
+      "@id": "adro1b33:after"
+    },
+    "reason": {
+      "@id": "adro1b33:reason",
+      "@type": "xsd:string"
+    },
+    "AiUsageResponse": "adro1b33:AiUsageResponse",
+    "used": {
+      "@id": "adro1b33:used",
+      "@type": "xsd:integer"
+    },
+    "limit": {
+      "@id": "adro1b33:limit",
+      "@type": "xsd:integer"
+    },
+    "resetsAt": {
+      "@id": "adro1b33:resetsAt",
+      "@type": "xsd:dateTime"
+    },
+    "AiChatResponse": "adro1b33:AiChatResponse",
+    "intent": {
+      "@id": "adro1b33:intent",
+      "@type": "xsd:string"
+    },
+    "engine": {
+      "@id": "adro1b33:engine",
+      "@type": "xsd:string"
+    },
+    "answer": {
+      "@id": "adro1b33:answer",
+      "@type": "xsd:string"
+    },
+    "confidence": {
+      "@id": "adro1b33:confidence",
+      "@type": "xsd:string"
+    },
+    "missingInformation": {
+      "@id": "adro1b33:missingInformation",
+      "@container": "@list"
+    },
+    "sources": {
+      "@id": "adro1b33:sources",
+      "@container": "@list"
+    },
+    "parameters": {
+      "@id": "adro1b33:parameters",
+      "@container": "@list"
+    },
+    "recommendation": {
+      "@id": "adro1b33:recommendation"
+    },
+    "diagnosis": {
+      "@id": "adro1b33:diagnosis"
+    },
+    "AiChatRequest": "adro1b33:AiChatRequest",
+    "parameterPath": {
+      "@id": "adro1b33:parameterPath",
+      "@type": "xsd:string"
+    },
+    "history": {
+      "@id": "adro1b33:history",
+      "@container": "@list"
+    },
+    "Artifact": "adro1b33:Artifact",
+    "artifactRole": {
+      "@id": "adro1b33:artifactRole",
+      "@type": "xsd:string"
+    },
+    "storageProvider": {
+      "@id": "adro1b33:storageProvider",
+      "@type": "xsd:string"
+    },
+    "s3Bucket": {
+      "@id": "adro1b33:s3Bucket",
+      "@type": "xsd:string"
+    },
+    "s3Key": {
+      "@id": "adro1b33:s3Key",
+      "@type": "xsd:string"
+    },
+    "s3Url": {
+      "@id": "adro1b33:s3Url",
+      "@type": "xsd:string"
+    },
+    "contentType": {
+      "@id": "adro1b33:contentType",
+      "@type": "xsd:string"
+    },
+    "checksumSha256": {
+      "@id": "adro1b33:checksumSha256",
+      "@type": "xsd:string"
+    },
+    "PaginatedArtifactListList": "adro1b33:PaginatedArtifactListList",
+    "count": {
+      "@id": "adro1b33:count",
+      "@type": "xsd:integer"
+    },
+    "next": {
+      "@id": "adro1b33:next",
+      "@type": "@id"
+    },
+    "previous": {
+      "@id": "adro1b33:previous",
+      "@type": "@id"
+    },
+    "results": {
+      "@id": "adro1b33:results",
+      "@container": "@list"
+    },
+    "ArtifactCopyRequest": "adro1b33:ArtifactCopyRequest",
+    "ArtifactCopyPendingResponse": "adro1b33:ArtifactCopyPendingResponse",
+    "operationId": {
+      "@id": "adro1b33:operationId",
+      "@type": "xsd:string"
+    },
+    "retryAfterSeconds": {
+      "@id": "adro1b33:retryAfterSeconds",
+      "@type": "xsd:integer"
+    },
+    "ArtifactList": "adro1b33:ArtifactList",
+    "BookDemoCreate": "adro1b33:BookDemoCreate",
+    "firstName": {
+      "@id": "adro1b33:firstName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "adro1b33:lastName",
+      "@type": "xsd:string"
+    },
+    "company": {
+      "@id": "adro1b33:company",
+      "@type": "xsd:string"
+    },
+    "phoneNumber": {
+      "@id": "adro1b33:phoneNumber",
+      "@type": "xsd:string"
+    },
+    "industry": {
+      "@id": "adro1b33:industry",
+      "@type": "xsd:string"
+    },
+    "jobRole": {
+      "@id": "adro1b33:jobRole",
+      "@type": "xsd:string"
+    },
+    "privacyConsent": {
+      "@id": "adro1b33:privacyConsent",
+      "@type": "xsd:boolean"
+    },
+    "marketingConsent": {
+      "@id": "adro1b33:marketingConsent",
+      "@type": "xsd:boolean"
+    },
+    "CommentNotificationReadResponse": "adro1b33:CommentNotificationReadResponse",
+    "ok": {
+      "@id": "adro1b33:ok",
+      "@type": "xsd:boolean"
+    },
+    "CommentNotificationPage": "adro1b33:CommentNotificationPage",
+    "CommentNotification": "adro1b33:CommentNotification",
+    "threadId": {
+      "@id": "adro1b33:threadId",
+      "@type": "xsd:integer"
+    },
+    "commentId": {
+      "@id": "adro1b33:commentId",
+      "@type": "xsd:integer"
+    },
+    "readAt": {
+      "@id": "adro1b33:readAt",
+      "@type": "xsd:dateTime"
+    },
+    "lastTriggeredAt": {
+      "@id": "adro1b33:lastTriggeredAt",
+      "@type": "xsd:dateTime"
+    },
+    "CommentNotificationRead": "adro1b33:CommentNotificationRead",
+    "notificationIds": {
+      "@id": "adro1b33:notificationIds",
+      "@container": "@list"
+    },
+    "CommentMentionRequestNode": "adro1b33:CommentMentionRequestNode",
+    "userId": {
+      "@id": "adro1b33:userId",
+      "@type": "xsd:integer"
+    },
+    "displayText": {
+      "@id": "adro1b33:displayText",
+      "@type": "xsd:string"
+    },
+    "CommentMentionResponseNode": "adro1b33:CommentMentionResponseNode",
+    "currentDisplayName": {
+      "@id": "adro1b33:currentDisplayName",
+      "@type": "xsd:string"
+    },
+    "isActiveTeamMember": {
+      "@id": "adro1b33:isActiveTeamMember",
+      "@type": "xsd:boolean"
+    },
+    "CommentContentRequest": "adro1b33:CommentContentRequest",
+    "ProjectCommentThread": "adro1b33:ProjectCommentThread",
+    "createdByUserId": {
+      "@id": "adro1b33:createdByUserId",
+      "@type": "xsd:integer"
+    },
+    "lastCommentAt": {
+      "@id": "adro1b33:lastCommentAt",
+      "@type": "xsd:dateTime"
+    },
+    "CommentTextResponseNode": "adro1b33:CommentTextResponseNode",
+    "ProjectCommentPage": "adro1b33:ProjectCommentPage",
+    "CommentTextRequestNode": "adro1b33:CommentTextRequestNode",
+    "CommentAuthor": "adro1b33:CommentAuthor",
+    "ProjectComment": "adro1b33:ProjectComment",
+    "authorUserId": {
+      "@id": "adro1b33:authorUserId",
+      "@type": "xsd:integer"
+    },
+    "author": {
+      "@id": "adro1b33:author"
+    },
+    "revision": {
+      "@id": "adro1b33:revision",
+      "@type": "xsd:integer"
+    },
+    "PriceEntry": "adro1b33:PriceEntry",
+    "currency": {
+      "@id": "adro1b33:currency",
+      "@type": "xsd:string"
+    },
+    "supplyAmountMinor": {
+      "@id": "adro1b33:supplyAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "taxAmountMinor": {
+      "@id": "adro1b33:taxAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "totalAmountMinor": {
+      "@id": "adro1b33:totalAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "CreditEstimateResponse": "adro1b33:CreditEstimateResponse",
+    "variables": {
+      "@id": "adro1b33:variables",
+      "@type": "@id"
+    },
+    "estimates": {
+      "@id": "adro1b33:estimates",
+      "@type": "@id"
+    },
+    "warnings": {
+      "@id": "adro1b33:warnings",
+      "@container": "@list"
+    },
+    "CreditTransaction": "adro1b33:CreditTransaction",
+    "operation": {
+      "@id": "adro1b33:operation",
+      "@type": "xsd:integer"
+    },
+    "operationKind": {
+      "@id": "adro1b33:operationKind",
+      "@type": "xsd:string"
+    },
+    "operationIdempotencyKey": {
+      "@id": "adro1b33:operationIdempotencyKey",
+      "@type": "xsd:string"
+    },
+    "bucket": {
+      "@id": "adro1b33:bucket",
+      "@type": "xsd:integer"
+    },
+    "bucketSource": {
+      "@id": "adro1b33:bucketSource",
+      "@type": "xsd:string"
+    },
+    "delta": {
+      "@id": "adro1b33:delta",
+      "@type": "xsd:integer"
+    },
+    "bucketRemainingAfter": {
+      "@id": "adro1b33:bucketRemainingAfter",
+      "@type": "xsd:integer"
+    },
+    "OneTimePrepareResponse": "adro1b33:OneTimePrepareResponse",
+    "paymentId": {
+      "@id": "adro1b33:paymentId",
+      "@type": "xsd:string"
+    },
+    "requestedByUserId": {
+      "@id": "adro1b33:requestedByUserId",
+      "@type": "xsd:integer"
+    },
+    "provider": {
+      "@id": "adro1b33:provider",
+      "@type": "xsd:string"
+    },
+    "billingKey": {
+      "@id": "adro1b33:billingKey",
+      "@type": "xsd:string"
+    },
+    "channelKey": {
+      "@id": "adro1b33:channelKey",
+      "@type": "xsd:string"
+    },
+    "orderName": {
+      "@id": "adro1b33:orderName",
+      "@type": "xsd:string"
+    },
+    "amountMinor": {
+      "@id": "adro1b33:amountMinor",
+      "@type": "xsd:integer"
+    },
+    "paidAmountMinor": {
+      "@id": "adro1b33:paidAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "cancelledAmountMinor": {
+      "@id": "adro1b33:cancelledAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "refundAvailableAmountMinor": {
+      "@id": "adro1b33:refundAvailableAmountMinor",
+      "@type": "xsd:integer"
+    },
+    "pgProvider": {
+      "@id": "adro1b33:pgProvider",
+      "@type": "xsd:string"
+    },
+    "pgTxId": {
+      "@id": "adro1b33:pgTxId",
+      "@type": "xsd:string"
+    },
+    "methodType": {
+      "@id": "adro1b33:methodType",
+      "@type": "xsd:string"
+    },
+    "failureCode": {
+      "@id": "adro1b33:failureCode",
+      "@type": "xsd:string"
+    },
+    "failureMessage": {
+      "@id": "adro1b33:failureMessage",
+      "@type": "xsd:string"
+    },
+    "requestedAt": {
+      "@id": "adro1b33:requestedAt",
+      "@type": "xsd:dateTime"
+    },
+    "paidAt": {
+      "@id": "adro1b33:paidAt",
+      "@type": "xsd:dateTime"
+    },
+    "failedAt": {
+      "@id": "adro1b33:failedAt",
+      "@type": "xsd:dateTime"
+    },
+    "cancelledAt": {
+      "@id": "adro1b33:cancelledAt",
+      "@type": "xsd:dateTime"
+    },
+    "cancellations": {
+      "@id": "adro1b33:cancellations",
+      "@container": "@list"
+    },
+    "bypass": {
+      "@id": "adro1b33:bypass"
+    },
+    "CreditEstimateVariables": "adro1b33:CreditEstimateVariables",
+    "cpu": {
+      "@id": "adro1b33:cpu",
+      "@type": "xsd:integer"
+    },
+    "gpu": {
+      "@id": "adro1b33:gpu",
+      "@type": "xsd:integer"
+    },
+    "predSimulatingSeconds": {
+      "@id": "adro1b33:predSimulatingSeconds",
+      "@type": "xsd:integer"
+    },
+    "projectModeMult": {
+      "@id": "adro1b33:projectModeMult",
+      "@type": "xsd:decimal"
+    },
+    "objectiveFuncMult": {
+      "@id": "adro1b33:objectiveFuncMult",
+      "@type": "xsd:decimal"
+    },
+    "optSteps": {
+      "@id": "adro1b33:optSteps",
+      "@type": "xsd:integer"
+    },
+    "creditPerOptStep": {
+      "@id": "adro1b33:creditPerOptStep",
+      "@type": "xsd:decimal"
+    },
+    "meshCells": {
+      "@id": "adro1b33:meshCells",
+      "@type": "xsd:integer"
+    },
+    "latticePoints": {
+      "@id": "adro1b33:latticePoints",
+      "@type": "xsd:integer"
+    },
+    "optAreaMult": {
+      "@id": "adro1b33:optAreaMult",
+      "@type": "xsd:decimal"
+    },
+    "optTargetMult": {
+      "@id": "adro1b33:optTargetMult",
+      "@type": "xsd:decimal"
+    },
+    "CreditBundle": "adro1b33:CreditBundle",
+    "description": {
+      "@id": "adro1b33:description",
+      "@type": "xsd:string"
+    },
+    "itemCode": {
+      "@id": "adro1b33:itemCode",
+      "@type": "xsd:string"
+    },
+    "price": {
+      "@id": "adro1b33:price"
+    },
+    "credits": {
+      "@id": "adro1b33:credits",
+      "@type": "xsd:integer"
+    },
+    "isActive": {
+      "@id": "adro1b33:isActive",
+      "@type": "xsd:boolean"
+    },
+    "sortOrder": {
+      "@id": "adro1b33:sortOrder",
+      "@type": "xsd:integer"
+    },
+    "CreditOperation": "adro1b33:CreditOperation",
+    "totalDelta": {
+      "@id": "adro1b33:totalDelta",
+      "@type": "xsd:integer"
+    },
+    "walletBalanceAfter": {
+      "@id": "adro1b33:walletBalanceAfter",
+      "@type": "xsd:integer"
+    },
+    "unmetAmount": {
+      "@id": "adro1b33:unmetAmount",
+      "@type": "xsd:integer"
+    },
+    "idempotencyKey": {
+      "@id": "adro1b33:idempotencyKey",
+      "@type": "xsd:string"
+    },
+    "note": {
+      "@id": "adro1b33:note",
+      "@type": "xsd:string"
+    },
+    "CreditBucket": "adro1b33:CreditBucket",
+    "grantedAmount": {
+      "@id": "adro1b33:grantedAmount",
+      "@type": "xsd:integer"
+    },
+    "remainingAmount": {
+      "@id": "adro1b33:remainingAmount",
+      "@type": "xsd:integer"
+    },
+    "grantedAt": {
+      "@id": "adro1b33:grantedAt",
+      "@type": "xsd:dateTime"
+    },
+    "referenceType": {
+      "@id": "adro1b33:referenceType",
+      "@type": "xsd:string"
+    },
+    "referenceId": {
+      "@id": "adro1b33:referenceId",
+      "@type": "xsd:string"
+    },
+    "PriceDisplay": "adro1b33:PriceDisplay",
+    "supplyAmount": {
+      "@id": "adro1b33:supplyAmount",
+      "@type": "xsd:string"
+    },
+    "taxAmount": {
+      "@id": "adro1b33:taxAmount",
+      "@type": "xsd:string"
+    },
+    "totalAmount": {
+      "@id": "adro1b33:totalAmount",
+      "@type": "xsd:string"
+    },
+    "unitPrice": {
+      "@id": "adro1b33:unitPrice",
+      "@type": "xsd:string"
+    },
+    "discountRate": {
+      "@id": "adro1b33:discountRate",
+      "@type": "xsd:string"
+    },
+    "BundlePurchaseStartRequest": "adro1b33:BundlePurchaseStartRequest",
+    "billingCountry": {
+      "@id": "adro1b33:billingCountry",
+      "@type": "xsd:string"
+    },
+    "PaymentCancellation": "adro1b33:PaymentCancellation",
+    "cancellationId": {
+      "@id": "adro1b33:cancellationId",
+      "@type": "xsd:string"
+    },
+    "amount": {
+      "@id": "adro1b33:amount",
+      "@type": "xsd:integer"
+    },
+    "CreditEstimateWarning": "adro1b33:CreditEstimateWarning",
+    "predictedCells": {
+      "@id": "adro1b33:predictedCells",
+      "@type": "xsd:integer"
+    },
+    "cellLimit": {
+      "@id": "adro1b33:cellLimit",
+      "@type": "xsd:integer"
+    },
+    "CreditWallet": "adro1b33:CreditWallet",
+    "balance": {
+      "@id": "adro1b33:balance",
+      "@type": "xsd:integer"
+    },
+    "bucketsBySource": {
+      "@id": "adro1b33:bucketsBySource"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "ADRO API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects ADRO's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-20) from openapi/adro1b33-accounts-api-openapi.yml, openapi/adro1b33-agent-api-openapi.yml, openapi/adro1b33-ai-api-openapi.yml.",
+  "dcterms:created": "2026-10-20",
+  "dcterms:source": [
+    "openapi/adro1b33-accounts-api-openapi.yml",
+    "openapi/adro1b33-agent-api-openapi.yml",
+    "openapi/adro1b33-ai-api-openapi.yml",
+    "openapi/adro1b33-announcements-api-openapi.yml",
+    "openapi/adro1b33-artifacts-api-openapi.yml"
+  ]
+}

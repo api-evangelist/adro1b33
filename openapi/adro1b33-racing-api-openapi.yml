@@ -303,6 +303,141 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    RaceSessionCreate:
+      type: object
+      properties:
+        geometryTransport:
+          enum:
+          - bundled-glb
+          - proxy-parts-v1
+          type: string
+          description: '* `bundled-glb` - bundled-glb
+
+            * `proxy-parts-v1` - proxy-parts-v1'
+          x-spec-enum-id: a79c18e17a6f5829
+          default: bundled-glb
+        jobUid:
+          type: string
+          maxLength: 36
+        gameBuildId:
+          type: string
+          maxLength: 64
+        vehiclePresetId:
+          enum:
+          - gt-validation-v1
+          - formula-student-validation-v1
+          type: string
+          description: '* `gt-validation-v1` - gt-validation-v1
+
+            * `formula-student-validation-v1` - formula-student-validation-v1'
+          x-spec-enum-id: c9fb85c158588aaa
+          default: gt-validation-v1
+      required:
+      - gameBuildId
+      - jobUid
+    RaceJobListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaceJobResponse'
+      required:
+      - count
+      - results
+    RaceJobResponse:
+      type: object
+      properties:
+        displayName:
+          type:
+          - string
+          - 'null'
+        uid:
+          type: string
+        projectUid:
+          type: string
+        projectName:
+          type:
+          - string
+          - 'null'
+        solver:
+          type: string
+        finishedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        availability:
+          type: string
+        reasonCode:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        primaryMetric:
+          type: string
+        aerodynamics:
+          type: object
+          additionalProperties: {}
+      required:
+      - availability
+      - finishedAt
+      - projectName
+      - projectUid
+      - solver
+      - uid
+    RaceFeedback:
+      type: object
+      properties:
+        differenceFelt:
+          type: integer
+          maximum: 5
+          minimum: 1
+        wouldOptimizeAgain:
+          type: boolean
+        comment:
+          type: string
+          default: ''
+          maxLength: 2000
+      required:
+      - differenceFelt
+      - wouldOptimizeAgain
+    RaceSessionResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+        status:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        readOnly:
+          type: boolean
+        performanceSnapshot:
+          type: object
+          additionalProperties: {}
+        bestLaps:
+          type: object
+          additionalProperties: {}
+        error:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+      required:
+      - bestLaps
+      - error
+      - expiresAt
+      - performanceSnapshot
+      - readOnly
+      - status
+      - uid
     RaceLapCreate:
       type: object
       properties:
@@ -355,141 +490,6 @@ components:
       - clientLapUid
       - isValid
       - variant
-    RaceFeedback:
-      type: object
-      properties:
-        differenceFelt:
-          type: integer
-          maximum: 5
-          minimum: 1
-        wouldOptimizeAgain:
-          type: boolean
-        comment:
-          type: string
-          default: ''
-          maxLength: 2000
-      required:
-      - differenceFelt
-      - wouldOptimizeAgain
-    RaceSessionCreate:
-      type: object
-      properties:
-        geometryTransport:
-          enum:
-          - bundled-glb
-          - proxy-parts-v1
-          type: string
-          description: '* `bundled-glb` - bundled-glb
-
-            * `proxy-parts-v1` - proxy-parts-v1'
-          x-spec-enum-id: a79c18e17a6f5829
-          default: bundled-glb
-        jobUid:
-          type: string
-          maxLength: 36
-        gameBuildId:
-          type: string
-          maxLength: 64
-        vehiclePresetId:
-          enum:
-          - gt-validation-v1
-          - formula-student-validation-v1
-          type: string
-          description: '* `gt-validation-v1` - gt-validation-v1
-
-            * `formula-student-validation-v1` - formula-student-validation-v1'
-          x-spec-enum-id: c9fb85c158588aaa
-          default: gt-validation-v1
-      required:
-      - gameBuildId
-      - jobUid
-    RaceJobListResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/RaceJobResponse'
-      required:
-      - count
-      - results
-    RaceSessionResponse:
-      type: object
-      properties:
-        uid:
-          type: string
-        status:
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
-        readOnly:
-          type: boolean
-        performanceSnapshot:
-          type: object
-          additionalProperties: {}
-        bestLaps:
-          type: object
-          additionalProperties: {}
-        error:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-      required:
-      - bestLaps
-      - error
-      - expiresAt
-      - performanceSnapshot
-      - readOnly
-      - status
-      - uid
-    RaceJobResponse:
-      type: object
-      properties:
-        displayName:
-          type:
-          - string
-          - 'null'
-        uid:
-          type: string
-        projectUid:
-          type: string
-        projectName:
-          type:
-          - string
-          - 'null'
-        solver:
-          type: string
-        finishedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        availability:
-          type: string
-        reasonCode:
-          type:
-          - string
-          - 'null'
-        reason:
-          type:
-          - string
-          - 'null'
-        primaryMetric:
-          type: string
-        aerodynamics:
-          type: object
-          additionalProperties: {}
-      required:
-      - availability
-      - finishedAt
-      - projectName
-      - projectUid
-      - solver
-      - uid
   securitySchemes:
     agentBearerAuth:
       type: http

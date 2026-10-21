@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-race-job-list-response-schema.json",
+  "title": "RaceJobListResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-racing-api-openapi.yml#/components/schemas/RaceJobListResponse",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RaceJobResponse"
+      }
+    }
+  },
+  "required": [
+    "count",
+    "results"
+  ],
+  "$defs": {
+    "RaceJobResponse": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uid": {
+          "type": "string"
+        },
+        "projectUid": {
+          "type": "string"
+        },
+        "projectName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "solver": {
+          "type": "string"
+        },
+        "finishedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "availability": {
+          "type": "string"
+        },
+        "reasonCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "primaryMetric": {
+          "type": "string"
+        },
+        "aerodynamics": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "availability",
+        "finishedAt",
+        "projectName",
+        "projectUid",
+        "solver",
+        "uid"
+      ]
+    }
+  }
+}

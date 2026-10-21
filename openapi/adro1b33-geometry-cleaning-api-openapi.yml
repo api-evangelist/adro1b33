@@ -580,15 +580,88 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CleaningProjectCreate:
+    CleaningRun:
       type: object
       properties:
-        name:
+        uid:
           type: string
-          maxLength: 255
-        draft:
-          type: boolean
-          default: false
+        projectId:
+          type: integer
+        projectUid:
+          type: string
+        projectName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+        sourceFiles:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        attempt:
+          type: integer
+        batchJobId:
+          type: string
+        plan: {}
+        questions: {}
+        viewerUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        files:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        deletion:
+          type: object
+          additionalProperties: {}
+        jobUid:
+          type:
+          - string
+          - 'null'
+        jobName:
+          type: string
+        revision:
+          type: string
+        review: {}
+        usage: {}
+        error:
+          type: string
+      required:
+      - attempt
+      - batchJobId
+      - createdAt
+      - deletion
+      - error
+      - files
+      - jobName
+      - jobUid
+      - plan
+      - projectId
+      - projectName
+      - projectUid
+      - questions
+      - review
+      - revision
+      - sourceFiles
+      - status
+      - uid
+      - usage
+      - viewerUrl
+    CleaningAnswers:
+      type: object
+      properties:
+        answers: {}
+        revision:
+          type: string
+          maxLength: 64
+      required:
+      - answers
     ChatRequest:
       type: object
       properties:
@@ -615,6 +688,15 @@ components:
       required:
       - message
       - revision
+    CleaningProjectCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        draft:
+          type: boolean
+          default: false
     ConversationMessage:
       type: object
       properties:
@@ -633,6 +715,55 @@ components:
       required:
       - content
       - role
+    PreparationProposalRequest:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          maxLength: 4096
+        assumeDefaults:
+          type: boolean
+      required:
+      - assumeDefaults
+      - proposalId
+    CleaningStart:
+      type: object
+      properties:
+        assumeDefaults:
+          type: boolean
+          default: false
+        interactive:
+          type: boolean
+          default: false
+    PreparationChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+        locale:
+          enum:
+          - ko
+          - en
+          type: string
+          description: '* `ko` - ko
+
+            * `en` - en'
+          x-spec-enum-id: 659d4ef1ad5b5558
+          default: en
+        revision:
+          type: string
+          maxLength: 64
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationMessage'
+        assumeDefaults:
+          type: boolean
+      required:
+      - assumeDefaults
+      - message
+      - revision
     CleaningProgress:
       type: object
       properties:
@@ -721,17 +852,6 @@ components:
       - stageStartedAt
       - updatedAt
       - viewer
-    PreparationProposalRequest:
-      type: object
-      properties:
-        proposalId:
-          type: string
-          maxLength: 4096
-        assumeDefaults:
-          type: boolean
-      required:
-      - assumeDefaults
-      - proposalId
     PatchedCleaningProjectUpdate:
       type: object
       properties:
@@ -753,126 +873,6 @@ components:
       required:
       - attempt
       - revision
-    PreparationChatRequest:
-      type: object
-      properties:
-        message:
-          type: string
-          maxLength: 2000
-        locale:
-          enum:
-          - ko
-          - en
-          type: string
-          description: '* `ko` - ko
-
-            * `en` - en'
-          x-spec-enum-id: 659d4ef1ad5b5558
-          default: en
-        revision:
-          type: string
-          maxLength: 64
-        history:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConversationMessage'
-        assumeDefaults:
-          type: boolean
-      required:
-      - assumeDefaults
-      - message
-      - revision
-    CleaningStart:
-      type: object
-      properties:
-        assumeDefaults:
-          type: boolean
-          default: false
-        interactive:
-          type: boolean
-          default: false
-    CleaningRun:
-      type: object
-      properties:
-        uid:
-          type: string
-        projectId:
-          type: integer
-        projectUid:
-          type: string
-        projectName:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        status:
-          type: string
-        sourceFiles:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-        attempt:
-          type: integer
-        batchJobId:
-          type: string
-        plan: {}
-        questions: {}
-        viewerUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-        files:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-        deletion:
-          type: object
-          additionalProperties: {}
-        jobUid:
-          type:
-          - string
-          - 'null'
-        jobName:
-          type: string
-        revision:
-          type: string
-        review: {}
-        usage: {}
-        error:
-          type: string
-      required:
-      - attempt
-      - batchJobId
-      - createdAt
-      - deletion
-      - error
-      - files
-      - jobName
-      - jobUid
-      - plan
-      - projectId
-      - projectName
-      - projectUid
-      - questions
-      - review
-      - revision
-      - sourceFiles
-      - status
-      - uid
-      - usage
-      - viewerUrl
-    CleaningAnswers:
-      type: object
-      properties:
-        answers: {}
-        revision:
-          type: string
-          maxLength: 64
-      required:
-      - answers
   securitySchemes:
     agentBearerAuth:
       type: http

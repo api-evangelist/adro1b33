@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-agent-attachment-response-schema.json",
+  "title": "AgentAttachmentResponse",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-agent-api-openapi.yml#/components/schemas/AgentAttachmentResponse",
+  "type": "object",
+  "properties": {
+    "attachmentUid": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 36,
+      "format": "uuid"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "enum": [
+        "pending_upload",
+        "uploaded",
+        "scanning",
+        "processing",
+        "ready",
+        "rejected",
+        "expired"
+      ]
+    },
+    "statusRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128,
+      "enum": [
+        "image",
+        "pdf",
+        "mesh",
+        "cad"
+      ]
+    },
+    "originalFileName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "sizeBytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "detectedContentType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rejectionCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128,
+      "enum": [
+        "unsupported_media_type",
+        "checksum_mismatch",
+        "malware_detected",
+        "encrypted_pdf",
+        "active_pdf_content",
+        "malformed_file",
+        "resource_limit_exceeded",
+        "processor_timeout",
+        "processing_failed"
+      ]
+    },
+    "expiresAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "date-time"
+    },
+    "derivatives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AgentAttachmentDerivative"
+      },
+      "minItems": 0,
+      "maxItems": 102
+    }
+  },
+  "required": [
+    "attachmentUid",
+    "status",
+    "statusRevision",
+    "category",
+    "originalFileName",
+    "sizeBytes",
+    "detectedContentType",
+    "sha256",
+    "rejectionCode",
+    "expiresAt",
+    "createdAt",
+    "updatedAt",
+    "derivatives"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "AgentAttachmentDerivative": {
+      "type": "object",
+      "properties": {
+        "derivativeUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "format": "uuid"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "enum": [
+            "normalized_image",
+            "pdf_text",
+            "pdf_page_preview",
+            "geometry_manifest",
+            "geometry_preview"
+          ]
+        },
+        "mediaType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "derivativeUid",
+        "kind",
+        "mediaType",
+        "sizeBytes",
+        "metadata"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-team-storage-addon-schema.json",
+  "title": "TeamStorageAddon",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-plans-api-openapi.yml#/components/schemas/TeamStorageAddon",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "teamId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "subscriptionId": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "unitCount": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "addonBytes": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "scheduledUnitCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "maxLength": 8
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "EXPIRED"
+      ],
+      "type": "string",
+      "description": "* `ACTIVE` - 활성\n* `EXPIRED` - 만료",
+      "x-spec-enum-id": "fee46434bd68355a"
+    },
+    "currentCycleStartedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "currentCycleEndsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nextBillingAttemptAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "failedAttemptCount": {
+      "type": "integer",
+      "maximum": 32767,
+      "minimum": 0
+    },
+    "lastFailedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expiredAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "cycles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/StorageAddonCycle"
+      },
+      "readOnly": true
+    }
+  },
+  "required": [
+    "addonBytes",
+    "currentCycleEndsAt",
+    "currentCycleStartedAt",
+    "cycles",
+    "id",
+    "nextBillingAttemptAt",
+    "subscriptionId",
+    "teamId",
+    "unitCount"
+  ],
+  "$defs": {
+    "StorageAddonCycle": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "unitCountSnapshot": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 0
+        },
+        "unitBytesSnapshot": {
+          "type": "integer",
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 8
+        },
+        "supplyAmountSnapshot": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 0
+        },
+        "taxAmountSnapshot": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 0
+        },
+        "totalAmountSnapshot": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 0
+        },
+        "cycleStartedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cycleEndsAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "PENDING",
+            "PAID",
+            "FAILED",
+            "PRORATED"
+          ],
+          "type": "string",
+          "description": "* `PENDING` - 결제 시도 중\n* `PAID` - 결제 성공\n* `FAILED` - 결제 실패\n* `PRORATED` - 업그레이드 일할 지급",
+          "x-spec-enum-id": "4bf9b922a073ba54"
+        },
+        "paymentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "createdAt",
+        "currency",
+        "cycleEndsAt",
+        "cycleStartedAt",
+        "id",
+        "paymentId",
+        "supplyAmountSnapshot",
+        "taxAmountSnapshot",
+        "totalAmountSnapshot",
+        "unitBytesSnapshot",
+        "unitCountSnapshot"
+      ]
+    }
+  }
+}

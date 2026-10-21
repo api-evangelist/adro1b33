@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adro1b33/main/json-schema/adro1b33-plan-schema.json",
+  "title": "Plan",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adro1b33-plans-api-openapi.yml#/components/schemas/Plan",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "code": {
+      "enum": [
+        "beginner",
+        "engineer",
+        "turbo",
+        "professional",
+        "oem",
+        "promotion"
+      ],
+      "type": "string",
+      "description": "* `beginner` - Beginner\n* `engineer` - Engineer\n* `turbo` - Turbo\n* `professional` - Professional\n* `oem` - OEM\n* `promotion` - Promotion",
+      "x-spec-enum-id": "790e8ec979be1b98"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string"
+    },
+    "itemCode": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "price": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PriceEntry"
+        }
+      ],
+      "readOnly": true
+    },
+    "monthlyCredits": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "storageQuotaBytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 9223372036854775807,
+      "minimum": 0,
+      "format": "int64",
+      "description": "Storage entitlement in bytes. Null means the catalogue has no numeric quota."
+    },
+    "storageAddonMaxBytes": {
+      "type": "integer",
+      "maximum": 9223372036854775807,
+      "minimum": 0,
+      "format": "int64",
+      "description": "Maximum cumulative self-service storage add-on entitlement in bytes."
+    },
+    "storageAddonPrices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/StorageAddonPrice"
+      },
+      "readOnly": true
+    },
+    "allowedSolvers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "readOnly": true
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "isCustomPricing": {
+      "type": "boolean"
+    },
+    "isPromotional": {
+      "type": "boolean"
+    },
+    "promotionalMonths": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "promotionalExpiresAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "allowedSolvers",
+    "code",
+    "createdAt",
+    "id",
+    "name",
+    "price",
+    "storageAddonPrices",
+    "updatedAt"
+  ],
+  "$defs": {
+    "PriceDisplay": {
+      "type": "object",
+      "properties": {
+        "supplyAmount": {
+          "type": "string"
+        },
+        "taxAmount": {
+          "type": "string"
+        },
+        "totalAmount": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "string"
+        },
+        "discountRate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "supplyAmount",
+        "taxAmount",
+        "totalAmount"
+      ]
+    },
+    "PriceEntry": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "supplyAmountMinor": {
+          "type": "integer"
+        },
+        "taxAmountMinor": {
+          "type": "integer"
+        },
+        "totalAmountMinor": {
+          "type": "integer"
+        },
+        "display": {
+          "$ref": "#/$defs/PriceDisplay"
+        }
+      },
+      "required": [
+        "currency",
+        "display",
+        "supplyAmountMinor",
+        "taxAmountMinor",
+        "totalAmountMinor"
+      ]
+    },
+    "StorageAddonPrice": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "supplyAmountMinor": {
+          "type": "integer"
+        },
+        "taxAmountMinor": {
+          "type": "integer"
+        },
+        "totalAmountMinor": {
+          "type": "integer"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "currency",
+        "isActive",
+        "supplyAmountMinor",
+        "taxAmountMinor",
+        "totalAmountMinor"
+      ]
+    }
+  }
+}

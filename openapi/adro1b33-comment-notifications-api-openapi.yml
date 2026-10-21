@@ -71,20 +71,6 @@ components:
           type: boolean
       required:
       - ok
-    CommentNotificationPage:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommentNotification'
-        next:
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - results
     CommentNotification:
       type: object
       properties:
@@ -145,6 +131,20 @@ components:
           minItems: 1
       required:
       - notificationIds
+    CommentNotificationPage:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentNotification'
+        next:
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - results
   securitySchemes:
     agentBearerAuth:
       type: http
