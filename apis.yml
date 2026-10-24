@@ -990,6 +990,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - Agents
+  tags_raw:
   - Agent
   properties:
   - type: OpenAPI
@@ -1028,6 +1030,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - CommentThreads
+  tags_raw:
   - comment-threads
   properties:
   - type: OpenAPI
@@ -1046,6 +1050,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - Comments
+  tags_raw:
   - comments
   properties:
   - type: OpenAPI
@@ -1116,6 +1122,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - Internal
+  tags_raw:
   - internal
   properties:
   - type: OpenAPI
@@ -1138,6 +1146,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - Marine
+  tags_raw:
   - marine
   properties:
   - type: OpenAPI
@@ -1148,6 +1158,8 @@ apis:
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
@@ -1165,7 +1177,8 @@ apis:
   description: The special_offer API from ADRO — 1 operation(s) for special_offer.
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
-  tags:
+  tags: []
+  tags_raw:
   - special_offer
   properties:
   - type: OpenAPI
@@ -1177,7 +1190,8 @@ apis:
   description: The student_team API from ADRO — 1 operation(s) for student_team.
   humanURL: https://adro.com/llms.txt
   baseURL: https://api.aoxlabs.com
-  tags:
+  tags: []
+  tags_raw:
   - student_team
   properties:
   - type: OpenAPI

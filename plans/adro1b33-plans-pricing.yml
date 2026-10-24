@@ -107,11 +107,19 @@ payment_providers:
 - PayPal
 payment_providers_note: PayLetter is named directly in the contract (POST /billing-keys/payletter/register-and-charge/);
   PayPal and card issuers are named in https://aoxlabs.com/refund section 8.
+audience: business-product
+pricing_basis: tiered-subscription
+published: false
+delivery:
+  delivery: managed
+note: Monetary price cells on https://aoxlabs.com/pricing render empty in the served HTML, so no price_text could
+  be quoted verbatim.
 x-canonical:
-  generated: '2026-10-08'
+  generated: '2026-10-23'
   vocabulary: all/0-working/economics/plans-canonical.yml
   models:
   - metered
+  - negotiated
   units: []
   plans:
   - name: Beginner
@@ -140,14 +148,7 @@ x-canonical:
     periods: []
   - name: OEM / Enterprise
     access: other
-    model: unstated
+    model: negotiated
     model_how: derived
     units: []
     periods: []
-audience: business-product
-pricing_basis: tiered-subscription
-published: false
-delivery:
-  delivery: managed
-note: Monetary price cells on https://aoxlabs.com/pricing render empty in the served HTML, so no price_text could
-  be quoted verbatim.
