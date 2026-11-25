@@ -134,7 +134,7 @@ Model Context Protocol servers that expose the API to agents.
 
 Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Adro1B33 Agentic Access](https://apis.io/agentic-access/adro1b33/adro1b33-agentic-access/)
+- [ADRO Agentic Access](https://apis.io/agentic-access/adro1b33/adro1b33-agentic-access/)
 
 #### JSON Schema (111)
 
@@ -177,7 +177,7 @@ Linked-data contexts for the provider's vocabulary.
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
-- [Adro1B33 Aox Overlay](https://apis.io/overlays/adro1b33/adro1b33-aox-overlay/)
+- [ADRO Aox Overlay](https://apis.io/overlays/adro1b33/adro1b33-aox-overlay/)
 
 #### Governance rules (1)
 
@@ -189,27 +189,27 @@ Spectral rulesets for the provider's contracts.
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Adro1B33 Authentication](https://apis.io/security/adro1b33/adro1b33-authentication/)
-- [Adro1B33 Domain Security](https://apis.io/security/adro1b33/adro1b33-domain-security/)
-- [Adro1B33 Trust Center](https://apis.io/security/adro1b33/adro1b33-trust-center/)
+- [ADRO Authentication](https://apis.io/security/adro1b33/adro1b33-authentication/)
+- [ADRO Domain Security](https://apis.io/security/adro1b33/adro1b33-domain-security/)
+- [ADRO Trust Center](https://apis.io/security/adro1b33/adro1b33-trust-center/)
 
 #### OAuth scopes (1)
 
 The permissions the API asks for.
 
-- [Adro1B33 Scopes](https://apis.io/scopes/adro1b33/adro1b33-scopes/)
+- [ADRO Scopes](https://apis.io/scopes/adro1b33/adro1b33-scopes/)
 
 #### Plans and pricing (1)
 
 Published plans, tiers and prices.
 
-- [Adro1B33 Plans Pricing](https://apis.io/plans/adro1b33/adro1b33-plans-pricing/)
+- [ADRO Plans Pricing](https://apis.io/plans/adro1b33/adro1b33-plans-pricing/)
 
 #### Rate limits (1)
 
 Published request limits.
 
-- [Adro1B33 Rate Limits](https://apis.io/rate-limits/adro1b33/adro1b33-rate-limits/)
+- [ADRO Rate Limits](https://apis.io/rate-limits/adro1b33/adro1b33-rate-limits/)
 
 ## Where to find this API
 
@@ -228,18 +228,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 41.4** — developing · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 41.8** — developing · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 66.7 |
-| Contract quality | 51.3 |
+| Contract quality | 53.1 |
 | Contract governance | 22.0 |
-| Operational transparency | 28.9 |
+| Operational transparency | 26.2 |
 | Developer ergonomics | 23.2 |
-| Access clarity | 47.4 |
+| Access clarity | 53.2 |
 
-**Agent readiness 49.6** — agent-native
+**Agent readiness 48.6** — agent-native
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -264,8 +264,12 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | platform (partial credit) |
 | Pagination Ratio | partial |
 | Operation Distinctiveness | mostly (partial credit) |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
-**Regulatory alignment 29.1** — Horizontal (data, software, accessibility, platform)
+**Regulatory alignment 23.6** — Horizontal (data, software, accessibility, platform)
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/adro1b33/](https://apis.io/providers/adro1b33/).
 
